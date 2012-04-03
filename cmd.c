@@ -8,13 +8,14 @@ void type_prompt() {
 	printf("eng> ");
 }
 
-void process_line() {
+bool process_line() {
 	// process all the commands currently sitting in CMD_BUFFER
 	CMD_BUFFER[CMD_BUFFER_COUNT] = '\0';
 	while(CMD_BUFFER_COUNT) {
-		if(!do_command(CMD_BUFFER)) return;
+		if(!do_command(CMD_BUFFER)) return false;
 		type_prompt();
 	}
+	return true;
 }
 
 void read_commands() {
@@ -23,7 +24,8 @@ void read_commands() {
 	
 	while((c = getc(stdin)) != EOF) {
 		if(c == '\n') {
-			process_line();
+			//handle the typed line and determine whether or not we need to exit
+			if(!process_line()) return;
 		} else {
 			if(CMD_BUFFER_COUNT >= MAX_CMD_BUFFER-1) {
 				printf("Input refused: input buffer full.\n");
