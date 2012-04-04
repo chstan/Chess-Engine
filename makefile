@@ -1,7 +1,6 @@
 CC = gcc
 
-#Although this will be changed, do not optimize
-CFLAGS = -g -Wall -O0 -std=c99
+CFLAGS = -g -Wall -pedantic -O3 -std=c99
 
 SOURCES = engine.c alert.c cmd.c
 OBJECTS = $(SOURCES:.c=.o)
