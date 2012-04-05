@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "extglobals.h"
 #include <assert.h>
 
 unsigned int countBits(BitMap bits) {
@@ -23,7 +24,7 @@ unsigned int LSB(BitMap bits) {
 		56, 45, 25, 31, 35, 16,  9, 12,
 		44, 24, 15,  8, 23,  7,  6,  5
 	};
-	static const U64 DeBruijn = U64(0x07EDD5E59A4E28C2);
+	static const U64 DeBruijn = 0x07EDD5E59A4E28C2;
 	
 	return INDEX[((bits & -bits) * DeBruijn) >> 58];
 }

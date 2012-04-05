@@ -2,7 +2,7 @@ CC = gcc
 
 CFLAGS = -g -Wall -pedantic -O3 -std=c99
 
-SOURCES = engine.c alert.c cmd.c
+SOURCES = engine.c alert.c command.c bit.c board.c init.c exit.c
 OBJECTS = $(SOURCES:.c=.o)
 TARGET = engine
 

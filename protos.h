@@ -1,6 +1,7 @@
 #ifndef PROTOS_H
 #define PROTOS_H
 #include "defines.h"
+#include "board.h"
 
 //-----------------UI AND CONTROL PROTOTYPES----------------
 void init(void);
@@ -9,7 +10,7 @@ void boardInit(void);
 bool doCommand(const char *cmd);
 void readCommands(void);
 void alert(int ALERT);
-void exit(void);
+void prepareForExit(void);
 
 //--------------------BOARD PROTOTYPES----------------------
 void resetBoard(Board *pBoard);
@@ -22,6 +23,7 @@ void resetBB(Board *pBoard);
 void updateBBFromSquares(Board *pBoard);
 void updateKingsFromBB(Board *pBoard);
 void updatePieceCountsFromBB(Board *pBoard);
+void displayBoard(Board *pBoard);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);

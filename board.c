@@ -6,7 +6,7 @@
 
 void resetBoard(Board *pBoard) {
 	int i;
-	for(i = 0; i < 64; i++) board->position.square[i] = EMPTY;
+	for(i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
 	pBoard->position.square[A1] = WHITE_ROOK;
 	pBoard->position.square[B1] = WHITE_KNIGHT;
 	pBoard->position.square[C1] = WHITE_BISHOP;
@@ -41,11 +41,11 @@ void resetBoard(Board *pBoard) {
 	pBoard->position.square[G7] = BLACK_PAWN;
 	pBoard->position.square[H7] = BLACK_PAWN;
 	
-	board->info.displayRotated = false;
+	pBoard->info.displayRotated = false;
 	
 	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO,
 		CAN_CASTLE_OO + CAN_CASTLE_OOO, 0);
-	return void;
+	return;
 }
 
 void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
@@ -66,7 +66,11 @@ void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
 	return;
 }
 
-
+void displayBoard(Board *pBoard) {
+	// const char *divider = "+---+---+---+---+---+---+---+---+";
+	// const char *padding = "|   |   |   |   |   |   |   |   |"; 
+	return;
+}
 
 //---------------------AUX FUNCTIONS-------------------------
 

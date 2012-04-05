@@ -2,6 +2,7 @@
 #define EXTGLOBALS_H
 
 #include "defines.h"
+#include "board.h"
 
 extern char CMD_BUFFER[];
 extern int CMD_BUFFER_COUNT;
@@ -31,8 +32,16 @@ extern const char* SQUARENAME[];
 extern const int FILES[];
 extern const int RANKS[];
  
-extern const unsigned  char WHITE_MOVE;  
-extern const unsigned  char BLACK_MOVE;  
+extern const unsigned  char WHITE;  
+extern const unsigned  char BLACK;
+
+extern const unsigned char PAWN;
+extern const unsigned char BISHOP;
+extern const unsigned char KNIGHT;
+extern const unsigned char ROOK;
+extern const unsigned char QUEEN;
+extern const unsigned char KING;
+extern const unsigned char TOTAL;  
  
 extern const unsigned  char EMPTY;
 extern const unsigned  char WHITE_KNIGHT;

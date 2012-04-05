@@ -12,8 +12,8 @@ bool processLine() {
 	// process all the commands currently sitting in CMD_BUFFER
 	CMD_BUFFER[CMD_BUFFER_COUNT] = '\0';
 	while(CMD_BUFFER_COUNT) {
-		if(!do_command(CMD_BUFFER)) return false;
-		type_prompt();
+		if(!doCommand(CMD_BUFFER)) return false;
+		typePrompt();
 	}
 	return true;
 }

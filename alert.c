@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "stdio.h"
 
 void alert(int ALERT) {
 	switch(ALERT) {

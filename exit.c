@@ -1,7 +1,8 @@
 #include "protos.h"
 #include "extglobals.h"
+#include <stdlib.h>
 
-void exit() {
+void prepareForExit() {
 	free(pBoard);
 	return;
 }

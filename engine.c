@@ -11,6 +11,6 @@ int main (int argc, char const *argv[])
 	
 	readCommands();
 	
-	exit();
+	prepareForExit();
 	return 0;
 }

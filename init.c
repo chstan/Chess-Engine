@@ -1,6 +1,8 @@
 #include "defines.h"
 #include "protos.h"
 #include "extglobals.h"
+#include "board.h"
+#include <stdlib.h>
 
 void init(void) {
 	boardInit();
@@ -36,7 +38,7 @@ void dataInit(void) {
 }
 
 void boardInit(void) {
-	pBoard = malloc(sizeof Board);
+	pBoard = malloc(sizeof(Board));
 	resetBoard(pBoard);
 	return;
 }

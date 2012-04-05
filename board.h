@@ -23,7 +23,7 @@ typedef struct {
 } Position;
 
 typedef struct {
-	int Material;
+	int material;
 	
 	unsigned char nextMove;
 	unsigned char castleWhite;
