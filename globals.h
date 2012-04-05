@@ -7,16 +7,24 @@
 char CMD_BUFFER[MAX_CMD_BUFFER];
 int CMD_BUFFER_COUNT = 0;
 
-enum BOARD_POSITIONS {
-	A1, A2, A3, A4, A5, A6, A7, A8,
-	B1, B2, B3, B4, B5, B6, B7, B8,
-	C1, C2, C3, C4, C5, C6, C7, C8,
-	D1, D2, D3, D4, D5, D6, D7, D8,
-	E1, E2, E3, E4, E5, E6, E7, E8,
-	F1, F2, F3, F4, F5, F6, F7, F8,
-	G1, G2, G3, G4, G5, G6, G7, G8,
-	H1, H2, H3, H4, H5, H6, H7, H8
-};
+Board board;
+
+extern const int A1 =  0; extern  const int B1 =  1; extern  const int C1 =  2; extern  const int D1 =  3; 
+extern const int E1 =  4; extern  const int F1 =  5; extern  const int G1 =  6; extern  const int H1 =  7;
+extern const int A2 =  8; extern  const int B2 =  9; extern  const int C2 = 10; extern  const int D2 = 11; 
+extern const int E2 = 12; extern  const int F2 = 13; extern  const int G2 = 14; extern  const int H2 = 15;
+extern const int A3 = 16; extern  const int B3 = 17; extern  const int C3 = 18; extern  const int D3 = 19; 
+extern const int E3 = 20; extern  const int F3 = 21; extern  const int G3 = 22; extern  const int H3 = 23;
+extern const int A4 = 24; extern  const int B4 = 25; extern  const int C4 = 26; extern  const int D4 = 27; 
+extern const int E4 = 28; extern  const int F4 = 29; extern  const int G4 = 30; extern  const int H4 = 31;
+extern const int A5 = 32; extern  const int B5 = 33; extern  const int C5 = 34; extern  const int D5 = 35; 
+extern const int E5 = 36; extern  const int F5 = 37; extern  const int G5 = 38; extern  const int H5 = 39;
+extern const int A6 = 40; extern  const int B6 = 41; extern  const int C6 = 42; extern  const int D6 = 43; 
+extern const int E6 = 44; extern  const int F6 = 45; extern  const int G6 = 46; extern  const int H6 = 47;
+extern const int A7 = 48; extern  const int B7 = 49; extern  const int C7 = 50; extern  const int D7 = 51; 
+extern const int E7 = 52; extern  const int F7 = 53; extern  const int G7 = 54; extern  const int H7 = 55;
+extern const int A8 = 56; extern  const int B8 = 57; extern  const int C8 = 58; extern  const int D8 = 59; 
+extern const int E8 = 60; extern  const int F8 = 61; extern  const int G8 = 62; extern  const int H8 = 63;
 
 extern const char* SQUARENAME[64] = {
 	"a1","b1","c1","d1","e1","f1","g1","h1",
@@ -51,5 +59,44 @@ extern const int RANK[64] = {
 	8, 8, 8, 8, 8, 8, 8, 8
 };
 
+extern const unsigned char WHITE = 0;
+extern const unsigned char BLACK = 1;
+
+extern const unsigned  char EMPTY = 0;                //  0000
+extern const unsigned  char WHITE_PAWN = 1;           //  0001
+extern const unsigned  char WHITE_KING = 2;           //  0010
+extern const unsigned  char WHITE_KNIGHT = 3;         //  0011
+extern const unsigned  char WHITE_BISHOP =  5;        //  0101
+extern const unsigned  char WHITE_ROOK = 6;           //  0110
+extern const unsigned  char WHITE_QUEEN = 7;          //  0111
+extern const unsigned  char BLACK_PAWN = 9;           //  1001
+extern const unsigned  char BLACK_KING = 10;          //  1010
+extern const unsigned  char BLACK_KNIGHT = 11;        //  1011
+extern const unsigned  char BLACK_BISHOP = 13;        //  1101
+extern const unsigned  char BLACK_ROOK = 14;          //  1110
+extern const unsigned  char BLACK_QUEEN = 15;         //  1111
+
+const char* PIECENAMES[16] = {"  ", "P ", "K ", "N ", "  ", "B ", "R ", "Q ",
+															"  ", "P*", "K*", "N*", "  ", "B*", "R*", "Q*"};
+
+BitMap BITSET[64];
+int BOARDINDEX[9][9];
+
+extern const int PAWN_VALUE = 100;
+extern const int KNIGHT_VALUE = 325;
+extern const int BISHOP_VALUE = 325;
+extern const int ROOK_VALUE = 500;
+extern const int QUEEN_VALUE = 1050;
+extern const int KING_VALUE = 90000;
+extern const int CHECK_MATE = KING_VALUE;
+
+int GS1B[256];
+
+unsigned char CANCASTLEOO = 1;
+unsigned char CANCASTLEOOO = 1;
+unsigned int WHITE_OOO_CASTL;
+unsigned int BLACK_OOO_CASTL;
+unsigned int WHITE_OO_CASTL;
+unsigned int BLACK_OO_CASTL;
 
 #endif

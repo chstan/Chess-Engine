@@ -7,6 +7,9 @@ int main (int argc, char const *argv[])
 {
 	printf(ENGINE_VERSION);
 	printf("\n");
+	
+	init();
+	
 	read_commands();
 	return 0;
 }

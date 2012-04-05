@@ -3,6 +3,8 @@
 
 #include "defines.h"
 
+#define sq(RANK, FILE) 8*(RANK-1)+(FILE-1)
+
 typedef struct {
 	BITBOARD king, queen, rook, bishop, knight, pawn;
 	BITBOARD occupied;
@@ -12,8 +14,6 @@ typedef struct {
 	PlayerPieces white;
 	PlayerPieces black;
 	
-	int Material;
-	
 	int square[64];
 	int kings[2];
 	
@@ -22,6 +22,8 @@ typedef struct {
 } Position;
 
 typedef struct {
+	int Material;
+	
 	unsigned char nextMove;
 	unsigned char castleWhite;
 	unsigned char castleBlack;
@@ -31,5 +33,10 @@ typedef struct {
 	
 	bool displayRotated;
 } BoardInfo;
+
+typedef struct {
+	Position position;
+	BoardInfo info;
+} Board;
 
 #endif
