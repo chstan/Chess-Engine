@@ -6,7 +6,13 @@
 
 void init(void) {
 	dataInit();
+	moveTableInit();
 	boardInit();
+	return;
+}
+
+void moveTableInit(void) {
+	
 	return;
 }
 

@@ -3,10 +3,13 @@
 #include "defines.h"
 #include "board.h"
 
-//-----------------UI AND CONTROL PROTOTYPES----------------
+//-----------------INITIALIZATION PROTOTYPES----------------
 void init(void);
 void dataInit(void);
 void boardInit(void);
+void moveTableInit(void);
+
+//-----------------UI AND CONTROL PROTOTYPES----------------
 bool doCommand(const char *cmd);
 void readCommands(void);
 void alert(int ALERT);

@@ -61,6 +61,17 @@ const int RANKS[64] = {
 	8, 8, 8, 8, 8, 8, 8, 8
 };
 
+const BitBoard fullBoard = -1LL;
+const BitBoard emptyBoard = 0LL;
+
+BitBoard rookMoves[64];
+BitBoard knightMoves[64];
+BitBoard bishopMoves[64];
+BitBoard pawnMoves[64];
+BitBoard pawnDouble[64];
+BitBoard pawnCapture[64];
+BitBoard kingMoves[64];
+
 const unsigned char WHITE = 0;
 const unsigned char BLACK = 1;
 

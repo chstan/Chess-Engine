@@ -12,6 +12,9 @@ void typePrompt() {
 		case B:
 			printf("BLACK> ");
 		break;
+		default:
+			printf("Board in inconsistent state> ");
+		break;
 	}
 }
 

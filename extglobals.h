@@ -32,6 +32,17 @@ extern const char* SQUARENAME[];
 extern const int FILES[];
 extern const int RANKS[];
 
+extern const BitBoard fullBoard;
+extern const BitBoard emptyBoard;
+
+extern BitBoard rookMoves[];
+extern BitBoard knightMoves[];
+extern BitBoard bishopMoves[];
+extern BitBoard pawnMoves[];
+extern BitBoard pawnDouble[];
+extern BitBoard pawnCapture[];
+extern BitBoard kingMoves[];
+
 extern const unsigned char WHITE;  
 extern const unsigned char BLACK;
 
