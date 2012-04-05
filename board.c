@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "extglobals.h"
 #include "assert.h"
+#include "stdio.h"
 
 void resetBoard(Board *pBoard) {
 	int i;
@@ -148,19 +149,19 @@ void updateAggregateBB(Board *pBoard) {
 void updateBBFromSquares(Board *pBoard) {
 	int i;
 	for(i = 0; i < 64; i++) {
-		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.white.pawn = pBoard->position.white.pawn | BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.white.king = pBoard->position.white.king | BITSET[i];
-		if(pBoard->position.square[i] == WHITE_QUEEN) pBoard->position.white.queen = pBoard->position.white.queen | BITSET[i];
-		if(pBoard->position.square[i] == WHITE_BISHOP) pBoard->position.white.bishop = pBoard->position.white.bishop | BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KNIGHT) pBoard->position.white.knight = pBoard->position.white.knight | BITSET[i];
-		if(pBoard->position.square[i] == WHITE_ROOK) pBoard->position.white.rook = pBoard->position.white.rook | BITSET[i];
+		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.white.pawn |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.white.king |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_QUEEN) pBoard->position.white.queen |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_BISHOP) pBoard->position.white.bishop |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_KNIGHT) pBoard->position.white.knight |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_ROOK) pBoard->position.white.rook |= BITSET[i];
 		
-		if(pBoard->position.square[i] == BLACK_PAWN) pBoard->position.black.pawn = pBoard->position.black.pawn | BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KING) pBoard->position.black.king = pBoard->position.black.king | BITSET[i];
-		if(pBoard->position.square[i] == BLACK_QUEEN) pBoard->position.black.queen = pBoard->position.black.queen | BITSET[i];
-		if(pBoard->position.square[i] == BLACK_BISHOP) pBoard->position.black.bishop = pBoard->position.black.bishop | BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.black.knight = pBoard->position.black.knight | BITSET[i];
-		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.black.rook = pBoard->position.black.rook | BITSET[i];
+		if(pBoard->position.square[i] == BLACK_PAWN) pBoard->position.black.pawn |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_KING) pBoard->position.black.king |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_QUEEN) pBoard->position.black.queen |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_BISHOP) pBoard->position.black.bishop |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.black.knight |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.black.rook |= BITSET[i];
 	}
 	return;
 }

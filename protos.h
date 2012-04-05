@@ -29,5 +29,6 @@ void displayBoard(Board *pBoard);
 unsigned int countBits(BitMap bits);
 unsigned int GSB(BitMap bits);
 unsigned int LSB(BitMap bits);
+void printBitMap(BitMap bits);
 
 #endif

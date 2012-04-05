@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 void init(void) {
-	boardInit();
 	dataInit();
+	boardInit();
 	return;
 }
 

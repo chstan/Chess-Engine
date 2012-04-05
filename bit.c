@@ -1,11 +1,13 @@
 #include "defines.h"
 #include "extglobals.h"
+#include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 unsigned int countBits(BitMap bits) {
 	unsigned int bitCount;
 	for(bitCount = 0; bits; bitCount++) {
-		bits &= bits - 1;
+		bits &= (bits - 1);
 	}
 	return bitCount;
 }
@@ -49,3 +51,13 @@ unsigned int GSB(BitMap bits) {
 	return GSB + GS1B[bits];
 }
 
+void printBitMap(BitMap bits) {
+	static char b[65];
+	b[0] = '\0';
+	int i;
+	for(i = 0; i < 64; i++) {
+		strcat(b, (bits & BITSET[i]) ? "1" : ".");
+	}
+	printf("%s\n", b);
+	return;
+}
