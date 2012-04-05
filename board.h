@@ -24,6 +24,8 @@ typedef struct {
 
 typedef struct {
 	int material;
+	int whiteMaterial;
+	int blackMaterial;
 	
 	unsigned char nextMove;
 	unsigned char castleWhite;

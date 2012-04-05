@@ -192,17 +192,20 @@ void updateBBFromSquares(Board *pBoard) {
 }
 
 void updateMaterialFromBB(Board *pBoard) {
-	pBoard->info.material = countBits(pBoard->position.white.pawn) * PAWN_VALUE
-												+	countBits(pBoard->position.white.bishop) * BISHOP_VALUE
-												+	countBits(pBoard->position.white.knight) * KNIGHT_VALUE
-												+	countBits(pBoard->position.white.rook) * ROOK_VALUE
-												+	countBits(pBoard->position.white.queen) * QUEEN_VALUE
+	pBoard->info.whiteMaterial = countBits(pBoard->position.white.pawn) * PAWN_VALUE
+														 + countBits(pBoard->position.white.bishop) * BISHOP_VALUE
+														 + countBits(pBoard->position.white.knight) * KNIGHT_VALUE
+														 + countBits(pBoard->position.white.rook) * ROOK_VALUE
+														 + countBits(pBoard->position.white.queen) * QUEEN_VALUE;
 													
-												-	countBits(pBoard->position.black.pawn) * PAWN_VALUE
-												-	countBits(pBoard->position.black.bishop) * BISHOP_VALUE
-												-	countBits(pBoard->position.black.knight) * KNIGHT_VALUE
-												-	countBits(pBoard->position.black.rook) * ROOK_VALUE
-												-	countBits(pBoard->position.black.queen) * QUEEN_VALUE;
+	pBoard->info.blackMaterial = countBits(pBoard->position.black.pawn) * PAWN_VALUE
+														 + countBits(pBoard->position.black.bishop) * BISHOP_VALUE
+														 + countBits(pBoard->position.black.knight) * KNIGHT_VALUE
+														 + countBits(pBoard->position.black.rook) * ROOK_VALUE
+														 + countBits(pBoard->position.black.queen) * QUEEN_VALUE;
+														
+	pBoard->info.material = pBoard->info.whiteMaterial
+												- pBoard->info.blackMaterial;
 	
 	return;
 }
