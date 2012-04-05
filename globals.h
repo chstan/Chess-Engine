@@ -9,6 +9,7 @@ int CMD_BUFFER_COUNT = 0;
 
 Board *pBoard;
 
+extern const int INVALID_SQUARE = -1;
 extern const int A1 =  0; extern  const int B1 =  1; extern  const int C1 =  2; extern  const int D1 =  3; 
 extern const int E1 =  4; extern  const int F1 =  5; extern  const int G1 =  6; extern  const int H1 =  7;
 extern const int A2 =  8; extern  const int B2 =  9; extern  const int C2 = 10; extern  const int D2 = 11; 
@@ -92,8 +93,8 @@ extern const int CHECK_MATE = KING_VALUE;
 
 int GS1B[256];
 
-unsigned char CANCASTLEOO = 1;
-unsigned char CANCASTLEOOO = 1;
+unsigned char CAN_CASTLE_OO = 1;
+unsigned char CAN_CASTLE_OOO = 1;
 unsigned int WHITE_OOO_CASTL;
 unsigned int BLACK_OOO_CASTL;
 unsigned int WHITE_OO_CASTL;

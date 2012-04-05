@@ -36,7 +36,7 @@ void dataInit(void) {
 }
 
 void boardInit(void) {
-	pBoard = malloc(sizeof *Board);
+	pBoard = malloc(sizeof Board);
 	resetBoard(pBoard);
 	return;
 }

@@ -7,12 +7,13 @@
 
 typedef struct {
 	BITBOARD king, queen, rook, bishop, knight, pawn;
-	BITBOARD occupied;
+	BITBOARD pieces;
 } PlayerPieces;
 
 typedef struct {
 	PlayerPieces white;
 	PlayerPieces black;
+	BitBoard pieces;
 	
 	int square[64];
 	int kings[2];

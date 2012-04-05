@@ -8,6 +8,7 @@ extern int CMD_BUFFER_COUNT;
 
 extern Board *pBoard;
 
+extern const int INVALID_SQUARE;
 extern const int A8;  extern const int B8;  extern const int C8;  extern const int D8; 
 extern const int E8;  extern const int F8;  extern const int G8;  extern const int H8; 
 extern const int A7;  extern const int B7;  extern const int C7;  extern const int D7; 
@@ -62,8 +63,8 @@ extern const int CHECK_MATE;
  
 extern int GS1B[]; 
  
-extern unsigned char CANCASTLEOO;
-extern unsigned char CANCASTLEOOO;
+extern unsigned char CAN_CASTLE_OO;
+extern unsigned char CAN_CASTLE_OOO;
 extern unsigned int WHITE_OOO_CASTL;
 extern unsigned int BLACK_OOO_CASTL;
 extern unsigned int WHITE_OO_CASTL;

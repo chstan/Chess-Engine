@@ -10,10 +10,10 @@ void read_commands(void);
 void alert(int ALERT);
 
 //--------------------BOARD PROTOTYPES----------------------
-void resetBoard(Board *b);
-void resetBoardFromSquares(Board *b, int inputSquares[64],
-	unsigned char next, int stale, int castleW, int castleB, int enPSq);
-void displayBoard(Board *b);
+void resetBoard(Board *pBoard);
+void initBoardFromSquares(Board *pBoard, unsigned char next,
+	int stale, int castleW, int castleB, int enPSq);
+void displayBoard(Board *pBoard);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);
