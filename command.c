@@ -5,7 +5,14 @@
 #include "extglobals.h"
 
 void typePrompt() {
-	printf("eng> ");
+	switch(pBoard->info.nextMove) {
+		case W:
+			printf("WHITE >");
+		break;
+		case B:
+			printf("BLACK >");
+		break;
+	}
 }
 
 bool processLine() {
@@ -46,6 +53,10 @@ bool doCommand(const char *cmd) {
 		printf("This is the help command.\n");
 		CMD_BUFFER_COUNT = '\0';
 		return true;
+	}
+	
+	if(!strcmp(cmd, "display")) {
+		displayBoard(pBoard);
 	}
 	
 	if(!strcmp(cmd, "todo")) {

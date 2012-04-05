@@ -31,9 +31,9 @@ extern const char* SQUARENAME[];
  
 extern const int FILES[];
 extern const int RANKS[];
- 
-extern const unsigned  char WHITE;  
-extern const unsigned  char BLACK;
+
+extern const unsigned char WHITE;  
+extern const unsigned char BLACK;
 
 extern const unsigned char PAWN;
 extern const unsigned char BISHOP;
@@ -43,19 +43,19 @@ extern const unsigned char QUEEN;
 extern const unsigned char KING;
 extern const unsigned char TOTAL;  
  
-extern const unsigned  char EMPTY;
-extern const unsigned  char WHITE_KNIGHT;
-extern const unsigned  char WHITE_PAWN;
-extern const unsigned  char WHITE_KING;
-extern const unsigned  char WHITE_BISHOP;
-extern const unsigned  char WHITE_ROOK;
-extern const unsigned  char WHITE_QUEEN; 
-extern const unsigned  char BLACK_KNIGHT; 
-extern const unsigned  char BLACK_PAWN; 
-extern const unsigned  char BLACK_KING; 
-extern const unsigned  char BLACK_BISHOP; 
-extern const unsigned  char BLACK_ROOK; 
-extern const unsigned  char BLACK_QUEEN;
+extern const unsigned char EMPTY;
+extern const unsigned char WHITE_KNIGHT;
+extern const unsigned char WHITE_PAWN;
+extern const unsigned char WHITE_KING;
+extern const unsigned char WHITE_BISHOP;
+extern const unsigned char WHITE_ROOK;
+extern const unsigned char WHITE_QUEEN; 
+extern const unsigned char BLACK_KNIGHT; 
+extern const unsigned char BLACK_PAWN; 
+extern const unsigned char BLACK_KING; 
+extern const unsigned char BLACK_BISHOP; 
+extern const unsigned char BLACK_ROOK; 
+extern const unsigned char BLACK_QUEEN;
  
 extern const char* PIECENAMES[];
  

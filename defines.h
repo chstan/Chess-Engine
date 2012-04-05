@@ -6,6 +6,9 @@
 #define ENGINE_VERSION "Engine 0.0.0"
 #define MAX_CMD_BUFFER 256
 
+#define W 0
+#define B 1
+
 typedef unsigned long long U64;
 typedef unsigned long long BitMap;
 typedef short SHORTINT;
