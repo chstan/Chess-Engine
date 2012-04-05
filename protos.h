@@ -24,6 +24,7 @@ void updateBBFromSquares(Board *pBoard);
 void updateKingsFromBB(Board *pBoard);
 void updatePieceCountsFromBB(Board *pBoard);
 void displayBoard(Board *pBoard);
+void rotateBoard(Board *pBoard);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);

@@ -61,6 +61,12 @@ bool doCommand(const char *cmd) {
 		return true;
 	}
 	
+	if(!strcmp(cmd, "rotate")) {
+		rotateBoard(pBoard);
+		CMD_BUFFER_COUNT = '\0';
+		return true;
+	}
+	
 	if(!strcmp(cmd, "todo")) {
 		printf("This is for the developers so they can check what there is to implement.\n");
 		CMD_BUFFER_COUNT = '\0';

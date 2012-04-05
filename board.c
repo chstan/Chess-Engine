@@ -68,17 +68,33 @@ void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
 }
 
 void displayBoard(Board *pBoard) {
-	const char *divider = "+---+---+---+---+---+---+---+---+";
+	const char *divider = "+-----+-----+-----+-----+-----+-----+-----+-----+";
 	
 	int i, j;
 	for(i = 0; i < 8; i++) {
 		printf("%s\n", divider);
 		for(j = 0; j < 8; j++) {
-			printf("|%s", PIECENAMES[pBoard->position.square[sq(i+1, j+1)]]);
+			switch(pBoard->info.displayRotated) {
+				case false:
+					printf("| %s ", PIECENAMES[pBoard->position.square[sq(8-i, j+1)]]);	
+				break;
+				case true:
+					printf("| %s ", PIECENAMES[pBoard->position.square[sq(i+1, j+1)]]);
+				break;
+			}
 		}
 		printf("|\n");
 	}
 	printf("%s\n", divider);
+	return;
+}
+
+void rotateBoard(Board *pBoard) {
+	if(pBoard->info.displayRotated) {
+		pBoard->info.displayRotated = false;
+	} else {
+		pBoard->info.displayRotated = true;
+	}
 	return;
 }
 
