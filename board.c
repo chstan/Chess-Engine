@@ -68,11 +68,14 @@ void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
 }
 
 void displayBoard(Board *pBoard) {
+	const char *header  = "   A     B     C     D     E     F     G     H   ";
 	const char *divider = "+-----+-----+-----+-----+-----+-----+-----+-----+";
+	
+	printf("\n\t%s\n", header);
 	
 	int i, j;
 	for(i = 0; i < 8; i++) {
-		printf("%s\n", divider);
+		printf("\t%s\n\t", divider);
 		for(j = 0; j < 8; j++) {
 			switch(pBoard->info.displayRotated) {
 				case false:
@@ -83,9 +86,9 @@ void displayBoard(Board *pBoard) {
 				break;
 			}
 		}
-		printf("|\n");
+		printf("|  %d\n", pBoard->info.displayRotated ? i+1 : 8-i);
 	}
-	printf("%s\n", divider);
+	printf("\t%s\n\n", divider);
 	return;
 }
 

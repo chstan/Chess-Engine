@@ -67,9 +67,12 @@ const BitBoard emptyBoard = 0LL;
 BitBoard rookMoves[64];
 BitBoard knightMoves[64];
 BitBoard bishopMoves[64];
-BitBoard pawnMoves[64];
-BitBoard pawnDouble[64];
-BitBoard pawnCapture[64];
+BitBoard pawnMovesWhite[64];
+BitBoard pawnDoubleWhite[64];
+BitBoard pawnCaptureWhite[64];
+BitBoard pawnMovesBlack[64];
+BitBoard pawnDoubleBlack[64];
+BitBoard pawnCaptureBlack[64];
 BitBoard kingMoves[64];
 
 const unsigned char WHITE = 0;

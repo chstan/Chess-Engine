@@ -38,9 +38,12 @@ extern const BitBoard emptyBoard;
 extern BitBoard rookMoves[];
 extern BitBoard knightMoves[];
 extern BitBoard bishopMoves[];
-extern BitBoard pawnMoves[];
-extern BitBoard pawnDouble[];
-extern BitBoard pawnCapture[];
+extern BitBoard pawnMovesWhite[];
+extern BitBoard pawnDoubleWhite[];
+extern BitBoard pawnCaptureWhite[];
+extern BitBoard pawnMovesBlack[];
+extern BitBoard pawnDoubleBlack[];
+extern BitBoard pawnCaptureBlack[];
 extern BitBoard kingMoves[];
 
 extern const unsigned char WHITE;  
