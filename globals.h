@@ -86,8 +86,8 @@ const unsigned char BLACK_BISHOP = 13;        //  1101
 const unsigned char BLACK_ROOK = 14;          //  1110
 const unsigned char BLACK_QUEEN = 15;         //  1111
 
-const char* PIECENAMES[16] = {"  ", "P ", "K ", "N ", "  ", "B ", "R ", "Q ",
-															"  ", "P*", "K*", "N*", "  ", "B*", "R*", "Q*"};
+const char* PIECENAMES[16] = {"   ", " P ", " K ", " N ", "   ", " B ", " R ", " Q ",
+															"   ", "*P*", "*K*", "*N*", "   ", "*B*", "*R*", "*Q*"};
 
 BitMap BITSET[64];
 int BOARDINDEX[9][9];

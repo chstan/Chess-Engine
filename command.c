@@ -7,10 +7,10 @@
 void typePrompt() {
 	switch(pBoard->info.nextMove) {
 		case W:
-			printf("WHITE >");
+			printf("WHITE> ");
 		break;
 		case B:
-			printf("BLACK >");
+			printf("BLACK> ");
 		break;
 	}
 }
@@ -57,6 +57,8 @@ bool doCommand(const char *cmd) {
 	
 	if(!strcmp(cmd, "display")) {
 		displayBoard(pBoard);
+		CMD_BUFFER_COUNT = '\0';
+		return true;
 	}
 	
 	if(!strcmp(cmd, "todo")) {

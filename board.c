@@ -68,8 +68,17 @@ void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
 }
 
 void displayBoard(Board *pBoard) {
-	// const char *divider = "+---+---+---+---+---+---+---+---+";
-	// const char *padding = "|   |   |   |   |   |   |   |   |"; 
+	const char *divider = "+---+---+---+---+---+---+---+---+";
+	
+	int i, j;
+	for(i = 0; i < 8; i++) {
+		printf("%s\n", divider);
+		for(j = 0; j < 8; j++) {
+			printf("|%s", PIECENAMES[pBoard->position.square[sq(i+1, j+1)]]);
+		}
+		printf("|\n");
+	}
+	printf("%s\n", divider);
 	return;
 }
 
