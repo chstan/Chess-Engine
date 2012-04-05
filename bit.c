@@ -6,6 +6,7 @@ unsigned int countBits(BitMap bits) {
 	for(bitCount = 0; bits; bitCount++) {
 		bits &= bits - 1;
 	}
+	return bitCount;
 }
 
 unsigned int LSB(BitMap bits) {

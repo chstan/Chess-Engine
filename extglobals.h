@@ -6,7 +6,7 @@
 extern char CMD_BUFFER[];
 extern int CMD_BUFFER_COUNT;
 
-extern Board board;
+extern Board *pBoard;
 
 extern const int A8;  extern const int B8;  extern const int C8;  extern const int D8; 
 extern const int E8;  extern const int F8;  extern const int G8;  extern const int H8; 

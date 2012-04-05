@@ -7,7 +7,7 @@
 char CMD_BUFFER[MAX_CMD_BUFFER];
 int CMD_BUFFER_COUNT = 0;
 
-Board board;
+Board *pBoard;
 
 extern const int A1 =  0; extern  const int B1 =  1; extern  const int C1 =  2; extern  const int D1 =  3; 
 extern const int E1 =  4; extern  const int F1 =  5; extern  const int G1 =  6; extern  const int H1 =  7;

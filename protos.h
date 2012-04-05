@@ -3,6 +3,8 @@
 #include "defines.h"
 
 void init(void);
+void dataInit(void);
+void boardInit(void);
 bool do_command(const char *cmd);
 void read_commands(void);
 void alert(int ALERT);
