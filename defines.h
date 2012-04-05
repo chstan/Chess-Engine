@@ -11,6 +11,8 @@ typedef unsigned long long BitMap;
 typedef short SHORTINT;
 typedef unsigned short USHORTINT;
 
+typedef unsigned long long BitBoard;
+
 enum ALERTS {
 	UNKNOWN_COMMAND
 };

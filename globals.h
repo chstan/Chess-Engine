@@ -63,19 +63,27 @@ extern const int RANK[64] = {
 extern const unsigned char WHITE = 0;
 extern const unsigned char BLACK = 1;
 
-extern const unsigned  char EMPTY = 0;                //  0000
-extern const unsigned  char WHITE_PAWN = 1;           //  0001
-extern const unsigned  char WHITE_KING = 2;           //  0010
-extern const unsigned  char WHITE_KNIGHT = 3;         //  0011
-extern const unsigned  char WHITE_BISHOP =  5;        //  0101
-extern const unsigned  char WHITE_ROOK = 6;           //  0110
-extern const unsigned  char WHITE_QUEEN = 7;          //  0111
-extern const unsigned  char BLACK_PAWN = 9;           //  1001
-extern const unsigned  char BLACK_KING = 10;          //  1010
-extern const unsigned  char BLACK_KNIGHT = 11;        //  1011
-extern const unsigned  char BLACK_BISHOP = 13;        //  1101
-extern const unsigned  char BLACK_ROOK = 14;          //  1110
-extern const unsigned  char BLACK_QUEEN = 15;         //  1111
+extern const unsigned char PAWN = 0;
+extern const unsigned char BISHOP = 1;
+extern const unsigned char KNIGHT = 2;
+extern const unsigned char ROOK = 3;
+extern const unsigned char QUEEN = 4;
+extern const unsigned char KING = 5;
+extern const unsigned char TOTAL = 6;
+
+extern const unsigned char EMPTY = 0;                //  0000
+extern const unsigned char WHITE_PAWN = 1;           //  0001
+extern const unsigned char WHITE_KING = 2;           //  0010
+extern const unsigned char WHITE_KNIGHT = 3;         //  0011
+extern const unsigned char WHITE_BISHOP =  5;        //  0101
+extern const unsigned char WHITE_ROOK = 6;           //  0110
+extern const unsigned char WHITE_QUEEN = 7;          //  0111
+extern const unsigned char BLACK_PAWN = 9;           //  1001
+extern const unsigned char BLACK_KING = 10;          //  1010
+extern const unsigned char BLACK_KNIGHT = 11;        //  1011
+extern const unsigned char BLACK_BISHOP = 13;        //  1101
+extern const unsigned char BLACK_ROOK = 14;          //  1110
+extern const unsigned char BLACK_QUEEN = 15;         //  1111
 
 const char* PIECENAMES[16] = {"  ", "P ", "K ", "N ", "  ", "B ", "R ", "Q ",
 															"  ", "P*", "K*", "N*", "  ", "B*", "R*", "Q*"};

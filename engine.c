@@ -5,11 +5,12 @@
 
 int main (int argc, char const *argv[])
 {
-	printf(ENGINE_VERSION);
-	printf("\n");
+	printf("%s\n",ENGINE_VERSION);
 	
 	init();
 	
-	read_commands();
+	readCommands();
+	
+	exit();
 	return 0;
 }

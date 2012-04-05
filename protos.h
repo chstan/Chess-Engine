@@ -2,18 +2,26 @@
 #define PROTOS_H
 #include "defines.h"
 
+//-----------------UI AND CONTROL PROTOTYPES----------------
 void init(void);
 void dataInit(void);
 void boardInit(void);
-bool do_command(const char *cmd);
-void read_commands(void);
+bool doCommand(const char *cmd);
+void readCommands(void);
 void alert(int ALERT);
+void exit(void);
 
 //--------------------BOARD PROTOTYPES----------------------
 void resetBoard(Board *pBoard);
-void initBoardFromSquares(Board *pBoard, unsigned char next,
-	int stale, int castleW, int castleB, int enPSq);
+void initBoardFromSquares(Board *pBoard, unsigned char nextMove,
+	int staleMoves, int castleW, int castleB, int enPassantSquare);
 void displayBoard(Board *pBoard);
+void updateAggregateBB(Board *pBoard);
+void updateMaterialFromBB(Board *pBoard);
+void resetBB(Board *pBoard);
+void updateBBFromSquares(Board *pBoard);
+void updateKingsFromBB(Board *pBoard);
+void updatePieceCountsFromBB(Board *pBoard);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);

@@ -1,7 +1,8 @@
 #include "board.h"
 #include "protos.h"
 #include "defines.h"
-#include "globals.h"
+#include "extglobals.h"
+#include "assert.h"
 
 void resetBoard(Board *pBoard) {
 	int i;
@@ -47,10 +48,59 @@ void resetBoard(Board *pBoard) {
 	return void;
 }
 
-void initBoardFromSquares(Board* pBoard, unsigned char next,
-	int stale, int castleW, int castleB, int enPSq) {
-	int i;
+void initBoardFromSquares(Board* pBoard, unsigned char nextMove,
+	int staleMoves, int castleW, int castleB, int enPassantSquare) {
 	
+	resetBB(pBoard);
+	updateBBFromSquares(pBoard);
+	updateAggregateBB(pBoard);
+	updateMaterialFromBB(pBoard);
+	updateKingsFromBB(pBoard);
+	updatePieceCountsFromBB(pBoard);
+	
+	pBoard->info.nextMove = nextMove;
+	pBoard->info.castleWhite = castleW;
+	pBoard->info.castleBlack = castleB;
+	pBoard->info.enPassantSquare = enPassantSquare;
+	pBoard->info.staleMoves = staleMoves;
+	return;
+}
+
+
+
+//---------------------AUX FUNCTIONS-------------------------
+
+void updatePieceCountsFromBB(Board *pBoard) {
+	// Slow. Consider looping through squares
+	pBoard->position.pieces[WHITE][PAWN] = countBits(pBoard->position.white.pawn);
+	pBoard->position.pieces[WHITE][BISHOP] = countBits(pBoard->position.white.bishop);
+	pBoard->position.pieces[WHITE][KNIGHT] = countBits(pBoard->position.white.knight);
+	pBoard->position.pieces[WHITE][ROOK] = countBits(pBoard->position.white.rook);
+	pBoard->position.pieces[WHITE][QUEEN] = countBits(pBoard->position.white.queen);
+	pBoard->position.pieces[WHITE][KING] = countBits(pBoard->position.white.king);
+	pBoard->position.pieces[WHITE][TOTAL] = countBits(pBoard->position.white.pieces);
+	
+	pBoard->position.pieces[BLACK][PAWN] = countBits(pBoard->position.black.pawn);
+	pBoard->position.pieces[BLACK][BISHOP] = countBits(pBoard->position.black.bishop);
+	pBoard->position.pieces[BLACK][KNIGHT] = countBits(pBoard->position.black.knight);
+	pBoard->position.pieces[BLACK][ROOK] = countBits(pBoard->position.black.rook);
+	pBoard->position.pieces[BLACK][QUEEN] = countBits(pBoard->position.black.queen);
+	pBoard->position.pieces[BLACK][KING] = countBits(pBoard->position.black.king);
+	pBoard->position.pieces[BLACK][TOTAL] = countBits(pBoard->position.black.pieces);
+	
+	pBoard->position.totalPieces = countBits(pBoard->position.occupied);
+	return;
+}
+
+void updateKingsFromBB(Board *pBoard) {
+	assert(countBits(pBoard->position.white.king) == 1
+			&& countBits(pBoard->position.black.king) == 1);
+	pBoard->position.kings[WHITE] = LSB(pBoard->position.white.king);
+	pBoard->position.kings[BLACK] = LSB(pBoard->position.black.king);
+	return;
+}
+
+void resetBB(Board *pBoard) {
 	pBoard->position.white.king = 0;
 	pBoard->position.white.queen = 0;
 	pBoard->position.white.rook = 0;
@@ -68,7 +118,31 @@ void initBoardFromSquares(Board* pBoard, unsigned char next,
 	pBoard->position.black.pieces = 0;
 	
 	pBoard->position.occupied = 0;
-	
+	return;
+}
+
+void updateAggregateBB(Board *pBoard) {
+	pBoard->position.white.pieces = pBoard->position.white.pawn |
+																	pBoard->position.white.king |
+																	pBoard->position.white.queen |
+																	pBoard->position.white.bishop |
+																	pBoard->position.white.knight |
+																	pBoard->position.white.rook;
+
+	pBoard->position.black.pieces = pBoard->position.black.pawn |
+																	pBoard->position.black.king |
+																	pBoard->position.black.queen |
+																	pBoard->position.black.bishop |
+																	pBoard->position.black.knight |
+																	pBoard->position.black.rook;
+																		
+	pBoard->position.occupied = pBoard->position.white.pieces |
+															pBoard->position.black.pieces;
+	return;
+}
+
+void updateBBFromSquares(Board *pBoard) {
+	int i;
 	for(i = 0; i < 64; i++) {
 		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.white.pawn = pBoard->position.white.pawn | BITSET[i];
 		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.white.king = pBoard->position.white.king | BITSET[i];
@@ -84,6 +158,21 @@ void initBoardFromSquares(Board* pBoard, unsigned char next,
 		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.black.knight = pBoard->position.black.knight | BITSET[i];
 		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.black.rook = pBoard->position.black.rook | BITSET[i];
 	}
+	return;
+}
+
+void updateMaterialFromBB(Board *pBoard) {
+	pBoard->info.material = countBits(pBoard->position.white.pawn) * PAWN_VALUE
+												+	countBits(pBoard->position.white.bishop) * BISHOP_VALUE
+												+	countBits(pBoard->position.white.knight) * KNIGHT_VALUE
+												+	countBits(pBoard->position.white.rook) * ROOK_VALUE
+												+	countBits(pBoard->position.white.queen) * QUEEN_VALUE
+													
+												-	countBits(pBoard->position.black.pawn) * PAWN_VALUE
+												-	countBits(pBoard->position.black.bishop) * BISHOP_VALUE
+												-	countBits(pBoard->position.black.knight) * KNIGHT_VALUE
+												-	countBits(pBoard->position.black.rook) * ROOK_VALUE
+												-	countBits(pBoard->position.black.queen) * QUEEN_VALUE;
 	
-	
+	return;
 }
