@@ -12,10 +12,44 @@ void init(void) {
 }
 
 void moveTableInit(void) {
-	int i, j;
-	for(i = 0; i < 64; i++) {
-		for(j = 0; j < 64; j++) {
-			//pawnMovesWhite[]
+	int i, j, index;
+	// i will be rank and j will be file
+	for(i = 0; i < 8; i++) {
+		for(j = 0; j < 8; j++) {
+			index = BOARDINDEX[i+1][j+1];
+			
+			//---------PAWN ONE SQUARE---------
+			if(i != 7){
+				pawnMoveWhite[index] = SETBIT[index + 8];
+			} else {
+				pawnMoveWhite[index] = emptyBoard;
+			}
+			if(i != 0) {
+				pawnMoveBlack[index] = SETBIT[index - 8];
+			} else {
+				pawnMoveBlack[index] = emptyBoard;
+			}
+			
+			//---------PAWN TWO SQUARES--------
+			if(i == 2) {
+				pawnDoubleWhite[index] = SETBIT[index + 16];
+			} else {
+				pawnDoubleWhite[index] = emptyBoard;
+			}
+			if(i == 7) {
+				pawnDoubleBlack[index] = SETBIT[index - 16];
+			} else {
+				pawnDoubleBlack[index] = emptyboard;
+			}
+			
+			//----------PAWN CAPTURES----------
+			
+			
+			//---------PAWN PROMOTIONS---------
+			//--------KING    MOVEMENTS--------
+			//--------KNIGHT  MOVEMENTS--------
+			//--------DIAGON  MOVEMENTS--------
+			//--------ORTHOG  MOVEMENTS--------
 		}
 	}
 	return;

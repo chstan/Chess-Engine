@@ -35,16 +35,26 @@ extern const int RANKS[];
 extern const BitBoard fullBoard;
 extern const BitBoard emptyBoard;
 
-extern BitBoard rookMoves[];
-extern BitBoard knightMoves[];
-extern BitBoard bishopMoves[];
-extern BitBoard pawnMovesWhite[];
+extern BitBoard RightMove[];
+extern BitBoard UpMove[];
+extern BitBoard LeftMove[];
+extern BitBoard DownMove[];
+
+extern BitBoard RightUpMove[];
+extern BitBoard LeftUpMove[];
+extern BitBoard LeftDownMove[];
+extern BitBoard RightDownMove[];
+
+extern BitBoard knightMove[];
+extern BitBoard pawnMoveWhite[];
 extern BitBoard pawnDoubleWhite[];
 extern BitBoard pawnCaptureWhite[];
-extern BitBoard pawnMovesBlack[];
+extern BitBoard pawnPromotionWhite[];
+extern BitBoard pawnMoveBlack[];
 extern BitBoard pawnDoubleBlack[];
 extern BitBoard pawnCaptureBlack[];
-extern BitBoard kingMoves[];
+extern BitBoard pawnPromotionBlack[];
+extern BitBoard kingMove[];
 
 extern const unsigned char WHITE;  
 extern const unsigned char BLACK;

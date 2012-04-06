@@ -53,7 +53,12 @@ bool doCommand(const char *cmd) {
 	}
 	
 	if(!strcmp(cmd, "help") || !strcmp(cmd, "h") || !strcmp(cmd, "?")) {
-		printf("This is the help command.\n");
+		printf("Command List:\n\n");
+		printf("rotate\n");
+		printf("display\n");
+		printf("todo\n");
+		printf("exit/quit\n");
+		printf("help/h/?\n");
 		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
