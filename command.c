@@ -59,6 +59,14 @@ bool doCommand(const char *cmd) {
 		printf("todo\n");
 		printf("exit/quit\n");
 		printf("help/h/?\n");
+		printf("about\n");
+		printf("\n");
+		CMD_BUFFER_COUNT = '\0';
+		return true;
+	}
+	
+	if(!strcmp(cmd, "about")) {
+		printf("\nThis is a computer chess engine being developed by Conrad and Marc.\n%s\n\n", ENGINE_VERSION);
 		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}

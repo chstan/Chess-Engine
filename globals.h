@@ -64,15 +64,15 @@ const int RANKS[64] = {
 const BitBoard fullBoard = -1LL;
 const BitBoard emptyBoard = 0LL;
 
-BitBoard RightMove[64];
-BitBoard UpMove[64];
-BitBoard LeftMove[64];
-BitBoard DownMove[64];
+BitBoard rightMove[64];
+BitBoard upMove[64];
+BitBoard leftMove[64];
+BitBoard downMove[64];
 
-BitBoard RightUpMove[64];
-BitBoard LeftUpMove[64];
-BitBoard LeftDownMove[64];
-BitBoard RightDownMove[64];
+BitBoard rightUpMove[64];
+BitBoard leftUpMove[64];
+BitBoard leftDownMove[64];
+BitBoard rightDownMove[64];
 
 BitBoard knightMove[64];
 BitBoard pawnMoveWhite[64];
