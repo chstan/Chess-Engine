@@ -79,12 +79,12 @@ BitBoard pawnMoveWhite[64];
 BitBoard pawnDoubleWhite[64];
 BitBoard pawnCaptureWhite[64];
 BitBoard pawnPromotionWhite[64];
-BitBoard pawnPromotionCapturesWhite[64];
+BitBoard pawnPromotionCaptureWhite[64];
 BitBoard pawnMoveBlack[64];
 BitBoard pawnDoubleBlack[64];
 BitBoard pawnCaptureBlack[64];
 BitBoard pawnPromotionBlack[64];
-BitBoard pawnPromotionCapturesBlack[64];
+BitBoard pawnPromotionCaptureBlack[64];
 BitBoard kingMove[64];
 
 const unsigned char WHITE = 0;

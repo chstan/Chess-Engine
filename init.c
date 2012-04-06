@@ -66,19 +66,19 @@ void moveTableInit(void) {
 			
 			//-----PAWN CAPTURE PROMOTIONS-----
 			if(8 > file && file > 1) {
-				if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 9] | BITSET[index + 7];
-				if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 9] | BITSET[index - 7];
+				if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET[index + 9] | BITSET[index + 7];
+				if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET[index - 9] | BITSET[index - 7];
 			} else {
 				if(file == 1) {
-					pawnCapturePromotionsWhite[index] = emptyBoard;
-					pawnCapturePromotionsBlack[index] = emptyBoard;
-					if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 9];
-					if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 7];
+					pawnPromotionCaptureWhite[index] = emptyBoard;
+					pawnPromotionCaptureBlack[index] = emptyBoard;
+					if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET[index + 9];
+					if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET[index - 7];
 				} else {
-					pawnCapturePromotionsWhite[index] = emptyBoard;
-					pawnCapturePromotionsBlack[index] = emptyBoard;
-					if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 7];
-					if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 9];
+					pawnPromotionCaptureWhite[index] = emptyBoard;
+					pawnPromotionCaptureBlack[index] = emptyBoard;
+					if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET[index + 7];
+					if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET[index - 9];
 				}
 			}
 			

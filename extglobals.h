@@ -50,12 +50,12 @@ extern BitBoard pawnMoveWhite[];
 extern BitBoard pawnDoubleWhite[];
 extern BitBoard pawnCaptureWhite[];
 extern BitBoard pawnPromotionWhite[];
-extern BitBoard pawnPromotionCapturesWhite[];
+extern BitBoard pawnPromotionCaptureWhite[];
 extern BitBoard pawnMoveBlack[];
 extern BitBoard pawnDoubleBlack[];
 extern BitBoard pawnCaptureBlack[];
 extern BitBoard pawnPromotionBlack[];
-extern BitBoard pawnPromotionCapturesBlack[];
+extern BitBoard pawnPromotionCaptureBlack[];
 extern BitBoard kingMove[];
 
 extern const unsigned char WHITE;  

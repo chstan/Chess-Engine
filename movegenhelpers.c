@@ -22,43 +22,45 @@
 
 //---------------QUEEN----------------
 BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopTimidBB(pBoard, queenLocation, side)
-			 | rookTimidBB(pBoard, queenLocation, side);
+	return bishopTimidBB(pBoard, queenIndex, side)
+			 | rookTimidBB(pBoard, queenIndex, side);
 }
 
 BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopCaptureBB(pBoard, queenLocation, side)
-			 | rookCaptureBB(pBoard, queenLocation, side);
+	return bishopCaptureBB(pBoard, queenIndex, side)
+			 | rookCaptureBB(pBoard, queenIndex, side);
 }
 
 BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopMoveBB(pBoard, queenLocation, side)
-			 | rookMoveBB(pBoard, queenLocation, side);
+	return bishopMoveBB(pBoard, queenIndex, side)
+			 | rookMoveBB(pBoard, queenIndex, side);
 }
 
 //---------------KNIGHT----------------
 BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side) {
-	return knightMoves[knightIndex] & ~pBoard->position.occupied;
+	return knightMove[knightIndex] & ~pBoard->position.occupied;
 }
 
 BitBoard knightCaptureBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
-			return knightMoves[knightIndex] & pBoard->position.black.pieces;
+			return knightMove[knightIndex] & pBoard->position.black.pieces;
 		break;
 		case B:
-			return knightMoves[knightIndex] & pBoard->position.white.pieces;
+			return knightMove[knightIndex] & pBoard->position.white.pieces;
 		break;
 	}
+	return 0;
 }
 
 BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
-			return knightMoves[knightIndex] & ~pBoard->position.white.pieces;
+			return knightMove[knightIndex] & ~pBoard->position.white.pieces;
 		break;
 		case B:
-			return knightMoves[knightIndex] & ~pBoard->position.black.pieces;
+			return knightMove[knightIndex] & ~pBoard->position.black.pieces;
 		break;
 	}
+	return 0;
 }
