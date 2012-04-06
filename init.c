@@ -80,15 +80,16 @@ void moveTableInit(void) {
 			lRank = (rank - 1 >= 1) ? rank - 1 : 1;
 			hRank = (rank + 1 <= 8) ? rank + 1 : 8;
 			lFile = (file - 1 >= 1) ? file - 1 : 1;
-			hFile = (file + 1 >= 8) ? file + 1 : 8;
-			printf("%d,   %d,   %d,   %d,\n", rank, file, lRank, lFile);
+			hFile = (file + 1 <= 8) ? file + 1 : 8;
 			bits = 0;
-			for(; lRank <= hRank; lRank++) {
-				for(; lFile <= hFile; lFile++) {
-					bits |= BITSET[sq(lRank, lFile)];
+			int iF;
+			int iR;
+			for(iR = lRank; iR <= hRank; iR++) {
+				for(iF = lFile; iF <= hFile; iF++) {
+					bits |= BITSET[sq(iR, iF)];
 				}
 			}
-			kingMove[index] = bits;
+			kingMove[index] = bits & ~BITSET[index];
 			
 			//--------KNIGHT  MOVEMENTS--------
 			bits = 0;

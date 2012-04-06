@@ -55,7 +55,7 @@ void printBitMap(BitMap bits) {
 	int rank, file;
 	for(rank = 8; rank >= 1; rank--) {
 		for(file = 1; file <= 8; file++) {
-			printf(" %s ", (bits & BITSET[sq(rank, file)]) ? "1" : ".");
+			printf(" %s ", (bits & BITSET[sq(rank, file)]) ? "#" : ".");
 		}
 		printf("\n");
 	}
