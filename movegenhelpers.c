@@ -6,18 +6,12 @@
 // bool pawnPromotion(Board *pBoard, BitBoard pawnLocation);
 // 
 // BitBoard bishopTimidBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard kingTimidBB(Board *pBoard, BitBoard kingLocation);
-// BitBoard pawnTimidBB(Board *pBoard, BitBoard pawnLocation);
 // BitBoard rookTimidBB(Board *pBoard, BitBoard rookLocation);
 // 
 // BitBoard bishopCaptureBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard kingCaptureBB(Board *pBoard, BitBoard kingLocation);
-// BitBoard pawnCaptureBB(Board *pBoard, BitBoard pawnLocation);
 // BitBoard rookCaptureBB(Board *pBoard, BitBoard rookLocation);
 // 
 // BitBoard bishopMoveBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard kingMoveBB(Board *pBoard, BitBoard kingLocation);
-// BitBoard pawnMoveBB(Board *pBoard, BitBoard pawnLocation);
 // BitBoard rookMoveBB(Board *pBoard, BitBoard rookLocation);
 
 //----------------QUEEN----------------
@@ -65,6 +59,35 @@ BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 	return 0;
 }
 
+//----------------KING-----------------
+BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex, int side) {
+	return kingMove[kingIndex] & ~pBoard->position.occupied;
+}
+
+BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side) {
+	switch(side) {
+		case W:
+			return kingMove[kingIndex] & pBoard->position.black.pieces;
+		break;
+		case B:
+			return kingMove[kingIndex] & pBoard->position.white.pieces;
+		break;
+	}
+	return 0;
+}
+
+BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side) {
+	switch(side) {
+		case W:
+			return kingMove[kingIndex] & ~pBoard->position.white.pieces;
+		break;
+		case B:
+			return kingMove[kingIndex] & ~pBoard->position.black.pieces;
+		break;
+	}
+	return 0;
+}
+
 //----------------PAWN-----------------
 BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 	BitBoard oneStep;
@@ -86,6 +109,7 @@ BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 			}
 		break;
 	}
+	return 0;
 }
 
 BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side) {
@@ -97,6 +121,7 @@ BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side) {
 			return pawnPromotionBlack[pawnIndex] & ~pBoard->position.occupied;
 		break;
 	}
+	return 0;
 }
 
 BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
@@ -108,6 +133,7 @@ BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
 			return pawnCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
 		break;
 	}
+	return 0;
 }
 
 BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
@@ -119,6 +145,7 @@ BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
 			return pawnPromotionCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
 		break;
 	}
+	return 0;
 }
 
 BitBoard pawnMoveBB(Board *pBoard, UCHAR pawnIndex, int side) {

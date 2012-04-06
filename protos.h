@@ -36,9 +36,10 @@ unsigned int LSB(BitMap bits);
 void printBitMap(BitMap bits);
 
 //-------------------MOVEGEN HELPERS------------------------
-bool pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);
-
+BitBoard pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);
 BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
+
+BitBoard castleBB(Board *pBoard, UCHAR kingIndex, int side);
 
 BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side);
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side);
