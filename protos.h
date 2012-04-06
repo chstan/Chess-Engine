@@ -38,6 +38,8 @@ void printBitMap(BitMap bits);
 //-------------------MOVEGEN HELPERS------------------------
 bool pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);
 
+BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
+
 BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side);
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side);
 BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side);

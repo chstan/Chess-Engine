@@ -20,7 +20,7 @@
 // BitBoard pawnMoveBB(Board *pBoard, BitBoard pawnLocation);
 // BitBoard rookMoveBB(Board *pBoard, BitBoard rookLocation);
 
-//---------------QUEEN----------------
+//----------------QUEEN----------------
 BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
 	return bishopTimidBB(pBoard, queenIndex, side)
 			 | rookTimidBB(pBoard, queenIndex, side);
@@ -57,10 +57,70 @@ BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
 			return knightMove[knightIndex] & ~pBoard->position.white.pieces;
-		break;
+		break;make
 		case B:
 			return knightMove[knightIndex] & ~pBoard->position.black.pieces;
 		break;
 	}
 	return 0;
+}
+
+//----------------PAWN-----------------
+BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
+	BitBoard oneStep;
+	switch(side) {
+		case W:
+			oneStep = pawnMoveWhite[pawnIndex] & ~pBoard->position.occupied;
+			if(oneStep) {
+				return oneStep | pawnDoubleWhite[pawnIndex] & ~pBoard->position.occupied;
+			} else {
+				return oneStep;
+			}
+		break;
+		case B:
+			oneStep = pawnMoveBlack[pawnIndex] & ~pBoard->position.occupied;
+			if(oneStep) {
+				return oneStep | pawnDoubleBlack[pawnIndex] & ~pBoard->position.occupied;
+			} else {
+				return oneStep;
+			}
+		break;
+	}
+}
+
+BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side) {
+	switch(side) {
+		case W:
+			return pawnPromotionWhite[pawnIndex] & ~pBoard->position.occupied;
+		break;
+		case B:
+			return pawnPromotionBlack[pawnIndex] & ~pBoard->position.occupied;
+		break;
+	}
+}
+
+BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
+	switch(side) {
+		case W:
+			return pawnCaptureWhite[pawnIndex] & pBoard->position.black.pieces;
+		break;
+		case B:
+			return pawnCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
+		break;
+	}
+}
+
+BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
+	switch(side) {
+		case W:
+			return pawnPromotionCaptureWhite[pawnIndex] & pBoard->position.black.pieces;
+		break;
+		case B:
+			return pawnPromotionCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
+		break;
+	}
+}
+
+BitBoard pawnMoveBB(Board *pBoard, UCHAR pawnIndex, int side) {
+	return pawnCaptureBB(pBoard, pawnIndex, side) | pawnTimidBB(pBoard, pawnIndex, side);
 }

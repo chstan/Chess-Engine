@@ -108,6 +108,8 @@ void moveTableInit(void) {
 				}
 			}
 			kingMove[index] = bits & ~BITSET[index];
+			printBitMap(kingMove[index]);
+			printf("\n\n");
 			
 			//--------KNIGHT  MOVEMENTS--------
 			bits = 0;
