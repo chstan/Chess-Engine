@@ -48,19 +48,37 @@ void moveTableInit(void) {
 			
 			//----------PAWN CAPTURES----------
 			if(8 > file && file > 1) {
-				pawnCaptureWhite[index] = BITSET[index + 9] | BITSET[index + 7];
-				pawnCaptureBlack[index] = BITSET[index - 9] | BITSET[index - 7];
+				if (rank <= 6) pawnCaptureWhite[index] = BITSET[index + 9] | BITSET[index + 7];
+				if (rank >= 3) pawnCaptureBlack[index] = BITSET[index - 9] | BITSET[index - 7];
 			} else {
 				if(file == 1) {
 					pawnCaptureWhite[index] = emptyBoard;
 					pawnCaptureBlack[index] = emptyBoard;
-					if (rank <= 7) pawnCaptureWhite[index] = BITSET[index + 9];
-					if (rank >= 2) pawnCaptureBlack[index] = BITSET[index - 7];
+					if (rank <= 6) pawnCaptureWhite[index] = BITSET[index + 9];
+					if (rank >= 3) pawnCaptureBlack[index] = BITSET[index - 7];
 				} else {
 					pawnCaptureWhite[index] = emptyBoard;
 					pawnCaptureBlack[index] = emptyBoard;
-					if (rank <= 7) pawnCaptureWhite[index] = BITSET[index + 7];
-					if (rank >= 2) pawnCaptureBlack[index] = BITSET[index - 9];
+					if (rank <= 6) pawnCaptureWhite[index] = BITSET[index + 7];
+					if (rank >= 3) pawnCaptureBlack[index] = BITSET[index - 9];
+				}
+			}
+			
+			//-----PAWN CAPTURE PROMOTIONS-----
+			if(8 > file && file > 1) {
+				if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 9] | BITSET[index + 7];
+				if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 9] | BITSET[index - 7];
+			} else {
+				if(file == 1) {
+					pawnCapturePromotionsWhite[index] = emptyBoard;
+					pawnCapturePromotionsBlack[index] = emptyBoard;
+					if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 9];
+					if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 7];
+				} else {
+					pawnCapturePromotionsWhite[index] = emptyBoard;
+					pawnCapturePromotionsBlack[index] = emptyBoard;
+					if (rank == 7) pawnCapturePromotionsWhite[index] = BITSET[index + 7];
+					if (rank == 2) pawnCapturePromotionsBlack[index] = BITSET[index - 9];
 				}
 			}
 			
