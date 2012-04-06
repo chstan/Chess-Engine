@@ -3,6 +3,7 @@
 #include "extglobals.h"
 #include "board.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void init(void) {
 	dataInit();
@@ -21,12 +22,13 @@ void moveTableInit(void) {
 			index = BOARDINDEX[rank][file];
 			
 			//--------PAWN ONE SQUARE----------
-			if(rank != 8){
+			if(rank < 7){
 				pawnMoveWhite[index] = BITSET[index + 8];
 			} else {
 				pawnMoveWhite[index] = emptyBoard;
 			}
-			if(rank != 1) {
+			
+			if(rank > 2) {
 				pawnMoveBlack[index] = BITSET[index - 8];
 			} else {
 				pawnMoveBlack[index] = emptyBoard;
@@ -50,11 +52,15 @@ void moveTableInit(void) {
 				pawnCaptureBlack[index] = BITSET[index - 9] | BITSET[index - 7];
 			} else {
 				if(file == 1) {
-					pawnCaptureWhite[index] = BITSET[index + 9];
-					pawnCaptureBlack[index] = BITSET[index - 7];
+					pawnCaptureWhite[index] = emptyBoard;
+					pawnCaptureBlack[index] = emptyBoard;
+					if (rank <= 7) pawnCaptureWhite[index] = BITSET[index + 9];
+					if (rank >= 2) pawnCaptureBlack[index] = BITSET[index - 7];
 				} else {
-					pawnCaptureWhite[index] = BITSET[index + 7];
-					pawnCaptureBlack[index] = BITSET[index - 9];
+					pawnCaptureWhite[index] = emptyBoard;
+					pawnCaptureBlack[index] = emptyBoard;
+					if (rank <= 7) pawnCaptureWhite[index] = BITSET[index + 7];
+					if (rank >= 2) pawnCaptureBlack[index] = BITSET[index - 9];
 				}
 			}
 			
@@ -64,7 +70,7 @@ void moveTableInit(void) {
 			} else {
 				pawnPromotionWhite[index] = emptyBoard;
 			}
-			if(rank == 1) {
+			if(rank == 2) {
 				pawnPromotionBlack[index] = BITSET[index - 8];
 			} else {
 				pawnPromotionBlack[index] = emptyBoard;	
@@ -75,6 +81,7 @@ void moveTableInit(void) {
 			hRank = (rank + 1 <= 8) ? rank + 1 : 8;
 			lFile = (file - 1 >= 1) ? file - 1 : 1;
 			hFile = (file + 1 >= 8) ? file + 1 : 8;
+			printf("%d,   %d,   %d,   %d,\n", rank, file, lRank, lFile);
 			bits = 0;
 			for(; lRank <= hRank; lRank++) {
 				for(; lFile <= hFile; lFile++) {
@@ -167,7 +174,7 @@ void dataInit(void) {
 	
 	for(rank = 0; rank < 9; rank++) {
 		for(file = 0; file < 9; file++) {
-			BOARDINDEX[file][rank] = sq(rank, file);
+			BOARDINDEX[rank][file] = sq(rank, file);
 		}
 	}
 	

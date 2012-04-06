@@ -52,12 +52,13 @@ unsigned int GSB(BitMap bits) {
 }
 
 void printBitMap(BitMap bits) {
-	static char b[65];
-	b[0] = '\0';
-	int i;
-	for(i = 0; i < 64; i++) {
-		strcat(b, (bits & BITSET[i]) ? "1" : ".");
+	int rank, file;
+	for(rank = 8; rank >= 1; rank--) {
+		for(file = 1; file <= 8; file++) {
+			printf(" %s ", (bits & BITSET[sq(rank, file)]) ? "1" : ".");
+		}
+		printf("\n");
 	}
-	printf("%s\n", b);
+	printf("\n");
 	return;
 }
