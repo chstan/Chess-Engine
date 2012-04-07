@@ -3,6 +3,7 @@
 
 #include "defines.h"
 #include "board.h"
+#include "move.h"
 
 extern char CMD_BUFFER[];
 extern int CMD_BUFFER_COUNT;

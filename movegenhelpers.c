@@ -1,10 +1,7 @@
 #include "protos.h"
 #include "defines.h"
 #include "extglobals.h"
-
-
-// bool pawnPromotion(Board *pBoard, BitBoard pawnLocation);
-// 
+ 
 // BitBoard bishopTimidBB(Board *pBoard, BitBoard bishopLocation);
 // BitBoard rookTimidBB(Board *pBoard, BitBoard rookLocation);
 // 
