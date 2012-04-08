@@ -91,6 +91,7 @@ void displayBoard(Board *pBoard) {
 		printf("|  %d\n", pBoard->info.displayRotated ? i+1 : 8-i);
 	}
 	printf("\t%s\n\n", divider);
+	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
 	return;
 }
 

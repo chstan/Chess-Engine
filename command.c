@@ -18,13 +18,24 @@ void typePrompt() {
 	}
 }
 
+void tokenizeCommand() {
+	TOKEN_COUNT = 0;
+	char* currentToken;
+	for(currentToken = strtok(CMD_BUFFER, " ");
+			currentToken && TOKEN_COUNT < MAX_TOKENS; currentToken = strtok(NULL, " ")) {
+		
+		TOKENS[TOKEN_COUNT] = currentToken;
+		TOKEN_COUNT++;
+	}
+	return;
+}
+
 bool processLine() {
 	// process all the commands currently sitting in CMD_BUFFER
 	CMD_BUFFER[CMD_BUFFER_COUNT] = '\0';
-	while(CMD_BUFFER_COUNT) {
-		if(!doCommand(CMD_BUFFER)) return false;
-		typePrompt();
-	}
+	tokenizeCommand();
+	CMD_BUFFER_COUNT = 0;
+	if(!doCommand()) return false;
 	return true;
 }
 
@@ -36,6 +47,7 @@ void readCommands() {
 		if(c == '\n') {
 			//handle the typed line and determine whether or not we need to exit
 			if(!processLine()) return;
+			typePrompt();
 		} else {
 			if(CMD_BUFFER_COUNT >= MAX_CMD_BUFFER-1) {
 				printf("Input refused: input buffer full.\n");
@@ -46,13 +58,12 @@ void readCommands() {
 	}
 }
 
-bool doCommand(const char *cmd) {
-	if(!strcmp(cmd, "")) {
-		CMD_BUFFER_COUNT = '\0';
+bool doCommand() {
+	if(!strcmp(TOKENS[0], "")) {
 		return true;
 	}
 	
-	if(!strcmp(cmd, "help") || !strcmp(cmd, "h") || !strcmp(cmd, "?")) {
+	if(!strcmp(TOKENS[0], "help") || !strcmp(TOKENS[0], "h") || !strcmp(TOKENS[0], "?")) {
 		printf("Command List:\n\n");
 		printf("rotate\n");
 		printf("display\n");
@@ -61,40 +72,33 @@ bool doCommand(const char *cmd) {
 		printf("help/h/?\n");
 		printf("about\n");
 		printf("\n");
-		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
 	
-	if(!strcmp(cmd, "about")) {
+	if(!strcmp(TOKENS[0], "about")) {
 		printf("\nThis is a computer chess engine being developed by Conrad and Marc.\n%s\n\n", ENGINE_VERSION);
-		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
 	
-	if(!strcmp(cmd, "display")) {
+	if(!strcmp(TOKENS[0], "display")) {
 		displayBoard(pBoard);
-		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
 	
-	if(!strcmp(cmd, "rotate")) {
+	if(!strcmp(TOKENS[0], "rotate")) {
 		rotateBoard(pBoard);
-		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
 	
-	if(!strcmp(cmd, "todo")) {
+	if(!strcmp(TOKENS[0], "todo")) {
 		printf("This is for the developers so they can check what there is to implement.\n");
-		CMD_BUFFER_COUNT = '\0';
 		return true;
 	}
 	
-	if(!strcmp(cmd, "exit") || !strcmp(cmd, "quit")) {
-		CMD_BUFFER_COUNT = '\0';
+	if(!strcmp(TOKENS[0], "exit") || !strcmp(TOKENS[0], "quit")) {
 		return false;
 	}
 	
 	alert(UNKNOWN_COMMAND);
-	CMD_BUFFER_COUNT = '\0';
 	return true;
 }

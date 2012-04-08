@@ -2,6 +2,7 @@
 #include "protos.h"
 #include "extglobals.h"
 #include "board.h"
+#include "move.h"
 #include <stdlib.h>
 #include <stdio.h>
 

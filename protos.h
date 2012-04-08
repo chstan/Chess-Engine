@@ -11,8 +11,9 @@ void boardInit(void);
 void moveTableInit(void);
 
 //-----------------UI AND CONTROL PROTOTYPES----------------
-bool doCommand(const char *cmd);
+bool doCommand(void);
 void readCommands(void);
+void tokenizeCommand(void);
 void alert(int ALERT);
 void prepareForExit(void);
 

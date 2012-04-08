@@ -7,6 +7,8 @@
 
 extern char CMD_BUFFER[];
 extern int CMD_BUFFER_COUNT;
+extern char *TOKENS[];
+extern int TOKEN_COUNT;
 
 extern Board *pBoard;
 

@@ -7,6 +7,8 @@
 
 char CMD_BUFFER[MAX_CMD_BUFFER];
 int CMD_BUFFER_COUNT = 0;
+char *TOKENS[MAX_TOKENS];
+int TOKEN_COUNT;
 
 Board *pBoard;
 
