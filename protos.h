@@ -15,6 +15,10 @@ void readCommands(void);
 void alert(int ALERT);
 void prepareForExit(void);
 
+//--------------------MAKE/UNMAKE MOVE----------------------
+void makeMove(Board *pBoard, Move m);
+void unmakeMove(Board *pBoard, Move m);
+
 //--------------------BOARD PROTOTYPES----------------------
 void resetBoard(Board *pBoard);
 void initBoardFromSquares(Board *pBoard, unsigned char nextMove,
@@ -28,6 +32,18 @@ void updateKingsFromBB(Board *pBoard);
 void updatePieceCountsFromBB(Board *pBoard);
 void displayBoard(Board *pBoard);
 void rotateBoard(Board *pBoard);
+
+void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
+void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece);
+
+void enPassant(Board *pBoard);
+void unPassant(Board *pBoard); // probably not needed
+
+void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
+void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);
+
+void promote(Board *pBoard, UCHAR index, UCHAR whichPromote);
+void unPromote(Board *pBoard, UCHAR index);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);

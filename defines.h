@@ -8,6 +8,7 @@
 
 #define W 0
 #define B 1
+#define color(p) ((p & 8) == 8)
 
 typedef unsigned long long U64;
 typedef unsigned long long BitMap;

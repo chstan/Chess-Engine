@@ -1,6 +1,8 @@
 #ifndef MOVE_H
 #define MOVE_H
 
+#include "binary.h"
+
 typedef unsigned int Move;
 
 // H G F E D C B A
@@ -21,23 +23,27 @@ typedef unsigned int Move;
  */
 
 //---------------MASKS----------------
-//							  ----PPCCPPPPCCCCMMMMFFFFFFTTTTTT
-#define tM 			0b11111111111111111111111111000000
-#define fM			0b11111111111111111111000000111111
-#define mM			0b11111111111111110000111111111111
-#define cM			0b11111111111100001111111111111111
-#define pM			0b11111111000011111111111111111111
-#define wC			0b00000001000000000000000000000000
-#define bC			0b00000010000000000000000000000000
-#define wP			0b00000100000000000000000000000000
-#define bP			0b00001000000000000000000000000000
+//							  ----PPCC PPPPCCCC MMMMFFFF FFTTTTTT
+#define tM 		B32(11111111,11111111,11111111,11000000)
+#define fM		B32(11111111,11111111,11110000,00111111)
+#define mM		B32(11111111,11111111,00001111,11111111)
+#define cM		B32(11111111,11110000,11111111,11111111)
+#define pM		B32(11111111,00001111,11111111,11111111)
+#define wC		B32(00000001,00000000,00000000,00000000)
+#define bC		B32(00000010,00000000,00000000,00000000)
+#define wP		B32(00000100,00000000,00000000,00000000)
+#define bP		B32(00001000,00000000,00000000,00000000)
+
+//------------INITIALIZER-------------
+#define moveF(bP, wP, bC, wC, promo, capt, mov, fr, to) (((((((((((((((((bP << 1) | wP) << 1) | bC) << 1) | wC) << 4) | promo) << 4) | capt) << 4) | mov) << 6) | fr) << 6) | to)
+#define move(capt, mov, fr, to) ((((((capt << 4) | mov) << 6) | fr) << 6) | to)
 
 //--------------GETTERS---------------
 #define to(move) 											(move & 63)
 #define from(move) 										((move >> 6) & 63)
 #define movedPiece(move) 							((move >> 12) & 15)
 #define capturedPiece(move) 					((move >> 16) & 15)
-#define promo(move) 									((move >> 20) & 15)
+#define promote(move) 								((move >> 20) & 15)
 #define whiteCastle(move) 						((move >> 21) & 1)
 #define blackCastle(move) 						((move >> 22) & 1)
 #define whiteEnPassant(move) 					((move >> 23) & 1)
@@ -48,7 +54,7 @@ typedef unsigned int Move;
 #define setFrom(move, from) 					(move &= (fM | (to << 6)))
 #define setMovedPiece(move, piece) 		(move &= (mM | (piece << 12))) 
 #define setCapturedPiece(move, piece) (move &= (cM | (piece << 16)))
-#define setPromo(move, promo) 				(move &= (pM | (promo << 20)))
+#define setPromote(move, promo) 			(move &= (pM | (promo << 20)))
 #define setWhiteCastle(move) 					(move |= wC)
 #define unsetWhiteCastle(move) 				(move &= ~wC)
 #define setBlackCastle(move) 					(move |= bC)

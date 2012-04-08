@@ -126,13 +126,15 @@ const int QUEEN_VALUE = 1050;
 const int KING_VALUE = 90000;
 const int CHECK_MATE = 90000;
 
+const int PIECEVALUES[16] =
+	{0, PAWN_VALUE, KING_VALUE, KNIGHT_VALUE, 0, BISHOP_VALUE, ROOK_VALUE, QUEEN_VALUE,
+	 0, PAWN_VALUE, KING_VALUE, KNIGHT_VALUE, 0, BISHOP_VALUE, ROOK_VALUE, QUEEN_VALUE}; 
+
 int GS1B[256];
 
 unsigned char CAN_CASTLE_OO = 1;
-unsigned char CAN_CASTLE_OOO = 1;
-unsigned int WHITE_OOO_CASTL;
-unsigned int BLACK_OOO_CASTL;
-unsigned int WHITE_OO_CASTL;
-unsigned int BLACK_OO_CASTL;
+unsigned char CAN_CASTLE_OOO = 2;
+unsigned char WHITE_CAN_CASTLE = 4;
+unsigned char BLACK_CAN_CASTLE = 4;
 
 #endif

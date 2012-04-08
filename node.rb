@@ -6,6 +6,7 @@ class Node
     @value = value
   end
   
+  
   def to_s indent=0
     value_s = @value.to_s
     sub_indent = indent + value_s.length

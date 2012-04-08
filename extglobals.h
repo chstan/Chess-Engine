@@ -96,14 +96,14 @@ extern const int ROOK_VALUE;
 extern const int QUEEN_VALUE;
 extern const int KING_VALUE;
 extern const int CHECK_MATE;
+
+extern const int PIECEVALUES[];
  
 extern int GS1B[]; 
  
 extern unsigned char CAN_CASTLE_OO;
 extern unsigned char CAN_CASTLE_OOO;
-extern unsigned int WHITE_OOO_CASTL;
-extern unsigned int BLACK_OOO_CASTL;
-extern unsigned int WHITE_OO_CASTL;
-extern unsigned int BLACK_OO_CASTL;
+extern unsigned char WHITE_CAN_CASTLE;
+extern unsigned char BLACK_CAN_CASTLE;
 
 #endif
