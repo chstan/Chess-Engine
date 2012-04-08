@@ -107,81 +107,81 @@ void rotateBoard(Board *pBoard) {
 void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 	//DOES NOT UPDATE ANY MATERIAL COUNTS
 	switch(lastOccupant) {
-		case WHITE_PAWN:
+		case WP:
 			pBoard->position.white.pawn &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case BLACK_PAWN:
+		case BP:
 			pBoard->position.black.pawn &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case WHITE_KING:
+		case WK:
 			pBoard->position.white.king &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 			pBoard->position.kings[WHITE] = INVALID_SQUARE;
 		break;
-		case BLACK_KING:
+		case BK:
 			pBoard->position.black.king &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 			pBoard->position.kings[WHITE] = INVALID_SQUARE;
 		break;
-		case WHITE_QUEEN:
+		case WQ:
 			pBoard->position.white.queen &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case BLACK_QUEEN:
+		case BQ:
 			pBoard->position.black.queen &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case WHITE_BISHOP:
+		case WB:
 			pBoard->position.white.bishop &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case BLACK_BISHOP:
+		case BB:
 			pBoard->position.black.bishop &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case WHITE_KNIGHT:
+		case WN:
 			pBoard->position.white.knight &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case BLACK_KNIGHT:
+		case BN:
 			pBoard->position.black.knight &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case WHITE_ROOK:
+		case WR:
 			pBoard->position.white.rook &= ~BITSET[index];
-			pBoard->position.white.piece &= ~BITSET[index];
+			pBoard->position.white.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case BLACK_ROOK:
+		case BR:
 			pBoard->position.black.rook &= ~BITSET[index];
-			pBoard->position.black.piece &= ~BITSET[index];
+			pBoard->position.black.pieces &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
-		case EMPTY:
+		case E:
 		
 		break;
 	}
@@ -190,84 +190,84 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 
 void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece) {
 	if(capturedPiece) {
-		setEmptyAt(pBoard *pBoard, UCHAR index, capturedPiece);
+		setEmptyAt(pBoard, index, capturedPiece);
 	}
 	switch(movedPiece) {
-		case WHITE_PAWN:
+		case WP:
 			pBoard->position.white.pawn |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case BLACK_PAWN:
+		case BP:
 			pBoard->position.black.pawn |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case WHITE_KING:
+		case WK:
 			pBoard->position.white.king |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 			pBoard->position.kings[WHITE] = index;
 		break;
-		case BLACK_KING:
+		case BK:
 			pBoard->position.black.king |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 			pBoard->position.kings[WHITE] = index;
 		break;
-		case WHITE_QUEEN:
+		case WQ:
 			pBoard->position.white.queen |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case BLACK_QUEEN:
+		case BQ:
 			pBoard->position.black.queen |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case WHITE_BISHOP:
+		case WB:
 			pBoard->position.white.bishop |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case BLACK_BISHOP:
+		case BB:
 			pBoard->position.black.bishop |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case WHITE_KNIGHT:
+		case WN:
 			pBoard->position.white.knight |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case BLACK_KNIGHT:
+		case BN:
 			pBoard->position.black.knight |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case WHITE_ROOK:
+		case WR:
 			pBoard->position.white.rook |= BITSET[index];
-			pBoard->position.white.piece |= BITSET[index];
+			pBoard->position.white.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case BLACK_ROOK:
+		case BR:
 			pBoard->position.black.rook |= BITSET[index];
-			pBoard->position.black.piece |= BITSET[index];
+			pBoard->position.black.pieces |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
-		case EMPTY:
+		case E:
 		
 		break;
 	}
@@ -361,15 +361,15 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 	return;
 }
 
-void promote(Board *pBoard, UCHAR index, UCHAR whichPromote) {
+void doPromote(Board *pBoard, UCHAR index, UCHAR whichPromote) {
 	switch(color(whichPromote)) {
 		case W:
 			setEmptyAt(pBoard, index, WHITE_PAWN);
-			setPieceAt(pBoard, index, whichPromote);
+			setPieceAt(pBoard, index, whichPromote, 0);
 		break;
 		case B:
 			setEmptyAt(pBoard, index, BLACK_PAWN);
-			setPieceAt(pBoard, index, whichPromot);
+			setPieceAt(pBoard, index, whichPromote, 0);
 		break;
 	}
 	return;
@@ -391,73 +391,73 @@ void unPromote(Board *pBoard, UCHAR index) {
 
 void addMaterial(Board *pBoard, UCHAR piece) {
 	switch(piece) {
-		case WHITE_PAWN:
+		case WP:
 			pBoard->info.whiteMaterial += PAWN_VALUE;
 			pBoard->position.pieces[WHITE][PAWN]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_PAWN:
+		case BP:
 			pBoard->info.blackMaterial += PAWN_VALUE;
 			pBoard->position.pieces[BLACK][PAWN]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case WHITE_KING:
+		case WK:
 			pBoard->info.whiteMaterial += KING_VALUE;
 			pBoard->position.pieces[WHITE][KING]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_KING:
+		case BK:
 			pBoard->info.blackMaterial += KING_VALUE;
 			pBoard->position.pieces[BLACK][KING]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case WHITE_QUEEN:
+		case WQ:
 			pBoard->info.whiteMaterial += QUEEN_VALUE;
 			pBoard->position.pieces[WHITE][QUEEN]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_QUEEN:
+		case BQ:
 			pBoard->info.blackMaterial += QUEEN_VALUE;
 			pBoard->position.pieces[BLACK][QUEEN]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case WHITE_BISHOP:
+		case WB:
 			pBoard->info.whiteMaterial += BISHOP_VALUE;
 			pBoard->position.pieces[WHITE][BISHOP]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_BISHOP:
+		case BB:
 			pBoard->info.blackMaterial += BISHOP_VALUE;
 			pBoard->position.pieces[BLACK][BISHOP]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case WHITE_KNIGHT:
+		case WN:
 			pBoard->info.whiteMaterial += KNIGHT_VALUE;
 			pBoard->position.pieces[WHITE][KNIGHT]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_KNIGHT:
+		case BN:
 			pBoard->info.blackMaterial += KNIGHT_VALUE;
 			pBoard->position.pieces[BLACK][KNIGHT]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case WHITE_ROOK:
+		case WR:
 			pBoard->info.whiteMaterial += ROOK_VALUE;
 			pBoard->position.pieces[WHITE][ROOK]++;
 			pBoard->position.pieces[WHITE][TOTAL]++;
 			pBoard->position.totalPieces++;
 		break;
-		case BLACK_ROOK:
+		case BR:
 			pBoard->info.blackMaterial += ROOK_VALUE;
 			pBoard->position.pieces[BLACK][ROOK]++;
 			pBoard->position.pieces[BLACK][TOTAL]++;
@@ -470,73 +470,73 @@ void addMaterial(Board *pBoard, UCHAR piece) {
 
 void removeMaterial(Board *pBoard, UCHAR piece) {
 	switch(piece) {
-		case WHITE_PAWN:
+		case WP:
 			pBoard->info.whiteMaterial -= PAWN_VALUE;
 			pBoard->position.pieces[WHITE][PAWN]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_PAWN:
+		case BP:
 			pBoard->info.blackMaterial -= PAWN_VALUE;
 			pBoard->position.pieces[BLACK][PAWN]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case WHITE_KING:
+		case WK:
 			pBoard->info.whiteMaterial -= KING_VALUE;
 			pBoard->position.pieces[WHITE][KING]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_KING:
+		case BK:
 			pBoard->info.blackMaterial -= KING_VALUE;
 			pBoard->position.pieces[BLACK][KING]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case WHITE_QUEEN:
+		case WQ:
 			pBoard->info.whiteMaterial -= QUEEN_VALUE;
 			pBoard->position.pieces[WHITE][QUEEN]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_QUEEN:
+		case BQ:
 			pBoard->info.blackMaterial -= QUEEN_VALUE;
 			pBoard->position.pieces[BLACK][QUEEN]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case WHITE_BISHOP:
+		case WB:
 			pBoard->info.whiteMaterial -= BISHOP_VALUE;
 			pBoard->position.pieces[WHITE][BISHOP]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_BISHOP:
+		case BB:
 			pBoard->info.blackMaterial -= BISHOP_VALUE;
 			pBoard->position.pieces[BLACK][BISHOP]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case WHITE_KNIGHT:
+		case WN:
 			pBoard->info.whiteMaterial -= KNIGHT_VALUE;
 			pBoard->position.pieces[WHITE][KNIGHT]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_KNIGHT:
+		case BN:
 			pBoard->info.blackMaterial -= KNIGHT_VALUE;
 			pBoard->position.pieces[BLACK][KNIGHT]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case WHITE_ROOK:
+		case WR:
 			pBoard->info.whiteMaterial -= ROOK_VALUE;
 			pBoard->position.pieces[WHITE][ROOK]--;
 			pBoard->position.pieces[WHITE][TOTAL]--;
 			pBoard->position.totalPieces--;
 		break;
-		case BLACK_ROOK:
+		case BR:
 			pBoard->info.blackMaterial -= ROOK_VALUE;
 			pBoard->position.pieces[BLACK][ROOK]--;
 			pBoard->position.pieces[BLACK][TOTAL]--;

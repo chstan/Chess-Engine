@@ -48,7 +48,7 @@ BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
 			return knightMove[knightIndex] & ~pBoard->position.white.pieces;
-		break;make
+		break;
 		case B:
 			return knightMove[knightIndex] & ~pBoard->position.black.pieces;
 		break;
@@ -92,7 +92,7 @@ BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 		case W:
 			oneStep = pawnMoveWhite[pawnIndex] & ~pBoard->position.occupied;
 			if(oneStep) {
-				return oneStep | pawnDoubleWhite[pawnIndex] & ~pBoard->position.occupied;
+				return oneStep | (pawnDoubleWhite[pawnIndex] & ~pBoard->position.occupied);
 			} else {
 				return oneStep;
 			}
@@ -100,7 +100,7 @@ BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 		case B:
 			oneStep = pawnMoveBlack[pawnIndex] & ~pBoard->position.occupied;
 			if(oneStep) {
-				return oneStep | pawnDoubleBlack[pawnIndex] & ~pBoard->position.occupied;
+				return oneStep | (pawnDoubleBlack[pawnIndex] & ~pBoard->position.occupied);
 			} else {
 				return oneStep;
 			}

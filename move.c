@@ -32,9 +32,9 @@ void makeMove(Board *pBoard, Move m) {
 		}
 		
 		if(promote(m)) {
-			promote(pBoard, to(m), promote(m));
-			removeMaterial(movedPiece);
-			addMaterial(promote(m));
+			doPromote(pBoard, to(m), promote(m));
+			removeMaterial(pBoard, movedPiece(m));
+			addMaterial(pBoard, promote(m));
 		}
 		removeMaterial(pBoard, capturedPiece(m));
 	}

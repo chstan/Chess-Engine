@@ -2,6 +2,7 @@
 #define PROTOS_H
 #include "defines.h"
 #include "board.h"
+#include "move.h"
 
 //-----------------INITIALIZATION PROTOTYPES----------------
 void init(void);
@@ -41,7 +42,7 @@ void enPassant(Board *pBoard);
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
 void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);
 
-void promote(Board *pBoard, UCHAR index, UCHAR whichPromote);
+void doPromote(Board *pBoard, UCHAR index, UCHAR whichPromote);
 void unPromote(Board *pBoard, UCHAR index);
 
 void addMaterial(Board *pBoard, UCHAR piece);
