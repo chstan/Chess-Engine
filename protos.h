@@ -37,13 +37,15 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
 void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece);
 
 void enPassant(Board *pBoard);
-void unPassant(Board *pBoard); // probably not needed
 
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
 void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);
 
 void promote(Board *pBoard, UCHAR index, UCHAR whichPromote);
 void unPromote(Board *pBoard, UCHAR index);
+
+void addMaterial(Board *pBoard, UCHAR piece);
+void removeMaterial(Board *pBoard, UCHAR piece);
 
 //-----------------------BIT OPS----------------------------
 unsigned int countBits(BitMap bits);

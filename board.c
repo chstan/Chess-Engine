@@ -318,6 +318,7 @@ void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 			pBoard->info.castleBlack &= ~BLACK_CAN_CASTLE;
 		break;
 	}
+	return;
 }
 
 void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
@@ -357,6 +358,7 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 			pBoard->info.castleBlack |= BLACK_CAN_CASTLE;
 		break;
 	}
+	return;
 }
 
 void promote(Board *pBoard, UCHAR index, UCHAR whichPromote) {
@@ -384,9 +386,10 @@ void unPromote(Board *pBoard, UCHAR index) {
 			setPieceAt(pBoard, index, BLACK_PAWN, 0);		
 		break;
 	}
+	return;
 }
 
-void addMaterial(UCHAR piece) {
+void addMaterial(Board *pBoard, UCHAR piece) {
 	switch(piece) {
 		case WHITE_PAWN:
 			pBoard->info.whiteMaterial += PAWN_VALUE;
@@ -462,9 +465,10 @@ void addMaterial(UCHAR piece) {
 		break;
 	}
 	pBoard->info.material = pBoard->info.whiteMaterial - pBoard->info.blackMaterial;
+	return;
 }
 
-void removeMaterial(UCHAR piece) {
+void removeMaterial(Board *pBoard, UCHAR piece) {
 	switch(piece) {
 		case WHITE_PAWN:
 			pBoard->info.whiteMaterial -= PAWN_VALUE;
@@ -540,6 +544,7 @@ void removeMaterial(UCHAR piece) {
 		break;
 	}
 	pBoard->info.material = pBoard->info.whiteMaterial - pBoard->info.blackMaterial;
+	return;
 }
 
 //---------------------AUX FUNCTIONS-------------------------

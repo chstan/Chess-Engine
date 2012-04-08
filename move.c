@@ -23,7 +23,7 @@ void makeMove(Board *pBoard, Move m) {
 		}
 	} else {
 		setEmptyAt(pBoard, from(m), movedPiece(m));
-
+		
 		if(!(whiteEnPassant(m) | blackEnPassant(m))) {
 			setPieceAt(pBoard, to(m), movedPiece(m), capturedPiece(m));
 		} else {
@@ -33,7 +33,10 @@ void makeMove(Board *pBoard, Move m) {
 		
 		if(promote(m)) {
 			promote(pBoard, to(m), promote(m));
+			removeMaterial(movedPiece);
+			addMaterial(promote(m));
 		}
+		removeMaterial(pBoard, capturedPiece(m));
 	}
 	return;
 }

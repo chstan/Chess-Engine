@@ -12,20 +12,20 @@
 // BitBoard rookMoveBB(Board *pBoard, BitBoard rookLocation);
 
 //----------------QUEEN----------------
-BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopTimidBB(pBoard, queenIndex, side)
-			 | rookTimidBB(pBoard, queenIndex, side);
-}
-
-BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopCaptureBB(pBoard, queenIndex, side)
-			 | rookCaptureBB(pBoard, queenIndex, side);
-}
-
-BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
-	return bishopMoveBB(pBoard, queenIndex, side)
-			 | rookMoveBB(pBoard, queenIndex, side);
-}
+// BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
+// 	return bishopTimidBB(pBoard, queenIndex, side)
+// 			 | rookTimidBB(pBoard, queenIndex, side);
+// }
+// 
+// BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
+// 	return bishopCaptureBB(pBoard, queenIndex, side)
+// 			 | rookCaptureBB(pBoard, queenIndex, side);
+// }
+// 
+// BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
+// 	return bishopMoveBB(pBoard, queenIndex, side)
+// 			 | rookMoveBB(pBoard, queenIndex, side);
+// }
 
 //---------------KNIGHT----------------
 BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side) {
