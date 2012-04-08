@@ -56,6 +56,7 @@ void readCommands() {
 			CMD_BUFFER[CMD_BUFFER_COUNT++] = c;
 		}
 	}
+	return;
 }
 
 bool doCommand() {
@@ -65,6 +66,7 @@ bool doCommand() {
 	
 	if(!strcmp(TOKENS[0], "help") || !strcmp(TOKENS[0], "h") || !strcmp(TOKENS[0], "?")) {
 		printf("Command List:\n\n");
+		printf("move [moveParam]\n");
 		printf("rotate\n");
 		printf("display\n");
 		printf("todo\n");
@@ -72,6 +74,20 @@ bool doCommand() {
 		printf("help/h/?\n");
 		printf("about\n");
 		printf("\n");
+		return true;
+	}
+	
+	if(!strcmp(TOKENS[0], "move")) {
+		if(TOKEN_COUNT == 1) {
+			printf("You have to specify a move as an additional parameter.\n\n");
+			printf("\tmove [PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROM]\n");
+			printf("or\n\tmove [CASTLE]\n\n");
+			return true;
+		}
+		Move m;
+		if(m = notationToMove(pBoard))
+			makeMove(pBoard, m);
+		
 		return true;
 	}
 	

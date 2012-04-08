@@ -38,6 +38,7 @@ void makeMove(Board *pBoard, Move m) {
 		}
 		removeMaterial(pBoard, capturedPiece(m));
 	}
+	pBoard->info.nextMove = (pBoard->info.nextMove + 1)%2;
 	return;
 }
 

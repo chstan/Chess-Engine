@@ -35,7 +35,7 @@ typedef unsigned int Move;
 #define bP		B32(00001000,00000000,00000000,00000000)
 
 //------------INITIALIZER-------------
-#define moveF(bP, wP, bC, wC, promo, capt, mov, fr, to) (((((((((((((((((bP << 1) | wP) << 1) | bC) << 1) | wC) << 4) | promo) << 4) | capt) << 4) | mov) << 6) | fr) << 6) | to)
+#define moveF(bP, wP, bC, wC, promo, capt, mov, fr, to) ((((((((((((((((bP << 1) | wP) << 1) | bC) << 1) | wC) << 4) | promo) << 4) | capt) << 4) | mov) << 6) | fr) << 6) | to)
 #define move(capt, mov, fr, to) ((((((capt << 4) | mov) << 6) | fr) << 6) | to)
 
 //--------------GETTERS---------------

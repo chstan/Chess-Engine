@@ -71,24 +71,25 @@ void initBoardFromSquares(Board* pBoard, unsigned char nextMove, int staleMoves,
 
 void displayBoard(Board *pBoard) {
 	const char *header  = "   A     B     C     D     E     F     G     H   ";
+	const char *reverse = "   H     G     F     E     D     C     B     A   ";
 	const char *divider = "+-----+-----+-----+-----+-----+-----+-----+-----+";
 	
-	printf("\n\t%s\n", header);
+	printf("\n\t%s\n", pBoard->info.nextMove ? reverse : header);
 	
 	int i, j;
 	for(i = 0; i < 8; i++) {
 		printf("\t%s\n\t", divider);
 		for(j = 0; j < 8; j++) {
-			switch(pBoard->info.displayRotated) {
-				case false:
+			switch(pBoard->info.nextMove) {
+				case W:
 					printf("| %s ", PIECENAMES[pBoard->position.square[sq(8-i, j+1)]]);	
 				break;
-				case true:
-					printf("| %s ", PIECENAMES[pBoard->position.square[sq(i+1, j+1)]]);
+				case B:
+					printf("| %s ", PIECENAMES[pBoard->position.square[sq(i+1, 8-j)]]);
 				break;
 			}
 		}
-		printf("|  %d\n", pBoard->info.displayRotated ? i+1 : 8-i);
+		printf("|  %d\n", pBoard->info.nextMove ? i+1 : 8-i);
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);

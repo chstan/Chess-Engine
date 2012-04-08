@@ -17,6 +17,9 @@ void tokenizeCommand(void);
 void alert(int ALERT);
 void prepareForExit(void);
 
+//------------------------NOTATION--------------------------
+Move notationToMove(Board *pBoard);
+
 //--------------------MAKE/UNMAKE MOVE----------------------
 void makeMove(Board *pBoard, Move m);
 void unmakeMove(Board *pBoard, Move m);
