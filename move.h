@@ -44,10 +44,10 @@ typedef unsigned int Move;
 #define movedPiece(move) 							((move >> 12) & 15)
 #define capturedPiece(move) 					((move >> 16) & 15)
 #define promote(move) 								((move >> 20) & 15)
-#define whiteCastle(move) 						((move >> 21) & 1)
-#define blackCastle(move) 						((move >> 22) & 1)
-#define whiteEnPassant(move) 					((move >> 23) & 1)
-#define blackEnPassant(move) 					((move >> 24) & 1)
+#define whiteCastle(move) 						((move >> 24) & 1)
+#define blackCastle(move) 						((move >> 25) & 1)
+#define whiteEnPassant(move) 					((move >> 26) & 1)
+#define blackEnPassant(move) 					((move >> 27) & 1)
 
 //--------------SETTERS---------------
 #define setTo(move, to) 							(move &= (tM | to))

@@ -13,7 +13,7 @@ void moveTableInit(void);
 //-----------------UI AND CONTROL PROTOTYPES----------------
 bool doCommand(void);
 void readCommands(void);
-void tokenizeCommand(void);
+bool tokenizeCommand(void);
 void alert(int ALERT);
 void prepareForExit(void);
 
@@ -23,6 +23,8 @@ Move notationToMove(Board *pBoard);
 //--------------------MAKE/UNMAKE MOVE----------------------
 void makeMove(Board *pBoard, Move m);
 void unmakeMove(Board *pBoard, Move m);
+
+void printMove(Move m);
 
 //--------------------BOARD PROTOTYPES----------------------
 void resetBoard(Board *pBoard);

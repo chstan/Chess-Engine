@@ -18,22 +18,23 @@ void typePrompt() {
 	}
 }
 
-void tokenizeCommand() {
+bool tokenizeCommand() {
 	TOKEN_COUNT = 0;
 	char* currentToken;
+	if (!strcmp(CMD_BUFFER, "")) return false;
 	for(currentToken = strtok(CMD_BUFFER, " ");
 			currentToken && TOKEN_COUNT < MAX_TOKENS; currentToken = strtok(NULL, " ")) {
 		
 		TOKENS[TOKEN_COUNT] = currentToken;
 		TOKEN_COUNT++;
 	}
-	return;
+	return true;
 }
 
 bool processLine() {
 	// process all the commands currently sitting in CMD_BUFFER
 	CMD_BUFFER[CMD_BUFFER_COUNT] = '\0';
-	tokenizeCommand();
+	if (!tokenizeCommand()) return true;
 	CMD_BUFFER_COUNT = 0;
 	if(!doCommand()) return false;
 	return true;
@@ -85,9 +86,9 @@ bool doCommand() {
 			return true;
 		}
 		Move m;
-		if(m = notationToMove(pBoard))
+		if((m = notationToMove(pBoard)))
 			makeMove(pBoard, m);
-		
+		printMove(m);
 		return true;
 	}
 	

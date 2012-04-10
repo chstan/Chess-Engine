@@ -11,11 +11,6 @@
 #define B 1
 #define color(p) ((p & 8) == 8)
 
-enum pieces {
-	E = 0, WP = 1, WK = 2, WN = 3, WB = 5, WR = 6, WQ = 7,
-	BP = 9, BK = 10, BN = 11, BB = 13, BR = 14, BQ = 15
-};
-
 #define E 0
 #define WP 1
 #define BP 9

@@ -184,7 +184,6 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case E:
-		
 		break;
 	}
 	return;
@@ -270,7 +269,6 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case E:
-		
 		break;
 	}
 	return;

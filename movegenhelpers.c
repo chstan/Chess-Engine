@@ -1,31 +1,54 @@
 #include "protos.h"
 #include "defines.h"
 #include "extglobals.h"
- 
-// BitBoard bishopTimidBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard rookTimidBB(Board *pBoard, BitBoard rookLocation);
-// 
-// BitBoard bishopCaptureBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard rookCaptureBB(Board *pBoard, BitBoard rookLocation);
-// 
-// BitBoard bishopMoveBB(Board *pBoard, BitBoard bishopLocation);
-// BitBoard rookMoveBB(Board *pBoard, BitBoard rookLocation);
+
+//----------------ROOK-----------------
+BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
+	
+	return 0;
+}
+
+BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
+	
+	return 0;
+}
+
+BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
+	
+	return 0;
+}
+
+//---------------BISHOP----------------
+BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
+	
+	return 0;
+}
+
+BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
+	
+	return 0;
+}
+
+BitBoard bishopMoveBB(Board *pBoard, UCHAR bishopIndex, int side) {
+	
+	return 0;
+}
 
 //----------------QUEEN----------------
-// BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
-// 	return bishopTimidBB(pBoard, queenIndex, side)
-// 			 | rookTimidBB(pBoard, queenIndex, side);
-// }
-// 
-// BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
-// 	return bishopCaptureBB(pBoard, queenIndex, side)
-// 			 | rookCaptureBB(pBoard, queenIndex, side);
-// }
-// 
-// BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
-// 	return bishopMoveBB(pBoard, queenIndex, side)
-// 			 | rookMoveBB(pBoard, queenIndex, side);
-// }
+BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
+	return bishopTimidBB(pBoard, queenIndex, side)
+			 | rookTimidBB(pBoard, queenIndex, side);
+}
+
+BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
+	return bishopCaptureBB(pBoard, queenIndex, side)
+			 | rookCaptureBB(pBoard, queenIndex, side);
+}
+
+BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
+	return bishopMoveBB(pBoard, queenIndex, side)
+			 | rookMoveBB(pBoard, queenIndex, side);
+}
 
 //---------------KNIGHT----------------
 BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side) {

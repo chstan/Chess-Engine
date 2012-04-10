@@ -24,6 +24,14 @@ Move kingSide(unsigned char color) {
 	return 0;
 }
 
+int getSquare(char *sq) {
+	for(int i = 0; i < 64; i++) {
+		if(!strcmp(sq, SQUARENAME[i]))
+			return i;
+	}
+	return INVALID_SQUARE;
+}
+
 Move notationToMove(Board *pBoard) {
 	unsigned char color = pBoard->info.nextMove;
 	if(!strcmp(TOKENS[1], "O-O-O")) {
@@ -37,8 +45,8 @@ Move notationToMove(Board *pBoard) {
 	if(!strcmp(TOKENS[1], "p")) {
 		if(totalArgs >= 3) {
 			piece = (color ? BLACK_PAWN : WHITE_PAWN);
-			orig = atoi(TOKENS[2]);
-			dest = atoi(TOKENS[3]);
+			orig = getSquare(TOKENS[2]);
+			dest = getSquare(TOKENS[3]);
 			// capt, prom, en passant	
 		} else {
 			printf("Improper number of arguments to specify a pawn move.\n\n");
@@ -52,8 +60,8 @@ Move notationToMove(Board *pBoard) {
 			if(!strcmp(TOKENS[1], "q")) piece = (color ? BLACK_QUEEN : WHITE_QUEEN);
 			if(!strcmp(TOKENS[1], "n")) piece = (color ? BLACK_KNIGHT : WHITE_KNIGHT);
 			if(!strcmp(TOKENS[1], "r")) piece = (color ? BLACK_ROOK : WHITE_ROOK);
-			orig = atoi(TOKENS[2]);
-			dest = atoi(TOKENS[3]);			
+			orig = getSquare(TOKENS[2]);
+			dest = getSquare(TOKENS[3]);			
 		} else {
 			printf("Improper number of arguments to specify a non-pawn move.\n\n");
 			return 0;

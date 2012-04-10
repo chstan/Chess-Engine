@@ -3,6 +3,7 @@
 #include "move.h"
 #include "defines.h"
 #include "extglobals.h"
+#include <stdio.h>
 
 
 /* As a word of note:
@@ -16,6 +17,7 @@
 
 void makeMove(Board *pBoard, Move m) {
 	if(whiteCastle(m) | blackCastle(m)) {
+		printf("CASTLING\n");
 		if(whiteCastle(m)) {
 			castle(pBoard, to(m), WHITE);
 		} else {
@@ -27,11 +29,13 @@ void makeMove(Board *pBoard, Move m) {
 		if(!(whiteEnPassant(m) | blackEnPassant(m))) {
 			setPieceAt(pBoard, to(m), movedPiece(m), capturedPiece(m));
 		} else {
+			printf("ENPASSANT\n");
 			setPieceAt(pBoard, to(m), movedPiece(m), 0);
 			enPassant(pBoard);
 		}
 		
 		if(promote(m)) {
+			printf("PROMOTE\n");
 			doPromote(pBoard, to(m), promote(m));
 			removeMaterial(pBoard, movedPiece(m));
 			addMaterial(pBoard, promote(m));
@@ -44,5 +48,30 @@ void makeMove(Board *pBoard, Move m) {
 
 void unmakeMove(Board *pBoard, Move m) {
 	// UNFINISHED
+	return;
+}
+
+void printMove(Move m) {
+	static const char *lineA =
+	"\tH G F E D C B A #PROMO# #CAPTD#\n"
+	"\t- - - - - - - - ------- -------\n";
+	static const char *lineB =
+	"\t#MOVED# #FROM BITS# # TO BITS #\n"
+	"\t------- ----------- -----------\n";
+	static const char *footer=
+	"A:    WHITE CASTLING\n"
+	"B:    BLACK CASTLING\n"
+	"C:    WHITE ENPASSANT\n"
+	"D:    BLACK ENPASSANT\n"
+	"E-H:  UNUSED FLAGS\n";
+	printf("%s\t", lineA);
+	for(int i = 31; i >= 16; i--) {
+		printf("%d ", (m & BITSET[i]) ? 1 : 0);
+	}
+	printf("\n%s\t", lineB);
+	for(int i = 15; i >= 0; i--) {
+		printf("%d ", (m & BITSET[i]) ? 1 : 0);
+	}
+	printf("\n%s", footer);
 	return;
 }
