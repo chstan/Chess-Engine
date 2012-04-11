@@ -60,6 +60,17 @@ unsigned int GSB(BitMap bits);
 unsigned int LSB(BitMap bits);
 void printBitMap(BitMap bits);
 
+//-----------------------MOVEGEN----------------------------
+void generateTimid(Board *pBoard);
+void generateCapture(Board *pBoard);
+void generateCheck(Board *pBoard);
+void generateMove(Board *pBoard);
+
+BitBoard attacks(Board *pBoard, int attackeeIndex);
+BitBoard checks(Board *pBoard, int kingIndex);
+
+void extractMoves(Board *pBoard);
+
 //-------------------MOVEGEN HELPERS------------------------
 BitBoard pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);
 BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
