@@ -548,7 +548,6 @@ void removeMaterial(Board *pBoard, UCHAR piece) {
 }
 
 //---------------------AUX FUNCTIONS-------------------------
-
 void updatePieceCountsFromBB(Board *pBoard) {
 	// Slow. Consider looping through squares
 	pBoard->position.pieces[WHITE][PAWN] = countBits(pBoard->position.white.pawn);

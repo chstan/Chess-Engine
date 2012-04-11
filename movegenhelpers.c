@@ -14,7 +14,14 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 }
 
 BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
-	
+	switch(side) {
+		case W:
+			
+		break;
+		case B:
+			
+		break;
+	}
 	return 0;
 }
 
