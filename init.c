@@ -6,6 +6,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* Function: init
+ * --------------
+ * init is called by main to fill
+ * BitBoards used later by the move generators
+ * and to allocate space for the board
+ * and a few other data structures.
+ */
 void init(void) {
 	dataInit();
 	moveTableInit();
@@ -13,6 +20,10 @@ void init(void) {
 	return;
 }
 
+/* Function: moveTableInit
+ * -----------------------
+ * Initializes the BitBoards used in the move tables.
+ */
 void moveTableInit(void) {
 	int rank, file, index;
 	int lRank, hRank, lFile, hFile;
@@ -184,20 +195,33 @@ void moveTableInit(void) {
 	return;
 }
 
+/* Function: dataInit
+ * ------------------
+ * dataInit sets up some global data used
+ * in bit functions and sporadically throughout the
+ * rest of the code.
+ */
 void dataInit(void) {
 	int i, rank, file;
 	
+	// The BitMap at i has the value 2^i
+	// i.e., exactly one bit set, at i
 	BITSET[0] = 0x1;
 	for(i = 1; i < 64; i++) {
 		BITSET[i] = BITSET[i-1] << 1;
 	}
 	
+	// Sets up a 2D array for looking up
+	// squares on the board.
 	for(rank = 0; rank < 9; rank++) {
 		for(file = 0; file < 9; file++) {
 			BOARDINDEX[rank][file] = sq(rank, file);
 		}
 	}
 	
+	// for all the numbers between 0 and 255
+	// GS1B[i] has the index of the greatest significant
+	// set bit in the binary representation of i
 	for(i = 0; i < 256; i++) {
     GS1B[i] = (
         (i > 127) ? 7 :
@@ -211,6 +235,12 @@ void dataInit(void) {
 	return;
 }
 
+/* Function: boardInit
+ * -------------------
+ * allocates memory for the board
+ * and proceeds to call functions in board.c
+ * to reset it to a coherent start state.
+ */
 void boardInit(void) {
 	pBoard = malloc(sizeof(Board));
 	resetBoard(pBoard);
