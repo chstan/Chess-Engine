@@ -36,3 +36,13 @@ void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
 	
 	return;
 }
+
+BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
+	
+	return 0;
+}
+
+BitBoard checks(Board *pBoard, int side) {
+	
+	return 0;
+}

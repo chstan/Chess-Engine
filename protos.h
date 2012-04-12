@@ -67,8 +67,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves);
 void generateCheck(Board *pBoard, MoveSet *pMoves);
 void generateMove(Board *pBoard, MoveSet *pMoves);
 
-BitBoard attacks(Board *pBoard, int attackeeIndex);
-BitBoard checks(Board *pBoard, int kingIndex);
+BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
+BitBoard checks(Board *pBoard, int side);
 
 void extractMoves(Board *pBoard);
 
