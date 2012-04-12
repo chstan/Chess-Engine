@@ -3,6 +3,7 @@
 #include "defines.h"
 #include "board.h"
 #include "move.h"
+#include "movegen.h"
 
 //-----------------INITIALIZATION PROTOTYPES----------------
 void init(void);
@@ -61,15 +62,17 @@ unsigned int LSB(BitMap bits);
 void printBitMap(BitMap bits);
 
 //-----------------------MOVEGEN----------------------------
-void generateTimid(Board *pBoard);
-void generateCapture(Board *pBoard);
-void generateCheck(Board *pBoard);
-void generateMove(Board *pBoard);
+void generateTimid(Board *pBoard, MoveSet *pMoves);
+void generateCapture(Board *pBoard, MoveSet *pMoves);
+void generateCheck(Board *pBoard, MoveSet *pMoves);
+void generateMove(Board *pBoard, MoveSet *pMoves);
 
 BitBoard attacks(Board *pBoard, int attackeeIndex);
 BitBoard checks(Board *pBoard, int kingIndex);
 
 void extractMoves(Board *pBoard);
+
+void initializeMoveSet(Board *pBoard, MoveSet *pMoves); 
 
 //-------------------MOVEGEN HELPERS------------------------
 BitBoard pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);

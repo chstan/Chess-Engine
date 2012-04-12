@@ -7,6 +7,9 @@
 #define MAX_CMD_BUFFER 256
 #define MAX_TOKENS 8
 
+#define MAX_MOVES_PER_PLY 256
+#define MAX_KILLERS 2
+
 #define W 0
 #define B 1
 #define color(p) ((p & 8) == 8)
