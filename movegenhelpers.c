@@ -13,26 +13,25 @@ BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
 	BitBoard currentIndex = BITSET[rookIndex];
-	BitBoard origin = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 8;
 		validMoves |= currentIndex;
 	}
 	// DOWN
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 8;
 		validMoves |= currentIndex;
 	}
 	// RIGHT
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 1;
 		validMoves |= currentIndex;
 	}
 	// LEFT
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 1;
 		validMoves |= currentIndex;
 	}
@@ -49,35 +48,34 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
 	BitBoard currentIndex = BITSET[rookIndex];
-	BitBoard origin = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 8;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// DOWN
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 8;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// RIGHT
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 1;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// LEFT
-	BitBoard currentIndex = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[rookIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 1;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	return validMoves;
@@ -105,26 +103,25 @@ BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
 	BitBoard currentIndex = BITSET[bishopIndex];
-	BitBoard origin = BITSET[rookIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 9;
 		validMoves |= currentIndex;
 	}
 	// UR
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 7;
 		validMoves |= currentIndex;
 	}
 	// DL
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 9;
 		validMoves |= currentIndex;
 	}
 	// DR
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 7;
 		validMoves |= currentIndex;
 	}
@@ -141,35 +138,34 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
 	BitBoard currentIndex = BITSET[bishopIndex];
-	BitBoard origin = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 9;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// UR
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 7;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// DL
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 9;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	// DR
-	BitBoard currentIndex = BITSET[bishopIndex];
-	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+	currentIndex = BITSET[bishopIndex];
+	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 7;
 	}
-	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
 		validMoves |= currentIndex;
 	}
 	return validMoves;
