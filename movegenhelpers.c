@@ -95,19 +95,95 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 }
 
 //---------------BISHOP----------------
+/* Function: bishopTimidBB
+ * Finds the valid moves for a bishop at bishopIndex which
+ * does not capture any piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
+ */
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
-	
-	return 0;
+	BitBoard validMoves = 0;
+	// UL
+	BitBoard currentIndex = BITSET[bishopIndex];
+	BitBoard origin = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex <<= 9;
+		validMoves |= currentIndex;
+	}
+	// UR
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex <<= 7;
+		validMoves |= currentIndex;
+	}
+	// DL
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex >>= 9;
+		validMoves |= currentIndex;
+	}
+	// DR
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex >>= 7;
+		validMoves |= currentIndex;
+	}
+	return validMoves;
 }
 
+/* Function: bishopCaptureBB
+ * Finds the valid moves for a bishop at bishopIndex which
+ * do capture an enemy piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
+ */
 BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
-	
-	return 0;
+	BitBoard validMoves = 0;
+	// UL
+	BitBoard currentIndex = BITSET[bishopIndex];
+	BitBoard origin = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex <<= 9;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// UR
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex <<= 7;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// DL
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex >>= 9;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// DR
+	BitBoard currentIndex = BITSET[bishopIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex >>= 7;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	return validMoves;
 }
 
+/* Function: bishopMoveBB
+ * Finds the valid moves for a bishop at bishopIndex which can
+ * but does not have to capture a piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
+ */
 BitBoard bishopMoveBB(Board *pBoard, UCHAR bishopIndex, int side) {
-	
-	return 0;
+	return bishopTimidBB(pBoard, bishopIndex, side)
+			 | bishopCaptureBB(pBoard, bishopIndex, side);
 }
 
 //----------------QUEEN----------------
