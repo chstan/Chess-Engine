@@ -6,7 +6,8 @@
 /* Function: rookTimidBB
  * Finds the valid moves for a rook at rookIndex which
  * does not capture any piece. AS A NOTE, this current
- * incarnation uses loops to achieve the 
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
  */
 BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
@@ -35,24 +36,62 @@ BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 		currentIndex >>= 1;
 		validMoves |= currentIndex;
 	}
-	return 0;
+	return validMoves;
 }
 
+/* Function: rookCaptureBB
+ * Finds the valid moves for a rook at rookIndex which
+ * do capture an enemy piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
+ */
 BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
-	
-	return 0;
+	BitBoard validMoves = 0;
+	// UP
+	BitBoard currentIndex = BITSET[rookIndex];
+	BitBoard origin = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex <<= 8;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// DOWN
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex >>= 8;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// RIGHT
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex <<= 1;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	// LEFT
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied - origin) != 0) {
+		currentIndex >>= 1;
+	}
+	if(currentIndex & (side ? pBoard->position.white.occupied : pBoard->position.black.occupied)) {
+		validMoves |= currentIndex;
+	}
+	return validMoves;
 }
 
+/* Function: rookMoveBB
+ * Finds the valid moves for a rook at rookIndex which can
+ * but does not have to capture a piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the rook move generation
+ * it can probably be done in O(1) with clever bit ops.
+ */
 BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
-	switch(side) {
-		case W:
-			
-		break;
-		case B:
-			
-		break;
-	}
-	return 0;
+	return rookTimidBB(pBoard, rookIndex, side)
+			 | rookCaptureBB(pBoard, rookIndex, side);
 }
 
 //---------------BISHOP----------------
