@@ -3,8 +3,38 @@
 #include "extglobals.h"
 
 //----------------ROOK-----------------
+/* Function: rookTimidBB
+ * Finds the valid moves for a rook at rookIndex which
+ * does not capture any piece. AS A NOTE, this current
+ * incarnation uses loops to achieve the 
+ */
 BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
-	
+	BitBoard validMoves = 0;
+	// UP
+	BitBoard currentIndex = BITSET[rookIndex];
+	BitBoard origin = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex <<= 8;
+		validMoves |= currentIndex;
+	}
+	// DOWN
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex >>= 8;
+		validMoves |= currentIndex;
+	}
+	// RIGHT
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex <<= 1;
+		validMoves |= currentIndex;
+	}
+	// LEFT
+	BitBoard currentIndex = BITSET[rookIndex];
+	while(currentIndex & (pBoard->position.occupied-origin) != 0) {
+		currentIndex >>= 1;
+		validMoves |= currentIndex;
+	}
 	return 0;
 }
 

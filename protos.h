@@ -73,6 +73,8 @@ BitBoard checks(Board *pBoard, int side);
 void extractMoves(Board *pBoard);
 
 void initializeMoveSet(Board *pBoard, MoveSet *pMoves); 
+Move next(MoveSet *pMoves);
+void writeMove(MoveSet *pMoves, Move m);
 
 //-------------------MOVEGEN HELPERS------------------------
 BitBoard pawnPromotion(Board *pBoard, UCHAR pawnIndex, int side);
