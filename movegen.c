@@ -9,7 +9,7 @@
 
 // void extractMoves(Board *pBoard);
 
-void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, int origin, int color)) {
+void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	int origin = 0, shift = 0, destination = 0;
 	Move currentMove = 0;
 	BitBoard generatedMoves = 0;

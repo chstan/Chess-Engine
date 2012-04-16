@@ -3,6 +3,7 @@
 #include "extglobals.h"
 
 //----------------ROOK-----------------
+
 /* Function: rookTimidBB
  * Finds the valid moves for a rook at rookIndex which
  * does not capture any piece. AS A NOTE, this current
@@ -93,6 +94,7 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 }
 
 //---------------BISHOP----------------
+
 /* Function: bishopTimidBB
  * Finds the valid moves for a bishop at bishopIndex which
  * does not capture any piece. AS A NOTE, this current
