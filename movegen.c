@@ -1,6 +1,9 @@
 #include "protos.h"
 #include "move.h"
 #include "defines.h"
+#include <assert.h>
+#include <stdio.h>
+
 
 // void generateCheck(Board *pBoard);
  
@@ -11,24 +14,29 @@
 
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
 int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
-	int origin = 0, shift = 0, destination = 0;
+	int origin = -1, shift = 0, destination = 0;
+	int count = 0;
 	Move currentMove = 0;
 	BitBoard generatedMoves = 0;
-	
+	//printf("Entering loop.\n");
 	while(currentPieces) {
-		shift = LSB(currentPieces);
+		shift = LSB(currentPieces)+1;
 		currentPieces >>= shift;
 		origin += shift;
-		
+		//printf("Origin: %d\t Count: %d\t Current Pieces:\n", origin, count);
+		//printBitMap(currentPieces);
 		generatedMoves = moveGen(pBoard, origin, color);
+		//if(generatedMoves) printf("Found moves!\n");
 		int i = 0;
 		destination = 0;
 		while(generatedMoves) {
-			i = LSB(generatedMoves);
+			count += 1;
+			i = LSB(generatedMoves)+1;
 			generatedMoves >>= i;
 			destination += i;
 			currentMove = move(0, piece, origin, destination);
 			writeMove(pMoves, currentMove);
+			//printMove(currentMove);
 		}
 	}
 	
@@ -41,7 +49,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	int piece;
 	
 	//pawn
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.pawn
 			: pBoard->position.white.pawn;
 	piece = (color) ?
@@ -51,7 +59,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, pawnTimidBB);
 	
 	//bishop
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.bishop
 			: pBoard->position.white.bishop;
 	piece = (color) ?
@@ -61,7 +69,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, bishopTimidBB);
 	
 	//knight
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.knight
 			: pBoard->position.white.knight;
 	piece = (color) ?
@@ -71,7 +79,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, knightTimidBB);
 	
 	//rook
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.rook
 			: pBoard->position.white.rook;
 	piece = (color) ?
@@ -81,7 +89,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, rookTimidBB);
 	
 	//queen
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.queen
 			: pBoard->position.white.queen;
 	piece = (color) ?
@@ -91,7 +99,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, queenTimidBB);
 	
 	//king
-	currentPieces = (color) ?
+	currentPieces = (color == BLACK) ?
 				pBoard->position.black.king
 			: pBoard->position.white.king;
 	piece = (color) ?
@@ -256,7 +264,13 @@ BitBoard checks(Board *pBoard, int side) {
 }
 
 void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
-	// WRITE THIS
+	resetMoveSet(pMoves);
+	printf("About to generate moves.\n");
+	generateCapture(pBoard, pMoves);
+	generateTimid(pBoard, pMoves);
+	printf("Generated moves.\n");
+	while(pMoves->moveIter < pMoves->totalMoves)
+		printMove(nextMove(pMoves));
 	return;
 }
 
@@ -272,12 +286,13 @@ void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
 **/
 void resetMoveSet(MoveSet *pMoves) {
 	pMoves->moveIter = 0;
-	pMoves->killerIter = 0;
-	pMoves->currentIndex = 0;
+	pMoves->currentMoveIndex = 0;
 	pMoves->timidIndex = 0;
 	pMoves->totalMoves = 0;
+	
+	pMoves->killerIter = 0;
 	pMoves->totalKillers = 0;
-	pMoves->killerIndex = 0;
+	pMoves->currentKillerIndex = 0;
 	return;
 }
 
@@ -293,7 +308,7 @@ void resetMoveSet(MoveSet *pMoves) {
  *\return Move that was read from the moveSet
 **/
 Move nextMove(MoveSet *pMoves) {
-	assert(pMoves->iter < pMoves->totalMoves);
+	assert(pMoves->moveIter < pMoves->totalMoves);
 	return pMoves->moveList[pMoves->moveIter++];
 }
 
@@ -309,10 +324,10 @@ Move nextMove(MoveSet *pMoves) {
  *\return (void)
 **/
 void writeMove(MoveSet *pMoves, Move m) {
-	assert(pMoves->currentIndex + 1 < MAX_MOVES_PER_PLY);
+	assert(pMoves->currentMoveIndex + 1 < MAX_MOVES_PER_PLY);
 	pMoves->totalMoves++;
-	pMoves->moveList[pMoves->currentIndex++] = m;
-	if(capt(m)) pMoves->timidIndex++;
+	pMoves->moveList[pMoves->currentMoveIndex++] = m;
+	if(capturedPiece(m)) pMoves->timidIndex++;
 	return;
 }
 
@@ -328,8 +343,8 @@ void writeMove(MoveSet *pMoves, Move m) {
  *\return (void)
 **/
 void writeKiller(MoveSet *pMoves, Move killer) {
-	assert(pMoves->killerIndex + 1 < MAX_KILLERS_PER_PLY);
+	assert(pMoves->currentKillerIndex + 1 < MAX_KILLERS_PER_PLY);
 	pMoves->totalKillers++;
-	pMoves->killerList[pMoves->killerIndex++] = killer;
+	pMoves->killerList[pMoves->currentKillerIndex++] = killer;
 	return;
 }

@@ -51,8 +51,8 @@ void resetBoard(Board *pBoard) {
 	return;
 }
 
-void initBoardFromSquares(Board* pBoard, unsigned char nextMove, int staleMoves, int castleW,
-	int castleB, int enPassantSquare) {
+void initBoardFromSquares(Board* pBoard, unsigned char nextMove, int staleMoves, int castleW, 
+int castleB, int enPassantSquare) {
 	
 	resetBB(pBoard);
 	updateBBFromSquares(pBoard);
@@ -93,6 +93,24 @@ void displayBoard(Board *pBoard) {
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
+	if(!pBoard->info.castleWhite) printf("White cannot castle.\n");
+	else {
+		printf("White can castle\n");
+		if(pBoard->info.castleWhite == CAN_CASTLE_OOO)
+			printf(" queenside\n");
+		if(pBoard->info.castleWhite == CAN_CASTLE_OO)
+			printf(" kingside\n");
+		printf(".\n");
+	}
+	if(!pBoard->info.castleBlack) printf("Black cannot castle.\n");
+	else {
+		printf("Black can castle\n");
+		if(pBoard->info.castleBlack == CAN_CASTLE_OOO)
+			printf(" queenside\n");
+		if(pBoard->info.castleBlack == CAN_CASTLE_OO)
+			printf(" kingside\n");
+		printf(".\n");
+	}
 	return;
 }
 

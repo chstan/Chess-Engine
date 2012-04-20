@@ -72,8 +72,9 @@ BitBoard checks(Board *pBoard, int side);
 
 void extractMoves(Board *pBoard);
 
+void resetMoveSet(MoveSet *pMoves);
 void initializeMoveSet(Board *pBoard, MoveSet *pMoves); 
-Move next(MoveSet *pMoves);
+Move nextMove(MoveSet *pMoves);
 void writeMove(MoveSet *pMoves, Move m);
 
 //-------------------MOVEGEN HELPERS------------------------

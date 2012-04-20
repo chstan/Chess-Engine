@@ -8,7 +8,7 @@
 #define MAX_TOKENS 8
 
 #define MAX_MOVES_PER_PLY 256
-#define MAX_KILLERS 2
+#define MAX_KILLERS_PER_PLY 2
 
 #define W 0
 #define B 1

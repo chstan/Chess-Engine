@@ -105,6 +105,14 @@ bool doCommand() {
 		return true;
 	}
 	
+	// Print all possible moves from the current position
+	if(!strcmp(TOKENS[0], "list-moves")) {
+		MoveSet moves;
+		resetMoveSet(&moves);
+		initializeMoveSet(pBoard, &moves);
+		return true;
+	}
+	
 	// List help information
 	if(!strcmp(TOKENS[0], "help") || !strcmp(TOKENS[0], "h") || !strcmp(TOKENS[0], "?")) {
 		printf("Command List:\n\n");
