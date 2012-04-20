@@ -46,8 +46,8 @@ void resetBoard(Board *pBoard) {
 	
 	pBoard->info.displayRotated = false;
 	
-	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO,
-		CAN_CASTLE_OO + CAN_CASTLE_OOO, 0);
+	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO + WHITE_CAN_CASTLE,
+		CAN_CASTLE_OO + CAN_CASTLE_OOO + BLACK_CAN_CASTLE, 0);
 	return;
 }
 
@@ -93,7 +93,7 @@ void displayBoard(Board *pBoard) {
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
-	if(!pBoard->info.castleWhite) printf("White cannot castle.\n");
+	if(!(pBoard->info.castleWhite & WHITE_CAN_CASTLE)) printf("White cannot castle.\n");
 	else {
 		printf("White can castle");
 		if(pBoard->info.castleWhite == CAN_CASTLE_OOO)
@@ -102,7 +102,7 @@ void displayBoard(Board *pBoard) {
 			printf(" kingside");
 		printf(".\n");
 	}
-	if(!pBoard->info.castleBlack) printf("Black cannot castle.\n");
+	if(!(pBoard->info.castleBlack & BLACK_CAN_CASTLE)) printf("Black cannot castle.\n");
 	else {
 		printf("Black can castle");
 		if(pBoard->info.castleBlack == CAN_CASTLE_OOO)
