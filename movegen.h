@@ -5,10 +5,12 @@
 
 typedef struct {
 	Move moveList[MAX_MOVES_PER_PLY];
-	Move killers[MAX_KILLERS];
+	Move killers[MAX_KILLERS_PER_PLY];
 	int timidIndex;
 	int totalMoves;
 	int totalKillers;
 	int currentIndex;
+	int moveIter;
+	int killerIter;
 } MoveSet;
 
