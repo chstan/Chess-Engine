@@ -1,7 +1,8 @@
 #ifndef MOVE_H
 #define MOVE_H
 
-#include "binary.h"
+#include "../binary.h"
+#include "../board/board.h"
 
 typedef unsigned int Move;
 
@@ -63,5 +64,11 @@ typedef unsigned int Move;
 #define unsetWhiteEnPassant(move) 		(move &= ~wP)
 #define setBlackEnPassant(move) 			(move |= bP)
 #define unsetBlackEnPassant(move) 		(move &= ~bP)
+
+void makeMove(Board *pBoard, Move m);
+
+void unmakeMove(Board *pBoard, Move m);
+
+void printMove(Move m);
 
 #endif

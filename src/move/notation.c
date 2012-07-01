@@ -1,10 +1,13 @@
-#include "move.h"
-#include "defines.h"
-#include "extglobals.h"
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "notation.h"
+#include "move.h"
+#include "../defines.h"
+#include "../extglobals.h"
+
 
 Move queenSide(unsigned char color) {
 	if(color == W) {

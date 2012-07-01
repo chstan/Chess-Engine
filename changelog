@@ -1,0 +1,5 @@
+Version 0.1.0:
+	-reorganized file structure to better reflect engine component design. Critical engine components now have their own subdirectories of Engine/src, for instance, move, board, and data-structures all live in their own directories now
+	-every .c file now has a corresponding .h, doing away with the old hack "protos.h". I regret that it lasted this long. Include best practices now put angle bracket includes before double quote includes, and the two are separated by a blank line
+	-function comments now all proceed the prototype in the appropriate header
+	-added linked list data type

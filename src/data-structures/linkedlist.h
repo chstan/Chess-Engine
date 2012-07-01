@@ -16,7 +16,8 @@ listNode *createList();
 
 void map(listNode *linkedList, void(*mapfn)(void *, void *), void *aux);
 
-listNode *deleteList(listNode *toDelete);
+// will not delete payload data!
+void deleteList(listNode *toDelete);
 
 listNode *insertNode(listNode *destination, listNode *toInsert);
 

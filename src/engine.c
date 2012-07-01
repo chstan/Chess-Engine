@@ -1,7 +1,11 @@
 #include <stdio.h>
+
+#include "engine.h"
 #include "defines.h"
-#include "protos.h"
 #include "globals.h"
+#include "init.h"
+#include "exit.h"
+#include "command.h"
 
 /* Function: main
  * --------------

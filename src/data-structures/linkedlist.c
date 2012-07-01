@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "linkedlist.h"
 
 listNode *nextNode(listNode *currentNode) {
@@ -10,52 +12,62 @@ listNode *prevNode(listNode *currentNode) {
 
 listNode *createList() {
 	listNode *created = malloc(sizeof(listNode));
-	listNode->prev = NULL;
-	listNode->next = NULL;
-	listNode->payload = NULL;
+	created->prev = NULL;
+	created->next = NULL;
+	created->payload = NULL;
+	
+	return created;
 }
 
-// will not delete payload data!
-listNode *deleteList(listNode *toDelete) {
+void deleteList(listNode *toDelete) {
 	// find the beginning
-	while(prev(toDelete)) {
+	while(prevNode(toDelete)) {
 		toDelete = prevNode(toDelete);
 	}
 	
-	listNode *nextNode = nextNode(toDelete);
+	listNode *next = nextNode(toDelete);
 	
 	do {
 		free(toDelete);
-		toDelete = nextNode;
-		nextNode = next(toDelete);
+		toDelete = next;
+		next = nextNode(toDelete);
 	} while(nextNode);
 }
 
 void map(listNode *linkedList, void(*mapfn)(void *, void *), void *aux) {
-	while(prev(linkedList)) {
+	while(prevNode(linkedList)) {
 		linkedList = prevNode(linkedList);
 	}
 	while(linkedList) {
 		mapfn(linkedList->payload, aux);
-		linkedList = next(linkedList);
+		linkedList = nextNode(linkedList);
 	}
 }
 
 listNode *insertNode(listNode *destination, listNode *toInsert) {
-	if(next(destination))
-		(next(destination))->prev = toInsert;
-	toInsert->next = (next(destination));
+	if(nextNode(destination))
+		(nextNode(destination))->prev = toInsert;
+	toInsert->next = (nextNode(destination));
 	
 	toInsert->prev = destination;
 	destination->next = toInsert;
+	
+	return destination;
 }
 
 listNode *removeNode(listNode *toRemove) {
-	if(prev(toRemove))
-		(prev(toRemove))->next = toRemove->next;
+	listNode *toReturn = NULL;
 	
-	if(next(toRemove))
-		(next(toRemove))->prev = toRemove->prev;
+	if(nextNode(toRemove)) {
+		(nextNode(toRemove))->prev = toRemove->prev;
+		toReturn = nextNode(toRemove);
+	}
+	
+	if(prevNode(toRemove)) {
+		(prevNode(toRemove))->next = toRemove->next;
+		toReturn = prevNode(toRemove);
+	}
 	
 	free(toRemove);
+	return toReturn;
 }

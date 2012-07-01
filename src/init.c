@@ -1,30 +1,20 @@
-#include "defines.h"
-#include "protos.h"
-#include "extglobals.h"
-#include "board.h"
-#include "move.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-/* Function: init
- * --------------
- * init is called by main to fill
- * BitBoards used later by the move generators
- * and to allocate space for the board
- * and a few other data structures.
- */
-void init(void) {
+#include "init.h"
+#include "defines.h"
+#include "extglobals.h"
+#include "board/board.h"
+#include "move/move.h"
+
+void init() {
 	dataInit();
 	moveTableInit();
 	boardInit();
 	return;
 }
 
-/* Function: moveTableInit
- * -----------------------
- * Initializes the BitBoards used in the move tables.
- */
-void moveTableInit(void) {
+void moveTableInit() {
 	int rank, file, index;
 	int lRank, hRank, lFile, hFile;
 	BitMap bits;
@@ -195,13 +185,7 @@ void moveTableInit(void) {
 	return;
 }
 
-/* Function: dataInit
- * ------------------
- * dataInit sets up some global data used
- * in bit functions and sporadically throughout the
- * rest of the code.
- */
-void dataInit(void) {
+void dataInit() {
 	int i, rank, file;
 	
 	// The BitMap at i has the value 2^i
@@ -235,13 +219,7 @@ void dataInit(void) {
 	return;
 }
 
-/* Function: boardInit
- * -------------------
- * allocates memory for the board
- * and proceeds to call functions in board.c
- * to reset it to a coherent start state.
- */
-void boardInit(void) {
+void boardInit() {
 	pBoard = malloc(sizeof(Board));
 	resetBoard(pBoard);
 	MoveSet *pMoves = malloc(sizeof(MoveSet));

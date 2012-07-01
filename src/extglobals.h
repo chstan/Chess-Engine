@@ -2,8 +2,8 @@
 #define EXTGLOBALS_H
 
 #include "defines.h"
-#include "board.h"
-#include "move.h"
+#include "board/board.h"
+#include "move/move.h"
 
 extern char CMD_BUFFER[];
 extern int CMD_BUFFER_COUNT;

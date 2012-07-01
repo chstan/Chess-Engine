@@ -1,13 +1,8 @@
-#include "defines.h"
-#include "stdio.h"
+#include <stdio.h>
 
-/* Function: alert
- * ---------------
- * alert is a general interface which (should be) is
- * used through the engine as a wrapper for a printf.
- * it helps avoid cluttered code for common messages to
- * the user.
- */
+#include "defines.h"
+#include "alert.h"
+
 void alert(int ALERT) {
 	switch(ALERT) {
 		case UNKNOWN_COMMAND:

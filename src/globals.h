@@ -2,8 +2,9 @@
 #define GLOBALS_H
 
 #include "defines.h"
-#include "board.h"
 #include "extglobals.h"
+#include "board/board.h"
+
 
 char CMD_BUFFER[MAX_CMD_BUFFER];
 int CMD_BUFFER_COUNT = 0;

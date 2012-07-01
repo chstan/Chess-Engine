@@ -1,15 +1,10 @@
-#include "protos.h"
-#include "defines.h"
-#include "extglobals.h"
+
+#include "movegenhelpers.h"
+#include "../defines.h"
+#include "../extglobals.h"
 
 //----------------ROOK-----------------
 
-/* Function: rookTimidBB
- * Finds the valid moves for a rook at rookIndex which
- * does not capture any piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
@@ -39,12 +34,6 @@ BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	return validMoves;
 }
 
-/* Function: rookCaptureBB
- * Finds the valid moves for a rook at rookIndex which
- * do capture an enemy piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
@@ -82,12 +71,6 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	return validMoves;
 }
 
-/* Function: rookMoveBB
- * Finds the valid moves for a rook at rookIndex which can
- * but does not have to capture a piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 	return rookTimidBB(pBoard, rookIndex, side)
 			 | rookCaptureBB(pBoard, rookIndex, side);
@@ -95,12 +78,6 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 
 //---------------BISHOP----------------
 
-/* Function: bishopTimidBB
- * Finds the valid moves for a bishop at bishopIndex which
- * does not capture any piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
@@ -130,12 +107,6 @@ BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	return validMoves;
 }
 
-/* Function: bishopCaptureBB
- * Finds the valid moves for a bishop at bishopIndex which
- * do capture an enemy piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
@@ -173,12 +144,6 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	return validMoves;
 }
 
-/* Function: bishopMoveBB
- * Finds the valid moves for a bishop at bishopIndex which can
- * but does not have to capture a piece. AS A NOTE, this current
- * incarnation uses loops to achieve the rook move generation
- * it can probably be done in O(1) with clever bit ops.
- */
 BitBoard bishopMoveBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	return bishopTimidBB(pBoard, bishopIndex, side)
 			 | bishopCaptureBB(pBoard, bishopIndex, side);

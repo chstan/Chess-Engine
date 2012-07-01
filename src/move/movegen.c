@@ -1,16 +1,11 @@
-#include "protos.h"
-#include "move.h"
-#include "defines.h"
 #include <assert.h>
 #include <stdio.h>
 
-
-// void generateCheck(Board *pBoard);
- 
-// BitBoard attacks(Board *pBoard, int attackeeIndex);
-// BitBoard checks(Board *pBoard, int kingIndex);
-
-// void extractMoves(Board *pBoard);
+#include "movegen.h"
+#include "movegenhelpers.h"
+#include "move.h"
+#include "../bit.h"
+#include "../defines.h"
 
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
 int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
@@ -274,16 +269,6 @@ void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
 	return;
 }
 
-/**
- *\brief resetMoveSet
- *
- *	resetMoveSet is an auxilliary function
- *  which effectively clears the state of the
- *  moveSet passed in as the parameter.
- *
- *\param  Pointer to the moveset
- *\return (void)
-**/
 void resetMoveSet(MoveSet *pMoves) {
 	pMoves->moveIter = 0;
 	pMoves->currentMoveIndex = 0;
@@ -296,33 +281,11 @@ void resetMoveSet(MoveSet *pMoves) {
 	return;
 }
 
-/**
- *\brief nextMove
- *
- *	nextMove returns the next unread move from the
- *  moveSet and updates the iterator to point to the
- *  next spot in the array. It also asserts that you are not
- *  trying to read an unwritten move from the moveSet.
- *
- *\param  Pointer to the moveSet
- *\return Move that was read from the moveSet
-**/
 Move nextMove(MoveSet *pMoves) {
 	assert(pMoves->moveIter < pMoves->totalMoves);
 	return pMoves->moveList[pMoves->moveIter++];
 }
 
-/**
- *\brief writeMove
- *
- *	writeMove adds a non-killer move to a moveSet
- *  and leaves the moveSet in a consistent state, updating
- *  iterators as necessary.
- *
- *\param  Pointer to the moveSet
- *\param  Move to be written
- *\return (void)
-**/
 void writeMove(MoveSet *pMoves, Move m) {
 	assert(pMoves->currentMoveIndex + 1 < MAX_MOVES_PER_PLY);
 	pMoves->totalMoves++;
@@ -331,17 +294,6 @@ void writeMove(MoveSet *pMoves, Move m) {
 	return;
 }
 
-/**
- *\brief writeKiller
- *
- *	writeKiller adds a killer move to a moveSet
- *  and leaves the moveSet in a consistent state, updating
- *  iterators as necessary.
- *
- *\param  Pointer to the moveSet
- *\param  Killer move to be written
- *\return (void)
-**/
 void writeKiller(MoveSet *pMoves, Move killer) {
 	assert(pMoves->currentKillerIndex + 1 < MAX_KILLERS_PER_PLY);
 	pMoves->totalKillers++;

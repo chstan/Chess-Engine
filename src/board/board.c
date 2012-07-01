@@ -1,11 +1,11 @@
-#include "board.h"
-#include "protos.h"
-#include "defines.h"
-#include "extglobals.h"
-#include "assert.h"
-#include "stdio.h"
-#include "move.h"
 #include <assert.h>
+#include <stdio.h>
+
+#include "board.h"
+#include "../bit.h"
+#include "../defines.h"
+#include "../extglobals.h"
+#include "../move/move.h"
 
 void resetBoard(Board *pBoard) {
 	int i;

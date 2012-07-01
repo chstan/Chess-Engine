@@ -1,10 +1,9 @@
-#include "protos.h"
-#include "board.h"
-#include "move.h"
-#include "defines.h"
-#include "extglobals.h"
 #include <stdio.h>
 
+#include "move.h"
+#include "../board/board.h"
+#include "../defines.h"
+#include "../extglobals.h"
 
 /* As a word of note:
  *   These functions assume that the move
