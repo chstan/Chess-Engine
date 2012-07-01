@@ -10,6 +10,7 @@
  * breed of beast, any logic we might want to add at exit
  * can be put here as well.
  */
+
 void prepareForExit() {
 	free(pBoard);
 	return;

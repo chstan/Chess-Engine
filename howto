@@ -1,6 +1,9 @@
-Dear Marc,
+To whom it may concern,
 	I know this all seems complicated, but hopefully it will help. I've added doxygen, a code auto documenter, to the project so that you can more easily manage getting into it. Although, not much has been documented in it yet, just some basic information on the data structures, there will be more to come. Hopefully you'll be able to use this as a reference when you start adding some code of your own, since jumping into something already several thousand lines long and with a few dozen files is never easy. If you have an specific requests I can try to make sure things get documented which are particularly tricky.
 	In order to use doxygen, you'll have to download (I recommend installing homebrew and then using "brew install doxygen") the program, after which building the documentation afresh can be done with "doxygen Doxyfile". Once you've got that all figured out I'll probably remove everything but the Doxyfile from the git repo and add the necessary lines in the .gitignore. In the mean time, you can open the documentation by navigating to doc/html/index.html.
 	
 Best of luck,
 Conrad
+
+EDIT:
+	Doxygen removed from the git repo, hopefully by now you've already pulled it and figured out how it works, or have installed it yourself.

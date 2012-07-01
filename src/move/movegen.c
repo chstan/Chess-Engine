@@ -26,7 +26,7 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 		//printf("Origin: %d\t Count: %d\t Current Pieces:\n", origin, count);
 		//printBitMap(currentPieces);
 		generatedMoves = moveGen(pBoard, origin, color);
-		//if(generatedMoves) printf("Found moves!\n");
+		if(generatedMoves) printBitMap(generatedMoves);
 		int i = 0;
 		destination = 0;
 		while(generatedMoves) {

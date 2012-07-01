@@ -1,6 +1,6 @@
-CC = gcc
+CC = clang
 
-CFLAGS = -g -Wall -pedantic -O3 -std=c99
+CFLAGS = -g -Wall -pedantic -O0
 
 SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:.c=.o)

@@ -244,5 +244,7 @@ void dataInit(void) {
 void boardInit(void) {
 	pBoard = malloc(sizeof(Board));
 	resetBoard(pBoard);
+	MoveSet *pMoves = malloc(sizeof(MoveSet));
+	generateMove(pBoard, pMoves);
 	return;
 }

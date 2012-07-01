@@ -12,7 +12,7 @@
 
 #define W 0
 #define B 1
-#define color(p) ((p & 8) == 8)
+#define color(p) (((p & 8) == 8) ? BLACK : WHITE)
 
 #define E 0
 #define WP 1

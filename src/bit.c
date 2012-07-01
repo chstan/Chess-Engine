@@ -57,6 +57,8 @@ unsigned int LSB(BitMap bits) {
  * DeBruijin multiplication here too.
  */
 unsigned int GSB(BitMap bits) {
+	//TODO: Replace with assembly version
+	
 	assert(bits != 0);
 	
 	int GSB = 0;
