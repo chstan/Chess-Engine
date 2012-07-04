@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-// major version - minor version - build
+// major version - minor version - bug fix
 #define ENGINE_VERSION "Engine 0.1.1"
 #define MAX_CMD_BUFFER 256
 #define MAX_TOKENS 8
