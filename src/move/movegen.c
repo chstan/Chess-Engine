@@ -23,12 +23,15 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 		generatedMoves = moveGen(pBoard, origin, color);
 		if(generatedMoves) printBitMap(generatedMoves);
 		int i = 0;
-		destination = 0;
+		destination = -1;
 		while(generatedMoves) {
 			count += 1;
 			i = LSB(generatedMoves)+1;
 			generatedMoves >>= i;
 			destination += i;
+			
+			// we need to determine other information about the move!
+			// we should factor this out into a helper method, extractMove
 			currentMove = move(0, piece, origin, destination);
 			writeMove(pMoves, currentMove);
 			//printMove(currentMove);
@@ -266,7 +269,11 @@ void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
 	printf("Generated moves.\n");
 	while(pMoves->moveIter < pMoves->totalMoves)
 		printMove(nextMove(pMoves));
-	return;
+}
+
+void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves) {
+	generateCapture(pBoard, pMoves);
+	generateTimid(pBoard, pMoves);
 }
 
 void resetMoveSet(MoveSet *pMoves) {
@@ -278,7 +285,6 @@ void resetMoveSet(MoveSet *pMoves) {
 	pMoves->killerIter = 0;
 	pMoves->totalKillers = 0;
 	pMoves->currentKillerIndex = 0;
-	return;
 }
 
 Move nextMove(MoveSet *pMoves) {
@@ -291,12 +297,10 @@ void writeMove(MoveSet *pMoves, Move m) {
 	pMoves->totalMoves++;
 	pMoves->moveList[pMoves->currentMoveIndex++] = m;
 	if(capturedPiece(m)) pMoves->timidIndex++;
-	return;
 }
 
 void writeKiller(MoveSet *pMoves, Move killer) {
 	assert(pMoves->currentKillerIndex + 1 < MAX_KILLERS_PER_PLY);
 	pMoves->totalKillers++;
 	pMoves->killerList[pMoves->currentKillerIndex++] = killer;
-	return;
 }

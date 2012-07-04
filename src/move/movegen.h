@@ -32,15 +32,9 @@ void generateCapture(Board *pBoard, MoveSet *pMoves);
 
 void generateMove(Board *pBoard, MoveSet *pMoves);
 
-//===============UNFINISHED===================
-
-void generateCheck(Board *pBoard, MoveSet *pMoves);
-
-BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
-
-BitBoard checks(Board *pBoard, int side);
-
 void initializeMoveSet(Board *pBoard, MoveSet *pMoves);
+
+void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves);
 
 /**
  *\brief resetMoveSet
@@ -92,4 +86,14 @@ void writeMove(MoveSet *pMoves, Move m);
  *\return (void)
 **/
 void writeKiller(MoveSet *pMoves, Move killer);
+
+//===============UNFINISHED===================
+
+void generateCheck(Board *pBoard, MoveSet *pMoves);
+
+BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
+
+BitBoard checks(Board *pBoard, int side);
+
+
 

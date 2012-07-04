@@ -6,11 +6,14 @@
 #include "extglobals.h"
 #include "board/board.h"
 #include "move/move.h"
+#include "aux/random.h"
 
 void init() {
 	dataInit();
 	moveTableInit();
 	boardInit();
+	
+	initRandom();
 	return;
 }
 

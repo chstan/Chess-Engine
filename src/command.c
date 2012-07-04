@@ -8,6 +8,7 @@
 #include "alert.h"
 #include "move/movegen.h"
 #include "move/notation.h"
+#include "aux/random.h"
 
 void typePrompt() {
 	assert(pBoard->info.nextMove == W || pBoard->info.nextMove == B);
@@ -79,6 +80,19 @@ bool doCommand() {
 		MoveSet moves;
 		resetMoveSet(&moves);
 		initializeMoveSet(pBoard, &moves);
+		
+		return true;
+	}
+	
+	if(!strcmp(TOKENS[0], "random-move")) {
+		MoveSet moves;
+		resetMoveSet(&moves);
+		initializeMoveSetQuiet(pBoard, &moves);
+		int moveIndex = randomi(0, moves.totalMoves);
+		Move randomMove = moves.moveList[moveIndex];
+		printMove(randomMove);
+		makeMove(pBoard, randomMove);
+		displayBoard(pBoard);
 		return true;
 	}
 	

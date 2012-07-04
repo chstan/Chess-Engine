@@ -3,3 +3,6 @@ Version 0.1.0:
 	-every .c file now has a corresponding .h, doing away with the old hack "protos.h". I regret that it lasted this long. Include best practices now put angle bracket includes before double quote includes, and the two are separated by a blank line
 	-function comments now all proceed the prototype in the appropriate header
 	-added linked list data type
+	
+Version 0.1.1:
+	-added random number facilities for random integers in a random and a random float function
