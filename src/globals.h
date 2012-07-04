@@ -140,4 +140,6 @@ unsigned char CAN_CASTLE_OOO = 2;
 unsigned char WHITE_CAN_CASTLE = 4;
 unsigned char BLACK_CAN_CASTLE = 4;
 
+bool randomInitialized = false;
+
 #endif
