@@ -9,11 +9,11 @@
 **/
 void initRandom();
 
-/** Function: random
+/** Function: randomi
  *  ----------
  * returns a random integer.
  *
- * Variants:
+ * Variants ?:
  * 	- random(int)
  *		- returns and integer between 0 and int (or between int and 0 if negative)
  *
@@ -23,9 +23,7 @@ void initRandom();
  *	- random(int, int)
  *		- returns an integer in the range defined by the parameters
 **/
-int random();
-int random(const int limit);
-int random(const int lowerLimit, const int upperLimit);
+int randomi(const int lowerLimit, const int upperLimit);
 
 /** Function: randomf
  *  ---------------

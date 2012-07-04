@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "random.h"
 #include "../extglobals.h"
@@ -12,24 +13,16 @@ void initRandom() {
 	#else
 	srand(0);
 	#endif
-	initRandom = true;
+	randomInitialized = true;
 }
 
-int random() {
-	random(0, 2);
-}
-
-int random(const int limit) {
-	random(0, limit);
-}
-
-int random(const int lowerLimit, const int upperLimit) {
-	assert(initRandom);
+int randomi(const int lowerLimit, const int upperLimit) {
+	assert(randomInitialized);
 	return lowerLimit + (rand() % upperLimit);
 }
 
 float randomf() {
-	assert(initRandom);
+	assert(randomInitialized);
 	unsigned int bits = rand();
 	float f = *(float *)&bits;
 	return f;
