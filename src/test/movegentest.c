@@ -14,7 +14,6 @@ U64 recursiveMoveCount(Board *pBoard, int depth) {
 	MoveSet moves;
 	
 	resetMoveSet(&moves);
-	U64 countedMoves = 0;
 	
 	if(depth == 0) return 1;
 	
