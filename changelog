@@ -6,3 +6,4 @@ Version 0.1.0:
 	
 Version 0.1.1:
 	-added random number facilities for random integers in a random and a random float function
+	-new command "random-move" generates all possible moves and selects one randomly to apply to the board, it prints all possible moves at a position, as well as the new board state

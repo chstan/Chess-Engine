@@ -1,3 +1,7 @@
+#ifndef MOVEGEN_H
+#define MOVEGEN_H
+
+
 #include "../defines.h"
 #include "../extglobals.h"
 #include "../board/board.h"
@@ -95,5 +99,5 @@ BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
 
 BitBoard checks(Board *pBoard, int side);
 
-
+#endif
 
