@@ -1,21 +1,20 @@
 #include <time.h>
+#include <stdio.h>
 
 #include "movegentest.h"
-#include "movegen.h"
+#include "../move/movegen.h"
 
 void performanceTest(Board *pBoard, int depth) {
 	int startTime = clock();
 	U64 totalMoves = recursiveMoveCount(pBoard, depth);
 	int endTime = clock();
-	printf("Performance test results:\n%lu moves generated in\n%d cycles.\n", totalMoves, endTime-startTime);
+	printf("Performance test results:\n%llu moves generated in\n%d cycles.\n", totalMoves, endTime-startTime);
 }
 
 U64 recursiveMoveCount(Board *pBoard, int depth) {
 	MoveSet moves;
-	
+	U64 countedMoves = 0;
 	resetMoveSet(&moves);
-	
-	if(depth == 0) return 1;
 	
 	// now find all the nodes immediately off the current board state
 	generateMove(pBoard, &moves);
