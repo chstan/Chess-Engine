@@ -13,15 +13,12 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 	int count = 0;
 	Move currentMove = 0;
 	BitBoard generatedMoves = 0;
-	//printf("Entering loop.\n");
 	while(currentPieces) {
 		shift = LSB(currentPieces)+1;
 		currentPieces >>= shift;
 		origin += shift;
-		//printf("Origin: %d\t Count: %d\t Current Pieces:\n", origin, count);
-		//printBitMap(currentPieces);
 		generatedMoves = moveGen(pBoard, origin, color);
-		if(generatedMoves) printBitMap(generatedMoves);
+		//if(generatedMoves) printBitMap(generatedMoves);
 		int i = 0;
 		destination = -1;
 		while(generatedMoves) {
@@ -34,7 +31,6 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 			// we should factor this out into a helper method, extractMove
 			currentMove = move(0, piece, origin, destination);
 			writeMove(pMoves, currentMove);
-			//printMove(currentMove);
 		}
 	}
 	

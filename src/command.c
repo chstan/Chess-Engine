@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
@@ -9,6 +10,7 @@
 #include "move/movegen.h"
 #include "move/notation.h"
 #include "aux/random.h"
+#include "test/movegentest.h"
 
 void typePrompt() {
 	assert(pBoard->info.nextMove == W || pBoard->info.nextMove == B);
@@ -93,6 +95,13 @@ bool doCommand() {
 		printMove(randomMove);
 		makeMove(pBoard, randomMove);
 		displayBoard(pBoard);
+		return true;
+	}
+	
+	if(!strcmp(TOKENS[0], "performance-test")) {
+		int depth = atoi(TOKENS[1]);
+		performanceTest(pBoard, depth);
+		
 		return true;
 	}
 	
