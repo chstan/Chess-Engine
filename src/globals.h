@@ -101,6 +101,7 @@ const unsigned char QUEEN = 4;
 const unsigned char KING = 5;
 const unsigned char TOTAL = 6;
 
+																							// binary representations
 const unsigned char EMPTY = 0;                //  0000
 const unsigned char WHITE_PAWN = 1;           //  0001
 const unsigned char WHITE_KING = 2;           //  0010

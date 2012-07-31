@@ -123,6 +123,171 @@ void rotateBoard(Board *pBoard) {
 	return;
 }
 
+void debugBoard(Board *pBoard) {
+	// we first check if the board is in a consistent state, and report to the user
+	// certain problems cannot be found at runtime however, and require prior knowledge of the
+	// state of the board, for instance in the case of castling.
+	bool boardConsistent = true;
+	
+	// array of squares
+	for(int i = 0; i < 64; i++) {
+		switch(pBoard->position.square[i]) {
+			case EMPTY:
+				// nothing to handle here, we don't track empty squares
+			break;
+			case WHITE_PAWN:
+				if(!(BITSET[i] & pBoard->position.white.pawn)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;  
+			case WHITE_KING:
+				if(!(BITSET[i] & pBoard->position.white.king)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case WHITE_KNIGHT:
+				if(!(BITSET[i] & pBoard->position.white.knight)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case WHITE_BISHOP:
+				if(!(BITSET[i] & pBoard->position.white.bishop)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case WHITE_ROOK:
+				if(!(BITSET[i] & pBoard->position.white.rook)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case WHITE_QUEEN:
+				if(!(BITSET[i] & pBoard->position.white.queen)) {
+					boardConsistent = false;
+					printf("The array of squares reports a white queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case BLACK_PAWN:
+				if(!(BITSET[i] & pBoard->position.black.pawn)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case BLACK_KING:
+				if(!(BITSET[i] & pBoard->position.black.king)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case BLACK_KNIGHT:
+				if(!(BITSET[i] & pBoard->position.black.knight)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case BLACK_BISHOP:
+				if(!(BITSET[i] & pBoard->position.black.bishop)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+			case BLACK_ROOK:
+				if(!(BITSET[i] & pBoard->position.black.rook)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break; 
+			case BLACK_QUEEN:
+				if(!(BITSET[i] & pBoard->position.black.queen)) {
+					boardConsistent = false;
+					printf("The array of squares reports a black queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
+				}
+			break;
+		}
+	}
+	
+	// array of kings
+	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->positon.black.king)) {
+		boardConsistent = false;
+		printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
+	}
+	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->positon.white.king)) {
+		boardConsistent = false;
+		printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
+	}
+	
+	// array of pieces
+	// no real check needed here at the moment, though one could be added for material consistency
+	
+	// bitboards
+	// white pawn
+	
+	// white king
+	// white queen
+	// white bishop
+	// white knight
+	// white rook
+	// black pawn
+	// black king
+	// black queen
+	// black bishop
+	// black knight
+	// black rook
+	
+	// rudimentary castling checks
+	switch(pBoard->info.castleWhite) {
+		case WHITE_CAN_CASTLE:
+			if(pBoard->position.squares[A1] != WHITE_ROOK || pBoard->position.squares[A8] != WHITE_ROOK || pBoard->position.squares[E1] != WHITE_KING) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that white can castle queenside or kingside.\n");
+			}
+		break;
+		case CAN_CASTLE_OO:
+			if(pBoard->position.squares[E1] != WHITE_KING || pBoard->position.squares[A8] != WHITE_ROOK) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that white can castle kingside.");
+			}
+		break;
+		case CAN_CASTLE_OOO:
+			if(pBoard->position.squares[E1] != WHITE_KING || pBoard->position.squares[A1] != WHITE_ROOK) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that white can castle queenside.");
+			}
+		break;
+	}
+	
+	switch(pBoard->info.castleBlack) {
+		case BLACK_CAN_CASTLE:
+			if(pBoard->position.squares[A1] != BLACK_ROOK || pBoard->position.squares[A8] != BLACK_ROOK || pBoard->position.squares[E1] != BLACK_KING) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that black can castle queenside or kingside.\n");
+			}
+		break;
+		case CAN_CASTLE_OO:
+			if(pBoard->position.squares[E1] != BLACK_KING || pBoard->position.squares[A8] != BLACK_ROOK) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that black can castle kingside.");
+			}
+		break;
+		case CAN_CASTLE_OOO:
+			if(pBoard->position.squares[E1] != BLACK_KING || pBoard->position.squares[A1] != BLACK_ROOK) {
+				boardConsistency = false;
+				printf("The board info incorrectly reports that black can castle queenside.");
+			}
+		break;
+	}
+	
+	// if it is not, we will print out a diagnostic
+	if(!boardConsistent) {
+		displayBoard(pBoard);
+		// other info would be nice too, but this is fine for the moment
+	}
+}
+
 //---------------------MAKE FUNCTIONS------------------------
 void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 	//DOES NOT UPDATE ANY MATERIAL COUNTS

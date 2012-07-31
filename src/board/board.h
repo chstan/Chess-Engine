@@ -53,6 +53,9 @@ void displayBoard(Board *pBoard);
 
 void rotateBoard(Board *pBoard);
 
+//------------------------DEBUG------------------------------
+void debugBoard(Board *pBoard);
+
 //---------------------MAKE FUNCTIONS------------------------
 void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
 
