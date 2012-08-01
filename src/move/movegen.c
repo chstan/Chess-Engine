@@ -44,8 +44,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//pawn
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.pawn
-			: pBoard->position.white.pawn;
+				pBoard->position.pieceBB[BLACK_PAWN]
+			: pBoard->position.pieceBB[WHITE_PAWN];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -54,8 +54,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//bishop
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.bishop
-			: pBoard->position.white.bishop;
+				pBoard->position.pieceBB[BLACK_BISHOP]
+			: pBoard->position.pieceBB[WHITE_BISHOP];
 	piece = (color) ?
 				BLACK_BISHOP
 			: WHITE_BISHOP;
@@ -64,8 +64,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//knight
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.knight
-			: pBoard->position.white.knight;
+				pBoard->position.pieceBB[BLACK_KNIGHT]
+			: pBoard->position.pieceBB[WHITE_KNIGHT];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -74,8 +74,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//rook
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.rook
-			: pBoard->position.white.rook;
+				pBoard->position.pieceBB[BLACK_ROOK]
+			: pBoard->position.pieceBB[WHITE_ROOK];
 	piece = (color) ?
 				BLACK_ROOK
 			: WHITE_ROOK;
@@ -84,8 +84,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//queen
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.queen
-			: pBoard->position.white.queen;
+				pBoard->position.pieceBB[BLACK_QUEEN]
+			: pBoard->position.pieceBB[WHITE_QUEEN];
 	piece = (color) ?
 				BLACK_QUEEN
 			: WHITE_QUEEN;
@@ -94,8 +94,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	
 	//king
 	currentPieces = (color == BLACK) ?
-				pBoard->position.black.king
-			: pBoard->position.white.king;
+				pBoard->position.pieceBB[BLACK_KING]
+			: pBoard->position.pieceBB[WHITE_KING];
 	piece = (color) ?
 				BLACK_KING
 			: WHITE_KING;
@@ -112,8 +112,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//pawn
 	currentPieces = (color) ?
-				pBoard->position.black.pawn
-			: pBoard->position.white.pawn;
+				pBoard->position.pieceBB[BLACK_PAWN]
+			: pBoard->position.pieceBB[WHITE_PAWN];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -122,8 +122,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//bishop
 	currentPieces = (color) ?
-				pBoard->position.black.bishop
-			: pBoard->position.white.bishop;
+				pBoard->position.pieceBB[BLACK_BISHOP]
+			: pBoard->position.pieceBB[WHITE_BISHOP];
 	piece = (color) ?
 				BLACK_BISHOP
 			: WHITE_BISHOP;
@@ -132,8 +132,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//knight
 	currentPieces = (color) ?
-				pBoard->position.black.knight
-			: pBoard->position.white.knight;
+				pBoard->position.pieceBB[BLACK_KNIGHT]
+			: pBoard->position.pieceBB[WHITE_KNIGHT];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -142,8 +142,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//rook
 	currentPieces = (color) ?
-				pBoard->position.black.rook
-			: pBoard->position.white.rook;
+				pBoard->position.pieceBB[BLACK_ROOK]
+			: pBoard->position.pieceBB[WHITE_ROOK];
 	piece = (color) ?
 				BLACK_ROOK
 			: WHITE_ROOK;
@@ -152,8 +152,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//queen
 	currentPieces = (color) ?
-				pBoard->position.black.queen
-			: pBoard->position.white.queen;
+				pBoard->position.pieceBB[BLACK_QUEEN]
+			: pBoard->position.pieceBB[WHITE_QUEEN];
 	piece = (color) ?
 				BLACK_QUEEN
 			: WHITE_QUEEN;
@@ -162,8 +162,8 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	
 	//king
 	currentPieces = (color) ?
-				pBoard->position.black.king
-			: pBoard->position.white.king;
+				pBoard->position.pieceBB[BLACK_KING]
+			: pBoard->position.pieceBB[WHITE_KING];
 	piece = (color) ?
 				BLACK_KING
 			: WHITE_KING;
@@ -180,8 +180,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//pawn
 	currentPieces = (color) ?
-				pBoard->position.black.pawn
-			: pBoard->position.white.pawn;
+				pBoard->position.pieceBB[BLACK_PAWN]
+			: pBoard->position.pieceBB[WHITE_PAWN];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -190,8 +190,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//bishop
 	currentPieces = (color) ?
-				pBoard->position.black.bishop
-			: pBoard->position.white.bishop;
+				pBoard->position.pieceBB[BLACK_BISHOP]
+			: pBoard->position.pieceBB[WHITE_BISHOP];
 	piece = (color) ?
 				BLACK_BISHOP
 			: WHITE_BISHOP;
@@ -200,8 +200,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//knight
 	currentPieces = (color) ?
-				pBoard->position.black.knight
-			: pBoard->position.white.knight;
+				pBoard->position.pieceBB[BLACK_KNIGHT]
+			: pBoard->position.pieceBB[WHITE_KNIGHT];
 	piece = (color) ?
 				BLACK_PAWN
 			: WHITE_PAWN;
@@ -210,8 +210,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//rook
 	currentPieces = (color) ?
-				pBoard->position.black.rook
-			: pBoard->position.white.rook;
+				pBoard->position.pieceBB[BLACK_ROOK]
+			: pBoard->position.pieceBB[WHITE_ROOK];
 	piece = (color) ?
 				BLACK_ROOK
 			: WHITE_ROOK;
@@ -220,8 +220,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//queen
 	currentPieces = (color) ?
-				pBoard->position.black.queen
-			: pBoard->position.white.queen;
+				pBoard->position.pieceBB[BLACK_QUEEN]
+			: pBoard->position.pieceBB[WHITE_QUEEN];
 	piece = (color) ?
 				BLACK_QUEEN
 			: WHITE_QUEEN;
@@ -230,8 +230,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	
 	//king
 	currentPieces = (color) ?
-				pBoard->position.black.king
-			: pBoard->position.white.king;
+				pBoard->position.pieceBB[BLACK_KING]
+			: pBoard->position.pieceBB[WHITE_KING];
 	piece = (color) ?
 				BLACK_KING
 			: WHITE_KING;

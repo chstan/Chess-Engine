@@ -136,73 +136,73 @@ void debugBoard(Board *pBoard) {
 				// nothing to handle here, we don't track empty squares
 			break;
 			case WP:
-				if(!(BITSET[i] & pBoard->position.white.pawn)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_PAWN])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;  
 			case WK:
-				if(!(BITSET[i] & pBoard->position.white.king)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_KING])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case WN:
-				if(!(BITSET[i] & pBoard->position.white.knight)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_KNIGHT])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case WB:
-				if(!(BITSET[i] & pBoard->position.white.bishop)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_BISHOP])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case WR:
-				if(!(BITSET[i] & pBoard->position.white.rook)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_ROOK])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case WQ:
-				if(!(BITSET[i] & pBoard->position.white.queen)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_QUEEN])) {
 					boardConsistent = false;
 					printf("The array of squares reports a white queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case BP:
-				if(!(BITSET[i] & pBoard->position.black.pawn)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_PAWN])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case BK:
-				if(!(BITSET[i] & pBoard->position.black.king)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_KING])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case BN:
-				if(!(BITSET[i] & pBoard->position.black.knight)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_KNIGHT])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case BB:
-				if(!(BITSET[i] & pBoard->position.black.bishop)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_BISHOP])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
 			case BR:
-				if(!(BITSET[i] & pBoard->position.black.rook)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_ROOK])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break; 
 			case BQ:
-				if(!(BITSET[i] & pBoard->position.black.queen)) {
+				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_QUEEN])) {
 					boardConsistent = false;
 					printf("The array of squares reports a black queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
@@ -211,11 +211,11 @@ void debugBoard(Board *pBoard) {
 	}
 	
 	// array of kings
-	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->position.black.king)) {
+	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->position.pieceBB[BLACK_KING])) {
 		boardConsistent = false;
 		printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
 	}
-	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->position.white.king)) {
+	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->position.pieceBB[WHITE_KING])) {
 		boardConsistent = false;
 		printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
 	}
@@ -293,76 +293,76 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 	//DOES NOT UPDATE ANY MATERIAL COUNTS
 	switch(lastOccupant) {
 		case WP:
-			pBoard->position.white.pawn &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_PAWN] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case BP:
-			pBoard->position.black.pawn &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_PAWN] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case WK:
-			pBoard->position.white.king &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_KING] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 			pBoard->position.kings[WHITE] = INVALID_SQUARE;
 		break;
 		case BK:
-			pBoard->position.black.king &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_KING] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 			pBoard->position.kings[WHITE] = INVALID_SQUARE;
 		break;
 		case WQ:
-			pBoard->position.white.queen &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_QUEEN] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case BQ:
-			pBoard->position.black.queen &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_QUEEN] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case WB:
-			pBoard->position.white.bishop &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_BISHOP] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case BB:
-			pBoard->position.black.bishop &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_BISHOP] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case WN:
-			pBoard->position.white.knight &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_KNIGHT] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case BN:
-			pBoard->position.black.knight &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_KNIGHT] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case WR:
-			pBoard->position.white.rook &= ~BITSET[index];
-			pBoard->position.white.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[WHITE_ROOK] &= ~BITSET[index];
+			pBoard->position.whiteOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
 		case BR:
-			pBoard->position.black.rook &= ~BITSET[index];
-			pBoard->position.black.pieces &= ~BITSET[index];
+			pBoard->position.pieceBB[BLACK_ROOK] &= ~BITSET[index];
+			pBoard->position.blackOccupied &= ~BITSET[index];
 			pBoard->position.occupied &= ~BITSET[index];
 			pBoard->position.square[index] = EMPTY;
 		break;
@@ -378,76 +378,76 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 	}
 	switch(movedPiece) {
 		case WP:
-			pBoard->position.white.pawn |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_PAWN] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case BP:
-			pBoard->position.black.pawn |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_PAWN] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case WK:
-			pBoard->position.white.king |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_KING] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 			pBoard->position.kings[WHITE] = index;
 		break;
 		case BK:
-			pBoard->position.black.king |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_KING] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 			pBoard->position.kings[WHITE] = index;
 		break;
 		case WQ:
-			pBoard->position.white.queen |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_QUEEN] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case BQ:
-			pBoard->position.black.queen |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_QUEEN] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case WB:
-			pBoard->position.white.bishop |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_BISHOP] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case BB:
-			pBoard->position.black.bishop |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_BISHOP] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case WN:
-			pBoard->position.white.knight |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_KNIGHT] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case BN:
-			pBoard->position.black.knight |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_KNIGHT] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case WR:
-			pBoard->position.white.rook |= BITSET[index];
-			pBoard->position.white.pieces |= BITSET[index];
+			pBoard->position.pieceBB[WHITE_ROOK] |= BITSET[index];
+			pBoard->position.whiteOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
 		case BR:
-			pBoard->position.black.rook |= BITSET[index];
-			pBoard->position.black.pieces |= BITSET[index];
+			pBoard->position.pieceBB[BLACK_ROOK] |= BITSET[index];
+			pBoard->position.blackOccupied |= BITSET[index];
 			pBoard->position.occupied |= BITSET[index];
 			pBoard->position.square[index] = movedPiece;
 		break;
@@ -733,107 +733,107 @@ void removeMaterial(Board *pBoard, UCHAR piece) {
 //---------------------AUX FUNCTIONS-------------------------
 void updatePieceCountsFromBB(Board *pBoard) {
 	// Slow. Consider looping through squares
-	pBoard->position.pieces[WHITE][PAWN] = countBits(pBoard->position.white.pawn);
-	pBoard->position.pieces[WHITE][BISHOP] = countBits(pBoard->position.white.bishop);
-	pBoard->position.pieces[WHITE][KNIGHT] = countBits(pBoard->position.white.knight);
-	pBoard->position.pieces[WHITE][ROOK] = countBits(pBoard->position.white.rook);
-	pBoard->position.pieces[WHITE][QUEEN] = countBits(pBoard->position.white.queen);
-	pBoard->position.pieces[WHITE][KING] = countBits(pBoard->position.white.king);
-	pBoard->position.pieces[WHITE][TOTAL] = countBits(pBoard->position.white.pieces);
+	pBoard->position.pieces[WHITE][PAWN] = countBits(pBoard->position.pieceBB[WHITE_PAWN]);
+	pBoard->position.pieces[WHITE][BISHOP] = countBits(pBoard->position.pieceBB[WHITE_BISHOP]);
+	pBoard->position.pieces[WHITE][KNIGHT] = countBits(pBoard->position.pieceBB[WHITE_KNIGHT]);
+	pBoard->position.pieces[WHITE][ROOK] = countBits(pBoard->position.pieceBB[WHITE_ROOK]);
+	pBoard->position.pieces[WHITE][QUEEN] = countBits(pBoard->position.pieceBB[WHITE_QUEEN]);
+	pBoard->position.pieces[WHITE][KING] = countBits(pBoard->position.pieceBB[WHITE_KING]);
+	pBoard->position.pieces[WHITE][TOTAL] = countBits(pBoard->position.whiteOccupied);
 	
-	pBoard->position.pieces[BLACK][PAWN] = countBits(pBoard->position.black.pawn);
-	pBoard->position.pieces[BLACK][BISHOP] = countBits(pBoard->position.black.bishop);
-	pBoard->position.pieces[BLACK][KNIGHT] = countBits(pBoard->position.black.knight);
-	pBoard->position.pieces[BLACK][ROOK] = countBits(pBoard->position.black.rook);
-	pBoard->position.pieces[BLACK][QUEEN] = countBits(pBoard->position.black.queen);
-	pBoard->position.pieces[BLACK][KING] = countBits(pBoard->position.black.king);
-	pBoard->position.pieces[BLACK][TOTAL] = countBits(pBoard->position.black.pieces);
+	pBoard->position.pieces[BLACK][PAWN] = countBits(pBoard->position.pieceBB[BLACK_PAWN]);
+	pBoard->position.pieces[BLACK][BISHOP] = countBits(pBoard->position.pieceBB[BLACK_BISHOP]);
+	pBoard->position.pieces[BLACK][KNIGHT] = countBits(pBoard->position.pieceBB[BLACK_KNIGHT]);
+	pBoard->position.pieces[BLACK][ROOK] = countBits(pBoard->position.pieceBB[BLACK_ROOK]);
+	pBoard->position.pieces[BLACK][QUEEN] = countBits(pBoard->position.pieceBB[BLACK_QUEEN]);
+	pBoard->position.pieces[BLACK][KING] = countBits(pBoard->position.pieceBB[BLACK_KING]);
+	pBoard->position.pieces[BLACK][TOTAL] = countBits(pBoard->position.blackOccupied);
 	
 	pBoard->position.totalPieces = countBits(pBoard->position.occupied);
 	return;
 }
 
 void updateKingsFromBB(Board *pBoard) {
-	assert(countBits(pBoard->position.white.king) == 1
-			&& countBits(pBoard->position.black.king) == 1);
-	pBoard->position.kings[WHITE] = LSB(pBoard->position.white.king);
-	pBoard->position.kings[BLACK] = LSB(pBoard->position.black.king);
+	assert(countBits(pBoard->position.pieceBB[WHITE_KING]) == 1
+			&& countBits(pBoard->position.pieceBB[BLACK_KING]) == 1);
+	pBoard->position.kings[WHITE] = LSB(pBoard->position.pieceBB[WHITE_KING]);
+	pBoard->position.kings[BLACK] = LSB(pBoard->position.pieceBB[BLACK_KING]);
 	return;
 }
 
 void resetBB(Board *pBoard) {
-	pBoard->position.white.king = 0;
-	pBoard->position.white.queen = 0;
-	pBoard->position.white.rook = 0;
-	pBoard->position.white.bishop = 0;
-	pBoard->position.white.knight = 0;
-	pBoard->position.white.pawn = 0;
-	pBoard->position.black.pieces = 0;
+	pBoard->position.pieceBB[WHITE_KING] = 0;
+	pBoard->position.pieceBB[WHITE_QUEEN] = 0;
+	pBoard->position.pieceBB[WHITE_ROOK] = 0;
+	pBoard->position.pieceBB[WHITE_BISHOP] = 0;
+	pBoard->position.pieceBB[WHITE_KNIGHT] = 0;
+	pBoard->position.pieceBB[WHITE_PAWN] = 0;
+	pBoard->position.blackOccupied = 0;
 	
-	pBoard->position.black.king = 0;
-	pBoard->position.black.queen = 0;
-	pBoard->position.black.rook = 0;
-	pBoard->position.black.bishop = 0;
-	pBoard->position.black.knight = 0;
-	pBoard->position.black.pawn = 0;
-	pBoard->position.black.pieces = 0;
+	pBoard->position.pieceBB[BLACK_KING] = 0;
+	pBoard->position.pieceBB[BLACK_QUEEN] = 0;
+	pBoard->position.pieceBB[BLACK_ROOK] = 0;
+	pBoard->position.pieceBB[BLACK_BISHOP] = 0;
+	pBoard->position.pieceBB[BLACK_KNIGHT] = 0;
+	pBoard->position.pieceBB[BLACK_PAWN] = 0;
+	pBoard->position.blackOccupied = 0;
 	
 	pBoard->position.occupied = 0;
 	return;
 }
 
 void updateAggregateBB(Board *pBoard) {
-	pBoard->position.white.pieces = pBoard->position.white.pawn |
-																	pBoard->position.white.king |
-																	pBoard->position.white.queen |
-																	pBoard->position.white.bishop |
-																	pBoard->position.white.knight |
-																	pBoard->position.white.rook;
+	pBoard->position.whiteOccupied = pBoard->position.pieceBB[WHITE_PAWN] |
+																	pBoard->position.pieceBB[WHITE_KING] |
+																	pBoard->position.pieceBB[WHITE_QUEEN] |
+																	pBoard->position.pieceBB[WHITE_BISHOP] |
+																	pBoard->position.pieceBB[WHITE_KNIGHT] |
+																	pBoard->position.pieceBB[WHITE_ROOK];
 
-	pBoard->position.black.pieces = pBoard->position.black.pawn |
-																	pBoard->position.black.king |
-																	pBoard->position.black.queen |
-																	pBoard->position.black.bishop |
-																	pBoard->position.black.knight |
-																	pBoard->position.black.rook;
+	pBoard->position.blackOccupied = pBoard->position.pieceBB[BLACK_PAWN] |
+																	pBoard->position.pieceBB[BLACK_KING] |
+																	pBoard->position.pieceBB[BLACK_QUEEN] |
+																	pBoard->position.pieceBB[BLACK_BISHOP] |
+																	pBoard->position.pieceBB[BLACK_KNIGHT] |
+																	pBoard->position.pieceBB[BLACK_ROOK];
 																		
-	pBoard->position.occupied = pBoard->position.white.pieces |
-															pBoard->position.black.pieces;
+	pBoard->position.occupied = pBoard->position.whiteOccupied |
+															pBoard->position.blackOccupied;
 	return;
 }
 
 void updateBBFromSquares(Board *pBoard) {
 	int i;
 	for(i = 0; i < 64; i++) {
-		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.white.pawn |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.white.king |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_QUEEN) pBoard->position.white.queen |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_BISHOP) pBoard->position.white.bishop |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KNIGHT) pBoard->position.white.knight |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_ROOK) pBoard->position.white.rook |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.pieceBB[WHITE_PAWN] |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.pieceBB[WHITE_KING] |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_QUEEN) pBoard->position.pieceBB[WHITE_QUEEN] |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_BISHOP) pBoard->position.pieceBB[WHITE_BISHOP] |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_KNIGHT) pBoard->position.pieceBB[WHITE_KNIGHT] |= BITSET[i];
+		if(pBoard->position.square[i] == WHITE_ROOK) pBoard->position.pieceBB[WHITE_ROOK] |= BITSET[i];
 		
-		if(pBoard->position.square[i] == BLACK_PAWN) pBoard->position.black.pawn |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KING) pBoard->position.black.king |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_QUEEN) pBoard->position.black.queen |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_BISHOP) pBoard->position.black.bishop |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.black.knight |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.black.rook |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_PAWN) pBoard->position.pieceBB[BLACK_PAWN] |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_KING) pBoard->position.pieceBB[BLACK_KING] |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_QUEEN) pBoard->position.pieceBB[BLACK_QUEEN] |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_BISHOP) pBoard->position.pieceBB[BLACK_BISHOP] |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.pieceBB[BLACK_KNIGHT] |= BITSET[i];
+		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.pieceBB[BLACK_ROOK] |= BITSET[i];
 	}
 	return;
 }
 
 void updateMaterialFromBB(Board *pBoard) {
-	pBoard->info.whiteMaterial = countBits(pBoard->position.white.pawn) * PAWN_VALUE
-														 + countBits(pBoard->position.white.bishop) * BISHOP_VALUE
-														 + countBits(pBoard->position.white.knight) * KNIGHT_VALUE
-														 + countBits(pBoard->position.white.rook) * ROOK_VALUE
-														 + countBits(pBoard->position.white.queen) * QUEEN_VALUE;
+	pBoard->info.whiteMaterial = countBits(pBoard->position.pieceBB[WHITE_PAWN]) * PAWN_VALUE
+														 + countBits(pBoard->position.pieceBB[WHITE_BISHOP]) * BISHOP_VALUE
+														 + countBits(pBoard->position.pieceBB[WHITE_KNIGHT]) * KNIGHT_VALUE
+														 + countBits(pBoard->position.pieceBB[WHITE_ROOK]) * ROOK_VALUE
+														 + countBits(pBoard->position.pieceBB[WHITE_QUEEN]) * QUEEN_VALUE;
 													
-	pBoard->info.blackMaterial = countBits(pBoard->position.black.pawn) * PAWN_VALUE
-														 + countBits(pBoard->position.black.bishop) * BISHOP_VALUE
-														 + countBits(pBoard->position.black.knight) * KNIGHT_VALUE
-														 + countBits(pBoard->position.black.rook) * ROOK_VALUE
-														 + countBits(pBoard->position.black.queen) * QUEEN_VALUE;
+	pBoard->info.blackMaterial = countBits(pBoard->position.pieceBB[BLACK_PAWN]) * PAWN_VALUE
+														 + countBits(pBoard->position.pieceBB[BLACK_BISHOP]) * BISHOP_VALUE
+														 + countBits(pBoard->position.pieceBB[BLACK_KNIGHT]) * KNIGHT_VALUE
+														 + countBits(pBoard->position.pieceBB[BLACK_ROOK]) * ROOK_VALUE
+														 + countBits(pBoard->position.pieceBB[BLACK_QUEEN]) * QUEEN_VALUE;
 														
 	pBoard->info.material = pBoard->info.whiteMaterial
 												- pBoard->info.blackMaterial;

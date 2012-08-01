@@ -41,7 +41,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 8;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// DOWN
@@ -49,7 +49,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 8;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// RIGHT
@@ -57,7 +57,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 1;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// LEFT
@@ -65,7 +65,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 1;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	return validMoves;
@@ -114,7 +114,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 9;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// UR
@@ -122,7 +122,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 7;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// DL
@@ -130,7 +130,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 9;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	// DR
@@ -138,7 +138,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 7;
 	}
-	if(currentIndex & (side ? pBoard->position.white.pieces : pBoard->position.black.pieces)) {
+	if(currentIndex & (side ? pBoard->position.whiteOccupied : pBoard->position.blackOccupied)) {
 		validMoves |= currentIndex;
 	}
 	return validMoves;
@@ -173,10 +173,10 @@ BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side) {
 BitBoard knightCaptureBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
-			return knightMove[knightIndex] & pBoard->position.black.pieces;
+			return knightMove[knightIndex] & pBoard->position.blackOccupied;
 		break;
 		case B:
-			return knightMove[knightIndex] & pBoard->position.white.pieces;
+			return knightMove[knightIndex] & pBoard->position.whiteOccupied;
 		break;
 	}
 	return 0;
@@ -185,10 +185,10 @@ BitBoard knightCaptureBB(Board *pBoard, UCHAR knightIndex, int side) {
 BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 	switch(side) {
 		case W:
-			return knightMove[knightIndex] & ~pBoard->position.white.pieces;
+			return knightMove[knightIndex] & ~pBoard->position.whiteOccupied;
 		break;
 		case B:
-			return knightMove[knightIndex] & ~pBoard->position.black.pieces;
+			return knightMove[knightIndex] & ~pBoard->position.blackOccupied;
 		break;
 	}
 	return 0;
@@ -202,10 +202,10 @@ BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex, int side) {
 BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side) {
 	switch(side) {
 		case W:
-			return kingMove[kingIndex] & pBoard->position.black.pieces;
+			return kingMove[kingIndex] & pBoard->position.blackOccupied;
 		break;
 		case B:
-			return kingMove[kingIndex] & pBoard->position.white.pieces;
+			return kingMove[kingIndex] & pBoard->position.whiteOccupied;
 		break;
 	}
 	return 0;
@@ -214,10 +214,10 @@ BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side) {
 BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side) {
 	switch(side) {
 		case W:
-			return kingMove[kingIndex] & ~pBoard->position.white.pieces;
+			return kingMove[kingIndex] & ~pBoard->position.whiteOccupied;
 		break;
 		case B:
-			return kingMove[kingIndex] & ~pBoard->position.black.pieces;
+			return kingMove[kingIndex] & ~pBoard->position.blackOccupied;
 		break;
 	}
 	return 0;
@@ -262,10 +262,10 @@ BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side) {
 BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
 	switch(side) {
 		case W:
-			return pawnCaptureWhite[pawnIndex] & pBoard->position.black.pieces;
+			return pawnCaptureWhite[pawnIndex] & pBoard->position.blackOccupied;
 		break;
 		case B:
-			return pawnCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
+			return pawnCaptureBlack[pawnIndex] & pBoard->position.whiteOccupied;
 		break;
 	}
 	return 0;
@@ -274,10 +274,10 @@ BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
 BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
 	switch(side) {
 		case W:
-			return pawnPromotionCaptureWhite[pawnIndex] & pBoard->position.black.pieces;
+			return pawnPromotionCaptureWhite[pawnIndex] & pBoard->position.blackOccupied;
 		break;
 		case B:
-			return pawnPromotionCaptureBlack[pawnIndex] & pBoard->position.white.pieces;
+			return pawnPromotionCaptureBlack[pawnIndex] & pBoard->position.whiteOccupied;
 		break;
 	}
 	return 0;

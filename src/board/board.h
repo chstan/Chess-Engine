@@ -6,13 +6,10 @@
 #define sq(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
 
 typedef struct {
-	BitBoard king, queen, rook, bishop, knight, pawn;
-	BitBoard pieces;
-} PlayerPieces;
-
-typedef struct {
-	PlayerPieces white;
-	PlayerPieces black;
+	BitBoard pieceBB[16];
+	
+	BitBoard whiteOccupied;
+	BitBoard blackOccupied;
 	BitBoard occupied;
 	
 	int square[64];
