@@ -46,8 +46,8 @@ void resetBoard(Board *pBoard) {
 	
 	pBoard->info.displayRotated = false;
 	
-	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO + WHITE_CAN_CASTLE,
-		CAN_CASTLE_OO + CAN_CASTLE_OOO + BLACK_CAN_CASTLE, 0);
+	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO + CAN_CASTLE,
+		CAN_CASTLE_OO + CAN_CASTLE_OOO + CAN_CASTLE, 0);
 	return;
 }
 
@@ -93,7 +93,7 @@ void displayBoard(Board *pBoard) {
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
-	if(!(pBoard->info.castleWhite & WHITE_CAN_CASTLE)) printf("White cannot castle.\n");
+	if(!(pBoard->info.castleWhite & CAN_CASTLE)) printf("White cannot castle.\n");
 	else {
 		printf("White can castle");
 		if(pBoard->info.castleWhite == CAN_CASTLE_OOO)
@@ -102,7 +102,7 @@ void displayBoard(Board *pBoard) {
 			printf(" kingside");
 		printf(".\n");
 	}
-	if(!(pBoard->info.castleBlack & BLACK_CAN_CASTLE)) printf("Black cannot castle.\n");
+	if(!(pBoard->info.castleBlack & CAN_CASTLE)) printf("Black cannot castle.\n");
 	else {
 		printf("Black can castle");
 		if(pBoard->info.castleBlack == CAN_CASTLE_OOO)
@@ -132,76 +132,76 @@ void debugBoard(Board *pBoard) {
 	// array of squares
 	for(int i = 0; i < 64; i++) {
 		switch(pBoard->position.square[i]) {
-			case EMPTY:
+			case E:
 				// nothing to handle here, we don't track empty squares
 			break;
-			case WHITE_PAWN:
+			case WP:
 				if(!(BITSET[i] & pBoard->position.white.pawn)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;  
-			case WHITE_KING:
+			case WK:
 				if(!(BITSET[i] & pBoard->position.white.king)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case WHITE_KNIGHT:
+			case WN:
 				if(!(BITSET[i] & pBoard->position.white.knight)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case WHITE_BISHOP:
+			case WB:
 				if(!(BITSET[i] & pBoard->position.white.bishop)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case WHITE_ROOK:
+			case WR:
 				if(!(BITSET[i] & pBoard->position.white.rook)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case WHITE_QUEEN:
+			case WQ:
 				if(!(BITSET[i] & pBoard->position.white.queen)) {
 					boardConsistent = false;
 					printf("The array of squares reports a white queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case BLACK_PAWN:
+			case BP:
 				if(!(BITSET[i] & pBoard->position.black.pawn)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case BLACK_KING:
+			case BK:
 				if(!(BITSET[i] & pBoard->position.black.king)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case BLACK_KNIGHT:
+			case BN:
 				if(!(BITSET[i] & pBoard->position.black.knight)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case BLACK_BISHOP:
+			case BB:
 				if(!(BITSET[i] & pBoard->position.black.bishop)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break;
-			case BLACK_ROOK:
+			case BR:
 				if(!(BITSET[i] & pBoard->position.black.rook)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
 				}
 			break; 
-			case BLACK_QUEEN:
+			case BQ:
 				if(!(BITSET[i] & pBoard->position.black.queen)) {
 					boardConsistent = false;
 					printf("The array of squares reports a black queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
@@ -211,11 +211,11 @@ void debugBoard(Board *pBoard) {
 	}
 	
 	// array of kings
-	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->positon.black.king)) {
+	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->position.black.king)) {
 		boardConsistent = false;
 		printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
 	}
-	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->positon.white.king)) {
+	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->position.white.king)) {
 		boardConsistent = false;
 		printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
 	}
@@ -240,42 +240,42 @@ void debugBoard(Board *pBoard) {
 	
 	// rudimentary castling checks
 	switch(pBoard->info.castleWhite) {
-		case WHITE_CAN_CASTLE:
-			if(pBoard->position.squares[A1] != WHITE_ROOK || pBoard->position.squares[A8] != WHITE_ROOK || pBoard->position.squares[E1] != WHITE_KING) {
-				boardConsistency = false;
+		case CAN_CASTLE:
+			if(pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[A8] != WHITE_ROOK || pBoard->position.square[E1] != WHITE_KING) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that white can castle queenside or kingside.\n");
 			}
 		break;
 		case CAN_CASTLE_OO:
-			if(pBoard->position.squares[E1] != WHITE_KING || pBoard->position.squares[A8] != WHITE_ROOK) {
-				boardConsistency = false;
+			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A8] != WHITE_ROOK) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that white can castle kingside.");
 			}
 		break;
 		case CAN_CASTLE_OOO:
-			if(pBoard->position.squares[E1] != WHITE_KING || pBoard->position.squares[A1] != WHITE_ROOK) {
-				boardConsistency = false;
+			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A1] != WHITE_ROOK) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that white can castle queenside.");
 			}
 		break;
 	}
 	
 	switch(pBoard->info.castleBlack) {
-		case BLACK_CAN_CASTLE:
-			if(pBoard->position.squares[A1] != BLACK_ROOK || pBoard->position.squares[A8] != BLACK_ROOK || pBoard->position.squares[E1] != BLACK_KING) {
-				boardConsistency = false;
+		case CAN_CASTLE:
+			if(pBoard->position.square[A1] != BLACK_ROOK || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[E1] != BLACK_KING) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle queenside or kingside.\n");
 			}
 		break;
 		case CAN_CASTLE_OO:
-			if(pBoard->position.squares[E1] != BLACK_KING || pBoard->position.squares[A8] != BLACK_ROOK) {
-				boardConsistency = false;
+			if(pBoard->position.square[E1] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle kingside.");
 			}
 		break;
 		case CAN_CASTLE_OOO:
-			if(pBoard->position.squares[E1] != BLACK_KING || pBoard->position.squares[A1] != BLACK_ROOK) {
-				boardConsistency = false;
+			if(pBoard->position.square[E1] != BLACK_KING || pBoard->position.square[A1] != BLACK_ROOK) {
+				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle queenside.");
 			}
 		break;
@@ -481,7 +481,7 @@ void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, F1, WHITE_ROOK, 0);
 				pBoard->info.castleWhite &= ~CAN_CASTLE_OO;
 			}
-			pBoard->info.castleWhite &= ~WHITE_CAN_CASTLE;
+			pBoard->info.castleWhite &= ~CAN_CASTLE;
 		break;
 		case B:
 			assert(index == C8 || index == G8);
@@ -498,7 +498,7 @@ void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, F8, BLACK_ROOK, 0);
 				pBoard->info.castleBlack &= ~CAN_CASTLE_OO;
 			}
-			pBoard->info.castleBlack &= ~BLACK_CAN_CASTLE;
+			pBoard->info.castleBlack &= ~CAN_CASTLE;
 		break;
 	}
 	return;
@@ -521,7 +521,7 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, H1, WHITE_ROOK, 0);
 				pBoard->info.castleWhite |= CAN_CASTLE_OO;
 			}
-			pBoard->info.castleWhite |= WHITE_CAN_CASTLE;
+			pBoard->info.castleWhite |= CAN_CASTLE;
 		break;
 		case B:
 			assert(index == C8 || index == G8);
@@ -538,7 +538,7 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, H8, BLACK_ROOK, 0);	
 				pBoard->info.castleBlack |= CAN_CASTLE_OO;
 			}
-			pBoard->info.castleBlack |= BLACK_CAN_CASTLE;
+			pBoard->info.castleBlack |= CAN_CASTLE;
 		break;
 	}
 	return;

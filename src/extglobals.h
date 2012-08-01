@@ -102,11 +102,6 @@ extern const int CHECK_MATE;
 extern const int PIECEVALUES[];
  
 extern int GS1B[]; 
- 
-extern unsigned char CAN_CASTLE_OO;
-extern unsigned char CAN_CASTLE_OOO;
-extern unsigned char WHITE_CAN_CASTLE;
-extern unsigned char BLACK_CAN_CASTLE;
 
 extern bool randomInitialized;
 

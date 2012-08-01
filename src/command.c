@@ -150,7 +150,7 @@ bool doCommand() {
 		return true;
 	}
 	
-	// Rotate the borad,
+	// Rotate the board,
 	// currently, the display function does not support rotating
 	// to override displaying the pieces of the next player to move
 	// that can be implemented easily
