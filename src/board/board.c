@@ -289,9 +289,9 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 	pBoard->position.occupied &= ~BITSET[index];
 	pBoard->position.square[index] = EMPTY;
 	if(lastOccupant == WHITE_KING || lastOccupant == BLACK_KING) {
-		pBoard->position.kings[(lastOccupant & 8) ? BLACK : WHITE] = INVALID_SQUARE;
+		pBoard->position.kings[color(lastOccupant)] = INVALID_SQUARE;
 	}
-	if(lastOccupant & 8) {
+	if(color(lastOccupant) == B) {
 		pBoard->position.blackOccupied &= ~BITSET[index];
 	} else {
 		pBoard->position.whiteOccupied &= ~BITSET[index];
@@ -306,9 +306,9 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 	pBoard->position.occupied |= BITSET[index];
 	pBoard->position.square[index] = movedPiece;
 	if(movedPiece == WHITE_KING || movedPiece == BLACK_KING) {
-		pBoard->position.kings[(movedPiece & 8) ? BLACK : WHITE] = index;
+		pBoard->position.kings[color(movedPiece)] = index;
 	}
-	if(movedPiece & 8) {
+	if(color(movedPiece) == B) {
 		pBoard->position.blackOccupied |= BITSET[index];
 	} else {
 		pBoard->position.whiteOccupied |= BITSET[index];
@@ -431,11 +431,10 @@ void unPromote(Board *pBoard, UCHAR index) {
 }
 
 void addMaterial(Board *pBoard, UCHAR piece) {
-	UCHAR color = (piece & 8) ? BLACK : WHITE;
-	pBoard->position.pieces[color][piece & ~8]++;
-	pBoard->position.pieces[color][TOTAL]++;
+	pBoard->position.pieces[color(piece)][piece & ~8]++;
+	pBoard->position.pieces[color(piece)][TOTAL]++;
 	pBoard->position.totalPieces++;
-	if(color == BLACK) {
+	if(color(piece) == BLACK) {
 		pBoard->info.blackMaterial += PIECEVALUES[piece];
 	} else {
 		pBoard->info.whiteMaterial += PIECEVALUES[piece];
@@ -445,11 +444,10 @@ void addMaterial(Board *pBoard, UCHAR piece) {
 }
 
 void removeMaterial(Board *pBoard, UCHAR piece) {
-	UCHAR color = (piece & 8) ? BLACK : WHITE;
-	pBoard->position.pieces[color][piece & ~8]--;
-	pBoard->position.pieces[color][TOTAL]--;
+	pBoard->position.pieces[color(piece)][piece & ~8]--;
+	pBoard->position.pieces[color(piece)][TOTAL]--;
 	pBoard->position.totalPieces--;
-	if(color == BLACK) {
+	if(color(piece) == BLACK) {
 		pBoard->info.blackMaterial -= PIECEVALUES[piece];
 	} else {
 		pBoard->info.whiteMaterial -= PIECEVALUES[piece];
