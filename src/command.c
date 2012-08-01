@@ -149,6 +149,12 @@ bool doCommand() {
 		displayBoard(pBoard);
 		return true;
 	}
+
+	// run debugBoard
+	if(!strcmp(TOKENS[0], "debug-board")) {
+		debugBoard(pBoard);
+		return true;
+	}
 	
 	// Rotate the board,
 	// currently, the display function does not support rotating
