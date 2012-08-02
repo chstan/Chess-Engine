@@ -462,22 +462,16 @@ void updateAggregateBB(Board *pBoard) {
 }
 
 void updateBBFromSquares(Board *pBoard) {
-	int i;
-	for(i = 0; i < 64; i++) {
-		if(pBoard->position.square[i] == WHITE_PAWN) pBoard->position.pieceBB[WHITE_PAWN] |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KING) pBoard->position.pieceBB[WHITE_KING] |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_QUEEN) pBoard->position.pieceBB[WHITE_QUEEN] |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_BISHOP) pBoard->position.pieceBB[WHITE_BISHOP] |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_KNIGHT) pBoard->position.pieceBB[WHITE_KNIGHT] |= BITSET[i];
-		if(pBoard->position.square[i] == WHITE_ROOK) pBoard->position.pieceBB[WHITE_ROOK] |= BITSET[i];
-		
-		if(pBoard->position.square[i] == BLACK_PAWN) pBoard->position.pieceBB[BLACK_PAWN] |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KING) pBoard->position.pieceBB[BLACK_KING] |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_QUEEN) pBoard->position.pieceBB[BLACK_QUEEN] |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_BISHOP) pBoard->position.pieceBB[BLACK_BISHOP] |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_KNIGHT) pBoard->position.pieceBB[BLACK_KNIGHT] |= BITSET[i];
-		if(pBoard->position.square[i] == BLACK_ROOK) pBoard->position.pieceBB[BLACK_ROOK] |= BITSET[i];
+	resetBB(pBoard);
+	
+	for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
+		UCHAR currentPiece = pBoard->position.square[currentSquare];
+		if(isPiece(currentPiece)) {
+			pBoard->position.pieceBB[currentPiece] |= BITSET[currentSquare];
+		}
 	}
+	
+	updateAggregateBB(pBoard);
 	return;
 }
 
