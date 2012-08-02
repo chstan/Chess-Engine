@@ -12,3 +12,4 @@ Version 0.1.2:
 	-added a performance test module for finding bugs in the move generator and benchmarking its speed
 	-now with more parentheses...
 	-added a debugBoard and consistentBoard method for checking board consistency
+	-changed the organization of the board structure to use an array of bitboards, which will allow us to tidy up code elsewhere in the project

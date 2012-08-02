@@ -109,6 +109,10 @@ bool doCommand() {
 	if(!strcmp(TOKENS[0], "help") || !strcmp(TOKENS[0], "h") || !strcmp(TOKENS[0], "?")) {
 		printf("Command List:\n\n");
 		printf("move [moveParam]\n");
+		printf("list-moves\n");
+		printf("random-move");
+		printf("performance-test");
+		printf("debug-board\n");
 		printf("rotate\n");
 		printf("display\n");
 		printf("todo\n");
