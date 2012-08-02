@@ -46,7 +46,7 @@ void resetBoard(Board *pBoard) {
 	
 	pBoard->info.displayRotated = false;
 	
-	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE, CAN_CASTLE, 0);
+	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE | CAN_CASTLE_OO | CAN_CASTLE_OOO, CAN_CASTLE | CAN_CASTLE_OO | CAN_CASTLE_OOO, 0);
 	return;
 }
 
@@ -163,11 +163,6 @@ void debugBoard(Board *pBoard) {
 
 	// rudimentary castling checks
 	switch(pBoard->info.castleWhite) {
-		case CAN_CASTLE:
-			if(pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[H1] != WHITE_ROOK || pBoard->position.square[E1] != WHITE_KING) {
-				boardConsistent = false;
-				printf("The board info incorrectly reports that white can castle queenside or kingside.\n");
-			}
 		break;
 		case CAN_CASTLE_OO:
 			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[H1] != WHITE_ROOK) {
@@ -181,15 +176,15 @@ void debugBoard(Board *pBoard) {
 				printf("The board info incorrectly reports that white can castle queenside.");
 			}
 		break;
+		case CAN_CASTLE_OO | CAN_CASTLE_OOO:
+			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[H1] != WHITE_ROOK) {
+				boardConsistent = false;
+				printf("The board info incorrectly reports that white can castle kingside or queenside.");
+			}
+		break;
 	}
 	
 	switch(pBoard->info.castleBlack) {
-		case CAN_CASTLE:
-			if(pBoard->position.square[H8] != BLACK_ROOK || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[E8] != BLACK_KING) {
-				boardConsistent = false;
-				printf("The board info incorrectly reports that black can castle queenside or kingside.\n");
-			}
-		break;
 		case CAN_CASTLE_OO:
 			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[H8] != BLACK_ROOK) {
 				boardConsistent = false;
@@ -200,6 +195,12 @@ void debugBoard(Board *pBoard) {
 			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle queenside.");
+			}
+		break;
+		case CAN_CASTLE_OO | CAN_CASTLE_OOO:
+			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[H8] != BLACK_ROOK) {
+				boardConsistent = false;
+				printf("The board info incorrectly reports that black can castle kingside or queenside.");
 			}
 		break;
 	}
