@@ -42,12 +42,37 @@ void makeMove(Board *pBoard, Move m) {
 		removeMaterial(pBoard, capturedPiece(m));
 	}
 	pBoard->info.nextMove ^= 1; // toggle the person to play
-	return;
 }
 
 void unmakeMove(Board *pBoard, Move m) {
-	// UNFINISHED
-	return;
+	if(whiteCastle(m) | blackCastle(m)) {
+		// CASTLING
+		if(whiteCastle(m)) {
+			unCastle(pBoard, to(m), WHITE);
+		} else {
+			unCastle(pBoard, to(m), BLACK);
+		}
+	} else {
+		//setEmptyAt(pBoard, to(m), movedPiece(m));
+		if(!(whiteEnPassant(m) | blackEnPassant(m))) {
+			if(capturedPiece(m)) {
+				setPieceAt(pBoard, to(m), capturedPiece(m), 0);
+			} 
+				setPieceAt(pBoard, from(m), movedPiece(m), 0);
+		} else {
+			// EN PASSANT
+			// NEED TO UNDO THE EN PASSANT!!! NOT DONE YET
+			setPieceAt(pBoard, from(m), movedPiece(m), 0);
+		}
+		
+		if(promote(m)) {
+			unPromote(pBoard, to(m));
+			removeMaterial(pBoard, promote(m));
+			addMaterial(pBoard, movedPiece(m));
+		}
+		addMaterial(pBoard, capturedPiece(m));
+	}
+	pBoard->info.nextMove ^= 1; // toggle the person to play
 }
 
 void printMove(Move m) {
@@ -72,5 +97,4 @@ void printMove(Move m) {
 		printf("%d ", (m & BITSET[i]) ? 1 : 0);
 	}
 	printf("\n%s", footer);
-	return;
 }
