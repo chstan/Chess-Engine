@@ -431,22 +431,12 @@ void updateKingsFromBB(Board *pBoard) {
 }
 
 void resetBB(Board *pBoard) {
-	pBoard->position.pieceBB[WHITE_KING] = 0;
-	pBoard->position.pieceBB[WHITE_QUEEN] = 0;
-	pBoard->position.pieceBB[WHITE_ROOK] = 0;
-	pBoard->position.pieceBB[WHITE_BISHOP] = 0;
-	pBoard->position.pieceBB[WHITE_KNIGHT] = 0;
-	pBoard->position.pieceBB[WHITE_PAWN] = 0;
+	for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
+		pBoard->position.pieceBB[currentPieceType] = 0;
+	}
+
+	pBoard->position.whiteOccupied = 0;
 	pBoard->position.blackOccupied = 0;
-	
-	pBoard->position.pieceBB[BLACK_KING] = 0;
-	pBoard->position.pieceBB[BLACK_QUEEN] = 0;
-	pBoard->position.pieceBB[BLACK_ROOK] = 0;
-	pBoard->position.pieceBB[BLACK_BISHOP] = 0;
-	pBoard->position.pieceBB[BLACK_KNIGHT] = 0;
-	pBoard->position.pieceBB[BLACK_PAWN] = 0;
-	pBoard->position.blackOccupied = 0;
-	
 	pBoard->position.occupied = 0;
 	return;
 }
