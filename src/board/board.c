@@ -82,10 +82,10 @@ void displayBoard(Board *pBoard) {
 		for(j = 0; j < 8; j++) {
 			switch(pBoard->info.nextMove) {
 				case W:
-					printf("| %s ", PIECENAMES[pBoard->position.square[sq(8-i, j+1)]]);	
+					printf("| %s ", PIECE_NAMES[pBoard->position.square[sq(8-i, j+1)]]);	
 				break;
 				case B:
-					printf("| %s ", PIECENAMES[pBoard->position.square[sq(i+1, 8-j)]]);
+					printf("| %s ", PIECE_NAMES[pBoard->position.square[sq(i+1, 8-j)]]);
 				break;
 			}
 		}
@@ -122,85 +122,13 @@ void debugBoard(Board *pBoard) {
 	// certain problems cannot be found at runtime however, and require prior knowledge of the
 	// state of the board, for instance in the case of castling.
 	bool boardConsistent = true;
-	
-	// array of squares
 	for(int i = 0; i < 64; i++) {
-		switch(pBoard->position.square[i]) {
-			case E:
-				// nothing to handle here, we don't track empty squares
-			break;
-			case WP:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_PAWN])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;  
-			case WK:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_KING])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case WN:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_KNIGHT])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case WB:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_BISHOP])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case WR:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_ROOK])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case WQ:
-				if(!(BITSET[i] & pBoard->position.pieceBB[WHITE_QUEEN])) {
-					boardConsistent = false;
-					printf("The array of squares reports a white queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case BP:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_PAWN])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black pawn at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case BK:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_KING])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black king at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case BN:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_KNIGHT])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black knight at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case BB:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_BISHOP])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black bishop at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
-			case BR:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_ROOK])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black rook at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break; 
-			case BQ:
-				if(!(BITSET[i] & pBoard->position.pieceBB[BLACK_QUEEN])) {
-					boardConsistent = false;
-					printf("The array of squares reports a black queen at %s, but the bitboard is empty.\n", SQUARENAME[i]);
-				}
-			break;
+		UCHAR currentPiece = pBoard->position.square[i];
+		if(currentPiece != EMPTY) {
+			if(!(BITSET[i] & pBoard->position.pieceBB[currentPiece])) {
+				boardConsistent = false;
+				printf("The array of squares reports a %s at %s, but the bitboard is empty.\n", PIECE_NAMES_FULL[currentPiece], SQUARENAME[i]);
+			}
 		}
 	}
 	
@@ -218,20 +146,22 @@ void debugBoard(Board *pBoard) {
 	// no real check needed here at the moment, though one could be added for material consistency
 	
 	// bitboards
-	// white pawn
-	
-	// white king
-	// white queen
-	// white bishop
-	// white knight
-	// white rook
-	// black pawn
-	// black king
-	// black queen
-	// black bishop
-	// black knight
-	// black rook
-	
+	for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
+		if(isPiece(currentPieceType)) {
+			BitBoard currentBitBoard = pBoard->position.pieceBB[currentPieceType];
+			int index = -1, shift = 0;
+			while(currentBitBoard) {
+				shift = LSB(currentBitBoard)+1;
+				currentBitBoard >>= shift;
+				index += shift;
+				if(pBoard->position.square[index] != currentPieceType) {
+					boardConsistent = false;
+					printf("The bitboards report a %s at %s, but the array of pieces does not.\n", PIECE_NAMES_FULL[currentPieceType], SQUARENAME[index]);
+				}
+			}
+		}
+	}
+
 	// rudimentary castling checks
 	switch(pBoard->info.castleWhite) {
 		case CAN_CASTLE:

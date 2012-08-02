@@ -86,7 +86,8 @@ extern const unsigned char BLACK_BISHOP;
 extern const unsigned char BLACK_ROOK; 
 extern const unsigned char BLACK_QUEEN;
  
-extern const char* PIECENAMES[];
+extern const char *PIECE_NAMES[];
+extern const char *PIECE_NAMES_FULL[];
  
 extern BitMap BITSET[];
 extern int BOARDINDEX[9][9]; 
