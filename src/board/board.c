@@ -8,8 +8,7 @@
 #include "../move/move.h"
 
 void resetBoard(Board *pBoard) {
-	int i;
-	for(i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
+	for(int i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
 	pBoard->position.square[A1] = WHITE_ROOK;
 	pBoard->position.square[B1] = WHITE_KNIGHT;
 	pBoard->position.square[C1] = WHITE_BISHOP;
