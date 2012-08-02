@@ -388,24 +388,29 @@ void removeMaterial(Board *pBoard, UCHAR piece) {
 
 //---------------------AUX FUNCTIONS-------------------------
 void updatePieceCountsFromBB(Board *pBoard) {
-	// Slow. Consider looping through squares
-	pBoard->position.pieces[WHITE][PAWN] = countBits(pBoard->position.pieceBB[WHITE_PAWN]);
-	pBoard->position.pieces[WHITE][BISHOP] = countBits(pBoard->position.pieceBB[WHITE_BISHOP]);
-	pBoard->position.pieces[WHITE][KNIGHT] = countBits(pBoard->position.pieceBB[WHITE_KNIGHT]);
-	pBoard->position.pieces[WHITE][ROOK] = countBits(pBoard->position.pieceBB[WHITE_ROOK]);
-	pBoard->position.pieces[WHITE][QUEEN] = countBits(pBoard->position.pieceBB[WHITE_QUEEN]);
-	pBoard->position.pieces[WHITE][KING] = countBits(pBoard->position.pieceBB[WHITE_KING]);
-	pBoard->position.pieces[WHITE][TOTAL] = countBits(pBoard->position.whiteOccupied);
+	// Reset everything
+	for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
+		pBoard->position.pieces[currentPieceType] = 0;
+	}
 	
-	pBoard->position.pieces[BLACK][PAWN] = countBits(pBoard->position.pieceBB[BLACK_PAWN]);
-	pBoard->position.pieces[BLACK][BISHOP] = countBits(pBoard->position.pieceBB[BLACK_BISHOP]);
-	pBoard->position.pieces[BLACK][KNIGHT] = countBits(pBoard->position.pieceBB[BLACK_KNIGHT]);
-	pBoard->position.pieces[BLACK][ROOK] = countBits(pBoard->position.pieceBB[BLACK_ROOK]);
-	pBoard->position.pieces[BLACK][QUEEN] = countBits(pBoard->position.pieceBB[BLACK_QUEEN]);
-	pBoard->position.pieces[BLACK][KING] = countBits(pBoard->position.pieceBB[BLACK_KING]);
-	pBoard->position.pieces[BLACK][TOTAL] = countBits(pBoard->position.blackOccupied);
+	pBoard->position.whiteTotal = 0;
+	pBoard->position.blackTotal = 0;
 	
-	pBoard->position.totalPieces = countBits(pBoard->position.occupied);
+	// now iterate across the squares in order to update piece counts
+	for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
+		UCHAR currentPiece = pBoard->position.square[currentSquare];
+		if(isPiece(currentPiece)) {
+			int color = color(currentPiece);
+			pBoard->position.pieces[currentPiece]++;
+			if(color == WHITE) {
+				pBoard->position.whiteTotal++;
+			} else {
+				pBoard->position.blackTotal++;
+			}
+		}
+	}
+	
+	pBoard->position.totalPieces = pBoard->position.whiteTotal + pBoard->position.blackTotal;
 	return;
 }
 

@@ -15,7 +15,9 @@ typedef struct {
 	int square[64];
 	int kings[2];
 	
-	signed char pieces[2][7];
+	signed char pieces[16];
+	signed char totalWhite;
+	signed char totalBlack;
 	signed char totalPieces;
 } Position;
 
