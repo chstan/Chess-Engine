@@ -361,8 +361,12 @@ void unPromote(Board *pBoard, UCHAR index) {
 }
 
 void addMaterial(Board *pBoard, UCHAR piece) {
-	pBoard->position.pieces[color(piece)][piece & ~8]++;
-	pBoard->position.pieces[color(piece)][TOTAL]++;
+	pBoard->position.pieces[piece]++;
+	if(color(piece) == WHITE) {
+		pBoard->position.totalWhite++;
+	} else {
+		pBoard->position.totalBlack++;
+	}
 	pBoard->position.totalPieces++;
 	if(color(piece) == BLACK) {
 		pBoard->info.blackMaterial += PIECEVALUES[piece];
@@ -374,8 +378,12 @@ void addMaterial(Board *pBoard, UCHAR piece) {
 }
 
 void removeMaterial(Board *pBoard, UCHAR piece) {
-	pBoard->position.pieces[color(piece)][piece & ~8]--;
-	pBoard->position.pieces[color(piece)][TOTAL]--;
+	pBoard->position.pieces[piece]--;
+	if(color(piece) == WHITE) {
+		pBoard->position.totalWhite--;
+	} else {
+		pBoard->position.totalBlack--;
+	}
 	pBoard->position.totalPieces--;
 	if(color(piece) == BLACK) {
 		pBoard->info.blackMaterial -= PIECEVALUES[piece];
@@ -393,8 +401,8 @@ void updatePieceCountsFromBB(Board *pBoard) {
 		pBoard->position.pieces[currentPieceType] = 0;
 	}
 	
-	pBoard->position.whiteTotal = 0;
-	pBoard->position.blackTotal = 0;
+	pBoard->position.totalWhite = 0;
+	pBoard->position.totalBlack = 0;
 	
 	// now iterate across the squares in order to update piece counts
 	for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
@@ -403,14 +411,14 @@ void updatePieceCountsFromBB(Board *pBoard) {
 			int color = color(currentPiece);
 			pBoard->position.pieces[currentPiece]++;
 			if(color == WHITE) {
-				pBoard->position.whiteTotal++;
+				pBoard->position.totalWhite++;
 			} else {
-				pBoard->position.blackTotal++;
+				pBoard->position.totalBlack++;
 			}
 		}
 	}
 	
-	pBoard->position.totalPieces = pBoard->position.whiteTotal + pBoard->position.blackTotal;
+	pBoard->position.totalPieces = pBoard->position.totalWhite + pBoard->position.totalBlack;
 	return;
 }
 
