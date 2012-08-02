@@ -9,6 +9,7 @@
 
 void resetBoard(Board *pBoard) {
 	for(int i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
+	
 	pBoard->position.square[A1] = WHITE_ROOK;
 	pBoard->position.square[B1] = WHITE_KNIGHT;
 	pBoard->position.square[C1] = WHITE_BISHOP;
@@ -163,13 +164,13 @@ void debugBoard(Board *pBoard) {
 	// rudimentary castling checks
 	switch(pBoard->info.castleWhite) {
 		case CAN_CASTLE:
-			if(pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[A8] != WHITE_ROOK || pBoard->position.square[E1] != WHITE_KING) {
+			if(pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[H1] != WHITE_ROOK || pBoard->position.square[E1] != WHITE_KING) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that white can castle queenside or kingside.\n");
 			}
 		break;
 		case CAN_CASTLE_OO:
-			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A8] != WHITE_ROOK) {
+			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[H1] != WHITE_ROOK) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that white can castle kingside.");
 			}
@@ -184,19 +185,19 @@ void debugBoard(Board *pBoard) {
 	
 	switch(pBoard->info.castleBlack) {
 		case CAN_CASTLE:
-			if(pBoard->position.square[A1] != BLACK_ROOK || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[E1] != BLACK_KING) {
+			if(pBoard->position.square[H8] != BLACK_ROOK || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[E8] != BLACK_KING) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle queenside or kingside.\n");
 			}
 		break;
 		case CAN_CASTLE_OO:
-			if(pBoard->position.square[E1] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK) {
+			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[H8] != BLACK_ROOK) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle kingside.");
 			}
 		break;
 		case CAN_CASTLE_OOO:
-			if(pBoard->position.square[E1] != BLACK_KING || pBoard->position.square[A1] != BLACK_ROOK) {
+			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK) {
 				boardConsistent = false;
 				printf("The board info incorrectly reports that black can castle queenside.");
 			}
