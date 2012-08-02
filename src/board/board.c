@@ -46,8 +46,7 @@ void resetBoard(Board *pBoard) {
 	
 	pBoard->info.displayRotated = false;
 	
-	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE_OO + CAN_CASTLE_OOO + CAN_CASTLE,
-		CAN_CASTLE_OO + CAN_CASTLE_OOO + CAN_CASTLE, 0);
+	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE, CAN_CASTLE, 0);
 	return;
 }
 
