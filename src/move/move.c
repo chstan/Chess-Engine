@@ -53,7 +53,13 @@ void unmakeMove(Board *pBoard, Move m) {
 			unCastle(pBoard, to(m), BLACK);
 		}
 	} else {
-		//setEmptyAt(pBoard, to(m), movedPiece(m));
+		if(promote(m)) {
+			unPromote(pBoard, to(m));
+			removeMaterial(pBoard, promote(m));
+			addMaterial(pBoard, movedPiece(m));
+		}
+		
+		setEmptyAt(pBoard, to(m), movedPiece(m));
 		if(!(whiteEnPassant(m) | blackEnPassant(m))) {
 			if(capturedPiece(m)) {
 				setPieceAt(pBoard, to(m), capturedPiece(m), 0);
@@ -63,12 +69,6 @@ void unmakeMove(Board *pBoard, Move m) {
 			// EN PASSANT
 			// NEED TO UNDO THE EN PASSANT!!! NOT DONE YET
 			setPieceAt(pBoard, from(m), movedPiece(m), 0);
-		}
-		
-		if(promote(m)) {
-			unPromote(pBoard, to(m));
-			removeMaterial(pBoard, promote(m));
-			addMaterial(pBoard, movedPiece(m));
 		}
 		addMaterial(pBoard, capturedPiece(m));
 	}
