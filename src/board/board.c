@@ -92,7 +92,7 @@ void displayBoard(Board *pBoard) {
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
-	if(!(pBoard->info.castleWhite & CAN_CASTLE)) printf("White cannot castle.\n");
+	if(pBoard->info.castleWhite == CANNOT_CASTLE) printf("White cannot castle.\n");
 	else {
 		printf("White can castle");
 		if(pBoard->info.castleWhite == CAN_CASTLE_OOO)
@@ -101,7 +101,7 @@ void displayBoard(Board *pBoard) {
 			printf(" kingside");
 		printf(".\n");
 	}
-	if(!(pBoard->info.castleBlack & CAN_CASTLE)) printf("Black cannot castle.\n");
+	if(pBoard->info.castleBlack == CANNOT_CASTLE) printf("Black cannot castle.\n");
 	else {
 		printf("Black can castle");
 		if(pBoard->info.castleBlack == CAN_CASTLE_OOO)
