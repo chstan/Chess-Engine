@@ -16,7 +16,7 @@
 
 void makeMove(Board *pBoard, Move m) {
 	if(whiteCastle(m) | blackCastle(m)) {
-		printf("CASTLING\n");
+		// CASTLING
 		if(whiteCastle(m)) {
 			castle(pBoard, to(m), WHITE);
 		} else {
@@ -33,17 +33,20 @@ void makeMove(Board *pBoard, Move m) {
 				updateEnPassantSquare(pBoard, INVALID_SQUARE);
 			}
 		} else {
-			printf("ENPASSANT\n");
+			// EN PASSANT
 			setPieceAt(pBoard, to(m), movedPiece(m), 0);
 			enPassant(pBoard, color(movedPiece(m)));
 		}
 		
 		if(promote(m)) {
-			printf("PROMOTE\n");
+			// PROMOTION
 			doPromote(pBoard, to(m), promote(m));
 			removeMaterial(pBoard, movedPiece(m));
 			addMaterial(pBoard, promote(m));
 		}
+		
+		updateCastling(pBoard, from(m), movedPiece(m));
+		
 		removeMaterial(pBoard, capturedPiece(m));
 	}
 

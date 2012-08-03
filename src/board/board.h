@@ -69,6 +69,8 @@ void enPassant(Board *pBoard, int color);
 
 void unPassant(Board *pBoard, int index, int color);
 
+void updateCastling(Board *pBoard, int index, UCHAR piece);
+
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
 
 void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);

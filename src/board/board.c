@@ -278,6 +278,26 @@ void unPassant(Board *pBoard, int index, int color) {
 	}
 }
 
+void updateCastling(Board *pBoard, int index, UCHAR piece) {
+	if(piece == WHITE_KING) {
+		pBoard->info.castleWhite &= ~CAN_CASTLE;
+	} else if(piece == BLACK_KING) {
+		pBoard->info.castleBlack &= ~CAN_CASTLE;
+	} else if(piece == WHITE_ROOK) {
+		if(index == A1) {
+			pBoard->info.castleWhite &= ~CAN_CASTLE_OOO;
+		} else if(index == H1) {
+			pBoard->info.castleWhite &= ~CAN_CASTLE_OO;
+		}
+	} else if(piece == BLACK_ROOK) {
+		if(index == A8) {
+			pBoard->info.castleBlack &= ~CAN_CASTLE_OOO;
+		} else if(index == H8) {
+			pBoard->info.castleBlack &= ~CAN_CASTLE_OO;
+		}
+	}
+}
+
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 	switch(whichKing) {
 		case W:
