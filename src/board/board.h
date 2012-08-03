@@ -4,6 +4,8 @@
 #include "../defines.h"
 
 #define sq(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
+#define MAX_MOVES_PER_GAME 512
+
 
 typedef struct {
 	BitBoard pieceBB[16];
@@ -27,6 +29,16 @@ typedef struct {
 	int blackMaterial;
 	
 	unsigned char nextMove;
+	MoveInfo state[MAX_MOVES_PER_GAME];
+
+	// indexs into the array, gives us the number
+	// of moves that have elapsed so far
+	unsigned int currentMove;	
+
+	bool displayRotated;
+} BoardInfo;
+
+typedef struct {
 	unsigned char castleWhite;
 	unsigned char castleBlack;
 	
@@ -35,9 +47,7 @@ typedef struct {
 	// where the pawn actually is
 	int enPassantSquare;
 	int staleMoves;
-	
-	bool displayRotated;
-} BoardInfo;
+} MoveInfo;
 
 typedef struct {
 	Position position;
