@@ -27,10 +27,15 @@ void makeMove(Board *pBoard, Move m) {
 		
 		if(!(whiteEnPassant(m) | blackEnPassant(m))) {
 			setPieceAt(pBoard, to(m), movedPiece(m), capturedPiece(m));
+			if((movedPiece(m) == WHITE_PAWN || movedPiece(m) == BLACK_PAWN) && (to(m) - from(m) == 16 || from(m) - to(m) == 16)) {
+				updateEnPassantSquare(pBoard, ((to(m) + from(m)) / 2));
+			} else {
+				updateEnPassantSquare(pBoard, INVALID_SQUARE);
+			}
 		} else {
 			printf("ENPASSANT\n");
 			setPieceAt(pBoard, to(m), movedPiece(m), 0);
-			enPassant(pBoard);
+			enPassant(pBoard, color(movedPiece(m)));
 		}
 		
 		if(promote(m)) {
@@ -41,11 +46,7 @@ void makeMove(Board *pBoard, Move m) {
 		}
 		removeMaterial(pBoard, capturedPiece(m));
 	}
-	if((movedPiece(m) == WHITE_PAWN || movedPiece(m) == BLACK_PAWN) && (to(m) - from(m) == 16 || from(m) - to(m) == 16)) {
-		updateEnPassantSquare(pBoard, to(m));
-	} else {
-		updateEnPassantSquare(pBoard, INVALID_SQUARE);
-	}
+
 	pBoard->info.nextMove ^= 1; // toggle the person to play
 }
 

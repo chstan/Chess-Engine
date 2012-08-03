@@ -30,6 +30,9 @@ typedef struct {
 	unsigned char castleWhite;
 	unsigned char castleBlack;
 	
+	// the en passant index
+	// represents where a pawn can capture to, rather than
+	// where the pawn actually is
 	int enPassantSquare;
 	int staleMoves;
 	
@@ -62,7 +65,7 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 
 void updateEnPassantSquare(Board *pBoard, int index);
 
-void enPassant(Board *pBoard);
+void enPassant(Board *pBoard, int color);
 
 void unPassant(Board *pBoard, int index, int color);
 

@@ -249,7 +249,8 @@ void updateEnPassantSquare(Board *pBoard, int index) {
 	pBoard->info.enPassantSquare = index;
 }
 
-void enPassant(Board *pBoard) {
+void enPassant(Board *pBoard, int color) {
+	// the color should be the color of the *capturing* pawn
 	// find where the en passant will take place and 
 	// make sure the board is updated so that no further enpassant is possible
 	int index = pBoard->info.enPassantSquare;
@@ -258,7 +259,12 @@ void enPassant(Board *pBoard) {
 	// the piece will either be a white pawn or a black pawn, but
 	// we can get it either way here
 	int piece = pBoard->position.square[index];
-	setEmptyAt(pBoard, index, piece);
+	removeMaterial(pBoard, piece);
+	if(color == WHITE) {
+		setEmptyAt(pBoard, index - 8, BLACK_PAWN);
+	} else {
+		setEmptyAt(pBoard, index + 8, WHITE_PAWN);
+	}
 	return;
 }
 
@@ -266,9 +272,9 @@ void unPassant(Board *pBoard, int index, int color) {
 	// a horrible corruption of the French language... mon Dieu!
 	pBoard->info.enPassantSquare = index;
 	if(color == WHITE) {
-		setPieceAt(pBoard, index, WHITE_PAWN, NO_PIECE);
+		setPieceAt(pBoard, index + 8, WHITE_PAWN, NO_PIECE);
 	} else {
-		setPieceAt(pBoard, index, BLACK_PAWN, NO_PIECE);
+		setPieceAt(pBoard, index - 8, BLACK_PAWN, NO_PIECE);
 	}
 }
 
