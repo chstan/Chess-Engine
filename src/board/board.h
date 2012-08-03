@@ -62,6 +62,8 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 
 void enPassant(Board *pBoard);
 
+void unPassant(Board *pBoard, int index, int color);
+
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
 
 void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);

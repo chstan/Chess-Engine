@@ -246,10 +246,26 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 }
 
 void enPassant(Board *pBoard) {
+	// find where the en passant will take place and 
+	// make sure the board is updated so that no further enpassant is possible
 	int index = pBoard->info.enPassantSquare;
+	pBoard->info.enPassantSquare = INVALID_SQUARE;
+	
+	// the piece will either be a white pawn or a black pawn, but
+	// we can get it either way here
 	int piece = pBoard->position.square[index];
 	setEmptyAt(pBoard, index, piece);
 	return;
+}
+
+void unPassant(Board *pBoard, int index, int color) {
+	// a horrible corruption of the French language... mon Dieu!
+	pBoard->info.enPassantSquare = index;
+	if(color == WHITE) {
+		setPieceAt(pBoard, index, WHITE_PAWN, NO_PIECE);
+	} else {
+		setPieceAt(pBoard, index, BLACK_PAWN, NO_PIECE);
+	}
 }
 
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
