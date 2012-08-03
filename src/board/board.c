@@ -245,6 +245,10 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 	}
 }
 
+void updateEnPassantSquare(Board *pBoard, int index) {
+	pBoard->info.enPassantSquare = index;
+}
+
 void enPassant(Board *pBoard) {
 	// find where the en passant will take place and 
 	// make sure the board is updated so that no further enpassant is possible

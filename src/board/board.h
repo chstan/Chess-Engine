@@ -60,6 +60,8 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
 
 void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece);
 
+void updateEnPassantSquare(Board *pBoard, int index);
+
 void enPassant(Board *pBoard);
 
 void unPassant(Board *pBoard, int index, int color);
