@@ -467,6 +467,7 @@ void updateBBFromSquares(Board *pBoard) {
 	for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
 		UCHAR currentPiece = pBoard->position.square[currentSquare];
 		if(isPiece(currentPiece)) {
+			printf("%s\n", PIECE_NAMES_FULL[currentPiece]);
 			pBoard->position.pieceBB[currentPiece] |= BITSET[currentSquare];
 		}
 	}

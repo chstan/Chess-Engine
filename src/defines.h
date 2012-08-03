@@ -28,7 +28,7 @@
 #define BR 14
 #define WQ 7
 #define BQ 15
-#define isPiece(p) ((1 < (p)) && ((p) < 16) && ((p) != 4) && ((p) != 8) && ((p) != 12))
+#define isPiece(p) ((0 < (p)) && ((p) < 16) && ((p) != 4) && ((p) != 8) && ((p) != 12))
 #define TOTAL_PIECE_TYPES 16
 
 #define CANNOT_CASTLE 0
