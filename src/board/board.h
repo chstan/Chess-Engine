@@ -24,21 +24,6 @@ typedef struct {
 } Position;
 
 typedef struct {
-	int material;
-	int whiteMaterial;
-	int blackMaterial;
-	
-	unsigned char nextMove;
-	MoveInfo state[MAX_MOVES_PER_GAME];
-
-	// indexs into the array, gives us the number
-	// of moves that have elapsed so far
-	unsigned int currentMove;	
-
-	bool displayRotated;
-} BoardInfo;
-
-typedef struct {
 	unsigned char castleWhite;
 	unsigned char castleBlack;
 	
@@ -48,6 +33,21 @@ typedef struct {
 	int enPassantSquare;
 	int staleMoves;
 } MoveInfo;
+
+typedef struct {
+	int material;
+	int whiteMaterial;
+	int blackMaterial;
+	
+	unsigned char toPlay;
+	MoveInfo state[MAX_MOVES_PER_GAME];
+
+	// indexs into the array, gives us the number
+	// of moves that have elapsed so far
+	unsigned int currentMove;	
+
+	bool displayRotated;
+} BoardInfo;
 
 typedef struct {
 	Position position;
@@ -78,8 +78,6 @@ void updateEnPassantSquare(Board *pBoard, int index);
 void enPassant(Board *pBoard, int color);
 
 void unPassant(Board *pBoard, int index, int color);
-
-void updateCastling(Board *pBoard, int index, UCHAR piece);
 
 void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
 

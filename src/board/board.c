@@ -45,12 +45,13 @@ void resetBoard(Board *pBoard) {
 	pBoard->position.square[H7] = BLACK_PAWN;
 	
 	pBoard->info.displayRotated = false;
+	pBoard->info.currentMove = 0;
 	
 	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE | CAN_CASTLE_OO | CAN_CASTLE_OOO, CAN_CASTLE | CAN_CASTLE_OO | CAN_CASTLE_OOO, 0);
 	return;
 }
 
-void initBoardFromSquares(Board* pBoard, unsigned char nextMove, int staleMoves, int castleW, 
+void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW, 
 int castleB, int enPassantSquare) {
 	
 	resetBB(pBoard);
@@ -60,11 +61,11 @@ int castleB, int enPassantSquare) {
 	updateKingsFromBB(pBoard);
 	updatePieceCountsFromBB(pBoard);
 	
-	pBoard->info.nextMove = nextMove;
-	pBoard->info.castleWhite = castleW;
-	pBoard->info.castleBlack = castleB;
-	pBoard->info.enPassantSquare = enPassantSquare;
-	pBoard->info.staleMoves = staleMoves;
+	pBoard->info.toPlay = toPlay;
+	pBoard->info.state[pBoard->info.currentMove].castleWhite = castleW;
+	pBoard->info.state[pBoard->info.currentMove].castleBlack = castleB;
+	pBoard->info.state[pBoard->info.currentMove].enPassantSquare = enPassantSquare;
+	pBoard->info.state[pBoard->info.currentMove].staleMoves = staleMoves;
 	return;
 }
 
@@ -73,13 +74,13 @@ void displayBoard(Board *pBoard) {
 	const char *reverse = "   H     G     F     E     D     C     B     A   ";
 	const char *divider = "+-----+-----+-----+-----+-----+-----+-----+-----+";
 	
-	printf("\n\t%s\n", pBoard->info.nextMove ? reverse : header);
+	printf("\n\t%s\n", pBoard->info.toPlay ? reverse : header);
 	
 	int i, j;
 	for(i = 0; i < 8; i++) {
 		printf("\t%s\n\t", divider);
 		for(j = 0; j < 8; j++) {
-			switch(pBoard->info.nextMove) {
+			switch(pBoard->info.toPlay) {
 				case W:
 					printf("| %s ", PIECE_NAMES[pBoard->position.square[sq(8-i, j+1)]]);	
 				break;
@@ -88,25 +89,25 @@ void displayBoard(Board *pBoard) {
 				break;
 			}
 		}
-		printf("|  %d\n", pBoard->info.nextMove ? i+1 : 8-i);
+		printf("|  %d\n", pBoard->info.toPlay ? i+1 : 8-i);
 	}
 	printf("\t%s\n\n", divider);
 	printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
-	if(pBoard->info.castleWhite == CANNOT_CASTLE) printf("White cannot castle.\n");
+	if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CANNOT_CASTLE) printf("White cannot castle.\n");
 	else {
 		printf("White can castle");
-		if(pBoard->info.castleWhite == CAN_CASTLE_OOO)
+		if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CAN_CASTLE_OOO)
 			printf(" queenside");
-		if(pBoard->info.castleWhite == CAN_CASTLE_OO)
+		if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CAN_CASTLE_OO)
 			printf(" kingside");
 		printf(".\n");
 	}
-	if(pBoard->info.castleBlack == CANNOT_CASTLE) printf("Black cannot castle.\n");
+	if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CANNOT_CASTLE) printf("Black cannot castle.\n");
 	else {
 		printf("Black can castle");
-		if(pBoard->info.castleBlack == CAN_CASTLE_OOO)
+		if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CAN_CASTLE_OOO)
 			printf(" queenside");
-		if(pBoard->info.castleBlack == CAN_CASTLE_OO)
+		if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CAN_CASTLE_OO)
 			printf(" kingside");
 		printf(".\n");
 	}
@@ -162,7 +163,7 @@ void debugBoard(Board *pBoard) {
 	}
 
 	// rudimentary castling checks
-	switch(pBoard->info.castleWhite) {
+	switch(pBoard->info.state[pBoard->info.currentMove].castleWhite) {
 		break;
 		case CAN_CASTLE_OO:
 			if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[H1] != WHITE_ROOK) {
@@ -184,7 +185,7 @@ void debugBoard(Board *pBoard) {
 		break;
 	}
 	
-	switch(pBoard->info.castleBlack) {
+	switch(pBoard->info.state[pBoard->info.currentMove].castleBlack) {
 		case CAN_CASTLE_OO:
 			if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[H8] != BLACK_ROOK) {
 				boardConsistent = false;
@@ -246,15 +247,14 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 }
 
 void updateEnPassantSquare(Board *pBoard, int index) {
-	pBoard->info.enPassantSquare = index;
+	pBoard->info.state[pBoard->info.currentMove].enPassantSquare = index;
 }
 
 void enPassant(Board *pBoard, int color) {
 	// the color should be the color of the *capturing* pawn
 	// find where the en passant will take place and 
 	// make sure the board is updated so that no further enpassant is possible
-	int index = pBoard->info.enPassantSquare;
-	pBoard->info.enPassantSquare = INVALID_SQUARE;
+	int index = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
 	
 	// the piece will either be a white pawn or a black pawn, but
 	// we can get it either way here
@@ -270,31 +270,10 @@ void enPassant(Board *pBoard, int color) {
 
 void unPassant(Board *pBoard, int index, int color) {
 	// a horrible corruption of the French language... mon Dieu!
-	pBoard->info.enPassantSquare = index;
 	if(color == WHITE) {
 		setPieceAt(pBoard, index + 8, WHITE_PAWN, NO_PIECE);
 	} else {
 		setPieceAt(pBoard, index - 8, BLACK_PAWN, NO_PIECE);
-	}
-}
-
-void updateCastling(Board *pBoard, int index, UCHAR piece) {
-	if(piece == WHITE_KING) {
-		pBoard->info.castleWhite &= ~CAN_CASTLE;
-	} else if(piece == BLACK_KING) {
-		pBoard->info.castleBlack &= ~CAN_CASTLE;
-	} else if(piece == WHITE_ROOK) {
-		if(index == A1) {
-			pBoard->info.castleWhite &= ~CAN_CASTLE_OOO;
-		} else if(index == H1) {
-			pBoard->info.castleWhite &= ~CAN_CASTLE_OO;
-		}
-	} else if(piece == BLACK_ROOK) {
-		if(index == A8) {
-			pBoard->info.castleBlack &= ~CAN_CASTLE_OOO;
-		} else if(index == H8) {
-			pBoard->info.castleBlack &= ~CAN_CASTLE_OO;
-		}
 	}
 }
 
@@ -307,15 +286,12 @@ void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, C1, WHITE_KING, 0);
 				setEmptyAt(pBoard, A1, WHITE_ROOK);
 				setPieceAt(pBoard, D1, WHITE_ROOK, 0);
-				pBoard->info.castleWhite &= ~CAN_CASTLE_OOO;
 			} else {
 				setEmptyAt(pBoard, E1, WHITE_KING);
 				setPieceAt(pBoard, G1, WHITE_KING, 0);
 				setEmptyAt(pBoard, H1, WHITE_ROOK);
 				setPieceAt(pBoard, F1, WHITE_ROOK, 0);
-				pBoard->info.castleWhite &= ~CAN_CASTLE_OO;
 			}
-			pBoard->info.castleWhite &= ~CAN_CASTLE;
 		break;
 		case B:
 			assert(index == C8 || index == G8);
@@ -324,15 +300,12 @@ void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, C8, BLACK_KING, 0);
 				setEmptyAt(pBoard, A8, BLACK_ROOK);
 				setPieceAt(pBoard, D8, BLACK_ROOK, 0);
-				pBoard->info.castleBlack &= ~CAN_CASTLE_OOO;
 			} else {                 
 				setEmptyAt(pBoard, E8, BLACK_KING);
 				setPieceAt(pBoard, G8, BLACK_KING, 0);
 				setEmptyAt(pBoard, H8, BLACK_ROOK);
 				setPieceAt(pBoard, F8, BLACK_ROOK, 0);
-				pBoard->info.castleBlack &= ~CAN_CASTLE_OO;
 			}
-			pBoard->info.castleBlack &= ~CAN_CASTLE;
 		break;
 	}
 	return;
@@ -347,15 +320,12 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, E1, WHITE_KING, 0);
 				setEmptyAt(pBoard, D1, WHITE_ROOK);
 				setPieceAt(pBoard, A1, WHITE_ROOK, 0);
-				pBoard->info.castleWhite |= CAN_CASTLE_OOO;
 			} else {
 				setEmptyAt(pBoard, G1, WHITE_KING);
 				setPieceAt(pBoard, E1, WHITE_KING, 0);
 				setEmptyAt(pBoard, F1, WHITE_ROOK);
 				setPieceAt(pBoard, H1, WHITE_ROOK, 0);
-				pBoard->info.castleWhite |= CAN_CASTLE_OO;
 			}
-			pBoard->info.castleWhite |= CAN_CASTLE;
 		break;
 		case B:
 			assert(index == C8 || index == G8);
@@ -364,15 +334,12 @@ void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
 				setPieceAt(pBoard, E8, BLACK_KING, 0);
 				setEmptyAt(pBoard, D8, BLACK_ROOK);
 				setPieceAt(pBoard, A8, BLACK_ROOK, 0);
-				pBoard->info.castleBlack |= CAN_CASTLE_OOO;
 			} else {                 
 				setEmptyAt(pBoard, G8, BLACK_KING);
 				setPieceAt(pBoard, E8, BLACK_KING, 0);
 				setEmptyAt(pBoard, F8, BLACK_ROOK);
-				setPieceAt(pBoard, H8, BLACK_ROOK, 0);	
-				pBoard->info.castleBlack |= CAN_CASTLE_OO;
+				setPieceAt(pBoard, H8, BLACK_ROOK, 0);
 			}
-			pBoard->info.castleBlack |= CAN_CASTLE;
 		break;
 	}
 	return;

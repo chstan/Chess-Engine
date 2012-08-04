@@ -39,7 +39,7 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 
 void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
-	int color = pBoard->info.nextMove;
+	int color = pBoard->info.toPlay;
 	int piece;
 	
 	//pawn
@@ -107,7 +107,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 
 void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
-	int color = pBoard->info.nextMove;
+	int color = pBoard->info.toPlay;
 	int piece;
 	
 	//pawn
@@ -175,7 +175,7 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 
 void generateMove(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
-	int color = pBoard->info.nextMove;
+	int color = pBoard->info.toPlay;
 	int piece;
 	
 	//pawn

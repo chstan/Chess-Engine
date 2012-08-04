@@ -36,7 +36,7 @@ int getSquare(char *sq) {
 }
 
 Move notationToMove(Board *pBoard) {
-	unsigned char color = pBoard->info.nextMove;
+	unsigned char color = pBoard->info.toPlay;
 	if(!strcmp(TOKENS[1], "O-O-O")) {
 		return queenSide(color);
 	} else if (!strcmp(TOKENS[1], "O-O")) {

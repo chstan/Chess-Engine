@@ -45,12 +45,11 @@ void makeMove(Board *pBoard, Move m) {
 			addMaterial(pBoard, promote(m));
 		}
 		
-		updateCastling(pBoard, from(m), movedPiece(m));
+		//updateState(pBoard, m);
 		
 		removeMaterial(pBoard, capturedPiece(m));
 	}
 
-	pBoard->info.nextMove ^= 1; // toggle the person to play
 }
 
 void unmakeMove(Board *pBoard, Move m) {
@@ -81,7 +80,6 @@ void unmakeMove(Board *pBoard, Move m) {
 		}
 		addMaterial(pBoard, capturedPiece(m));
 	}
-	pBoard->info.nextMove ^= 1; // toggle the person to play
 }
 
 void printMove(Move m) {

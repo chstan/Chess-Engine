@@ -17,24 +17,24 @@ unsigned int countBits(BitMap bits) {
 
 unsigned int LSB(BitMap bits) {
 	if(!bits) return 0;
-	unsigned int lsb;	
+	unsigned long long lsb;	
 	#ifdef __clang__
-	asm("bsfl %0, %1" : "=r"(lsb) : "r"(bits));
+	asm("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
 	#elif (__GNUC__ || __cplusplus)
-	__asm__("bsfl %0, %1" : "=r"(lsb) : "r"(bits));
+	__asm__("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
 	#endif
 	return lsb;
 }
 
 unsigned int GSB(BitMap bits) {
 	if(!bits) return 0;
-	unsigned int gsb;	
+	unsigned long long gsb;	
 	#ifdef __clang__
-	asm("bsrl %0, %1" : "=r"(gsb) : "r"(bits));
+	asm("bsrq %0, %1" : "=r" (gsb) : "r" (bits));
 	#elif (__GNUC__ || __cplusplus)
-	__asm__("bsrl %0, %1" : "=r"(gsb) : "r"(bits));
+	__asm__("bsrq %0, %1" : "=r" (gsb) : "r" (bits));
 	#endif
-	return lsb;
+	return gsb;
 }
 
 void printBitMap(BitMap bits) {

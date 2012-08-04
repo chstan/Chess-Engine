@@ -13,8 +13,8 @@
 #include "test/movegentest.h"
 
 void typePrompt() {
-	assert(pBoard->info.nextMove == W || pBoard->info.nextMove == B);
-	switch(pBoard->info.nextMove) {
+	assert(pBoard->info.toPlay == W || pBoard->info.toPlay == B);
+	switch(pBoard->info.toPlay) {
 		case W:
 			printf("WHITE> ");
 		break;
