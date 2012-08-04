@@ -100,11 +100,11 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	int piece, endpiece;
 
 	if (color == BLACK) {
-		piece = WP;
-		endpiece = WQ;
-	} else {
 		piece = BP;
-    endpiece = BQ;
+		endpiece = BQ;
+	} else {
+		piece = WP;
+    endpiece = WQ;
 	}
 
 	for (; piece <= endpiece; piece++) {
@@ -122,11 +122,11 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	int piece, endpiece;
 
 	if (color == BLACK) {
-		piece = WP;
-		endpiece = WQ;
-	} else {
 		piece = BP;
 		endpiece = BQ;
+	} else {
+		piece = WP;
+		endpiece = WQ;
 	}
 
 	for (; piece <= endpiece; piece++) {
@@ -144,11 +144,11 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	int piece, endpiece;
 
 	if (color == BLACK) {
-		piece = WP;
-		endpiece = WQ;
-	} else {
 		piece = BP;
 		endpiece = BQ;
+	} else {
+		piece = WP;
+		endpiece = WQ;
 	}
 
 	for (; piece <= endpiece; piece++) {
