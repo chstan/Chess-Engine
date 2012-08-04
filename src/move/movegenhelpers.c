@@ -1,4 +1,3 @@
-
 #include "movegenhelpers.h"
 #include "../defines.h"
 #include "../extglobals.h"

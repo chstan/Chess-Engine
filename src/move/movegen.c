@@ -7,6 +7,63 @@
 #include "../bit.h"
 #include "../defines.h"
 
+MoveGenCB moveCB[] = {
+	NULL, 
+	pawnMoveBB,
+	kingMoveBB,
+	knightMoveBB,
+	NULL,
+	bishopMoveBB,
+	rookMoveBB,
+	queenMoveBB,
+	NULL, 
+	pawnMoveBB,
+	kingMoveBB,
+	knightMoveBB,
+	NULL,
+	bishopMoveBB,
+	rookMoveBB,
+	queenMoveBB
+};
+
+MoveGenCB timidCB[] = {
+	NULL, 
+	pawnTimidBB,
+	kingTimidBB,
+	knightTimidBB,
+	NULL,
+	bishopTimidBB,
+	rookTimidBB,
+	queenTimidBB,
+	NULL, 
+	pawnTimidBB,
+	kingTimidBB,
+	knightTimidBB,
+	NULL,
+	bishopTimidBB,
+	rookTimidBB,
+	queenTimidBB
+};
+
+MoveGenCB captureCB[] = {
+	NULL, 
+	pawnCaptureBB,
+	kingCaptureBB,
+	knightCaptureBB,
+	NULL,
+	bishopCaptureBB,
+	rookCaptureBB,
+	queenCaptureBB,
+	NULL, 
+	pawnCaptureBB,
+	kingCaptureBB,
+	knightCaptureBB,
+	NULL,
+	bishopCaptureBB,
+	rookCaptureBB,
+	queenCaptureBB
+};
+
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
 int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	int origin = -1, shift = 0, destination = 0;
@@ -40,67 +97,21 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 void generateTimid(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
 	int color = pBoard->info.toPlay;
-	int piece;
-	
-	//pawn
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_PAWN]
-			: pBoard->position.pieceBB[WHITE_PAWN];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, pawnTimidBB);
-	
-	//bishop
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_BISHOP]
-			: pBoard->position.pieceBB[WHITE_BISHOP];
-	piece = (color) ?
-				BLACK_BISHOP
-			: WHITE_BISHOP;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, bishopTimidBB);
-	
-	//knight
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_KNIGHT]
-			: pBoard->position.pieceBB[WHITE_KNIGHT];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, knightTimidBB);
-	
-	//rook
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_ROOK]
-			: pBoard->position.pieceBB[WHITE_ROOK];
-	piece = (color) ?
-				BLACK_ROOK
-			: WHITE_ROOK;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, rookTimidBB);
-	
-	//queen
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_QUEEN]
-			: pBoard->position.pieceBB[WHITE_QUEEN];
-	piece = (color) ?
-				BLACK_QUEEN
-			: WHITE_QUEEN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, queenTimidBB);
-	
-	//king
-	currentPieces = (color == BLACK) ?
-				pBoard->position.pieceBB[BLACK_KING]
-			: pBoard->position.pieceBB[WHITE_KING];
-	piece = (color) ?
-				BLACK_KING
-			: WHITE_KING;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, kingTimidBB);
+	int piece, endpiece;
+
+	if (color == BLACK) {
+		piece = WP;
+		endpiece = WQ;
+	} else {
+		piece = BP;
+    endpiece = BQ;
+	}
+
+	for (; piece <= endpiece; piece++) {
+		if (!isPiece(piece)) continue;
+		currentPieces = pBoard->position.pieceBB[piece];
+		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, timidCB[piece]);
+	}
 	
 	return;
 }
@@ -108,67 +119,21 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 void generateCapture(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
 	int color = pBoard->info.toPlay;
-	int piece;
-	
-	//pawn
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_PAWN]
-			: pBoard->position.pieceBB[WHITE_PAWN];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, pawnCaptureBB);
-	
-	//bishop
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_BISHOP]
-			: pBoard->position.pieceBB[WHITE_BISHOP];
-	piece = (color) ?
-				BLACK_BISHOP
-			: WHITE_BISHOP;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, bishopCaptureBB);
-	
-	//knight
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_KNIGHT]
-			: pBoard->position.pieceBB[WHITE_KNIGHT];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, knightCaptureBB);
-	
-	//rook
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_ROOK]
-			: pBoard->position.pieceBB[WHITE_ROOK];
-	piece = (color) ?
-				BLACK_ROOK
-			: WHITE_ROOK;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, rookCaptureBB);
-	
-	//queen
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_QUEEN]
-			: pBoard->position.pieceBB[WHITE_QUEEN];
-	piece = (color) ?
-				BLACK_QUEEN
-			: WHITE_QUEEN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, queenCaptureBB);
-	
-	//king
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_KING]
-			: pBoard->position.pieceBB[WHITE_KING];
-	piece = (color) ?
-				BLACK_KING
-			: WHITE_KING;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, kingCaptureBB);
+	int piece, endpiece;
+
+	if (color == BLACK) {
+		piece = WP;
+		endpiece = WQ;
+	} else {
+		piece = BP;
+		endpiece = BQ;
+	}
+
+	for (; piece <= endpiece; piece++) {
+		if (!isPiece(piece)) continue;
+		currentPieces = pBoard->position.pieceBB[piece];
+		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, captureCB[piece]);
+	}
 	
 	return;
 }
@@ -176,68 +141,59 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 void generateMove(Board *pBoard, MoveSet *pMoves) {
 	BitBoard currentPieces = 0;
 	int color = pBoard->info.toPlay;
-	int piece;
+	int piece, endpiece;
+
+	if (color == BLACK) {
+		piece = WP;
+		endpiece = WQ;
+	} else {
+		piece = BP;
+		endpiece = BQ;
+	}
+
+	for (; piece <= endpiece; piece++) {
+		if (!isPiece(piece)) continue;
+		currentPieces = pBoard->position.pieceBB[piece];
+		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, moveCB[piece]);
+	}
 	
-	//pawn
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_PAWN]
-			: pBoard->position.pieceBB[WHITE_PAWN];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, pawnMoveBB);
-	
-	//bishop
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_BISHOP]
-			: pBoard->position.pieceBB[WHITE_BISHOP];
-	piece = (color) ?
-				BLACK_BISHOP
-			: WHITE_BISHOP;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, bishopMoveBB);
-	
-	//knight
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_KNIGHT]
-			: pBoard->position.pieceBB[WHITE_KNIGHT];
-	piece = (color) ?
-				BLACK_PAWN
-			: WHITE_PAWN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, knightMoveBB);
-	
-	//rook
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_ROOK]
-			: pBoard->position.pieceBB[WHITE_ROOK];
-	piece = (color) ?
-				BLACK_ROOK
-			: WHITE_ROOK;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, rookMoveBB);
-	
-	//queen
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_QUEEN]
-			: pBoard->position.pieceBB[WHITE_QUEEN];
-	piece = (color) ?
-				BLACK_QUEEN
-			: WHITE_QUEEN;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, queenMoveBB);
-	
-	//king
-	currentPieces = (color) ?
-				pBoard->position.pieceBB[BLACK_KING]
-			: pBoard->position.pieceBB[WHITE_KING];
-	piece = (color) ?
-				BLACK_KING
-			: WHITE_KING;
-			
-	generateAgnostic(pBoard, color, currentPieces, piece, pMoves, kingMoveBB);
 	return;
+}
+
+BitBoard generatePieceAttacks(Board *pBoard, int color, BitBoard currentPieces, 
+int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
+	int origin = -1, shift = 0;
+	BitBoard generatedMoves = 0;
+	while(currentPieces) {
+		shift = LSB(currentPieces)+1;
+		currentPieces >>= shift;
+		origin += shift;
+		generatedMoves |= moveGen(pBoard, origin, color);
+	}
+	return generatedMoves;
+}
+
+BitBoard generateAllAttacks(Board *pBoard) {
+	BitBoard attacks;
+	BitBoard currentPieces = 0;
+	int color = pBoard->info.toPlay;
+	int piece, endpiece;
+
+	if (color == BLACK) {
+		piece = WP;
+		endpiece = WQ;
+	} else {
+		piece = BP;
+		endpiece = BQ;
+	}
+
+	for (; piece <= endpiece; piece++) {
+		if (!isPiece(piece)) continue;
+		currentPieces = pBoard->position.pieceBB[piece];
+		attacks |= generatePieceAttacks(pBoard, color, currentPieces, piece, captureCB[piece]);
+	}
+	
+	return attacks;
 }
 
 //===============UNFINISHED===================

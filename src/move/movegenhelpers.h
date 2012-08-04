@@ -88,5 +88,6 @@ BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
 
 BitBoard pawnMoveBB(Board *pBoard, UCHAR pawnIndex, int side);
 
+typedef BitBoard (*MoveGenCB)(Board *pBoard, UCHAR index, int side);
 
 #endif
