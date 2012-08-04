@@ -8,7 +8,8 @@ void performanceTest(Board *pBoard, int depth) {
 	int startTime = clock();
 	U64 totalMoves = recursiveMoveCount(pBoard, depth);
 	int endTime = clock();
-	printf("Performance test results:\n%llu move(s) generated in\n%d cycles.\n", totalMoves, endTime-startTime);
+	double seconds = ((double)(endTime - startTime))/CLOCKS_PER_SEC;
+	printf("Performance test results:\n%llu move(s) generated in\n%f seconds.\n", totalMoves, seconds);
 }
 
 U64 recursiveMoveCount(Board *pBoard, int depth) {
