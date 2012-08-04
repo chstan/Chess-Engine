@@ -35,7 +35,7 @@
 #define CANNOT_CASTLE 0
 #define CAN_CASTLE_OO 1
 #define CAN_CASTLE_OOO 2
-#define CAN_CASTLE 4
+#define CAN_CASTLE (CAN_CASTLE_OO | CAN_CASTLE_OOO)
 
 typedef unsigned long long U64;
 typedef unsigned long long BitMap;
