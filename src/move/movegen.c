@@ -64,11 +64,20 @@ MoveGenCB captureCB[] = {
 	queenCaptureBB
 };
 
+static Move extractMove(int piece, int origin, int destination) {
+	int occupant = 0;
+	// we assume it's occupied by the appropriate color if this function is called
+	if (pBoard->position.occupied & BITSET[destination]) {
+		occupant = pBoard->position.square[destination];
+	}
+	// TODO detect enpassant
+	return move(occupant, piece, origin, destination);
+}
+
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
 int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	int origin = -1, shift = 0, destination = 0;
 	int count = 0;
-	Move currentMove = 0;
 	BitBoard generatedMoves = 0;
 	while(currentPieces) {
 		shift = LSB(currentPieces)+1;
@@ -83,11 +92,7 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 			i = LSB(generatedMoves)+1;
 			generatedMoves >>= i;
 			destination += i;
-			
-			// we need to determine other information about the move!
-			// we should factor this out into a helper method, extractMove
-			currentMove = move(0, piece, origin, destination);
-			writeMove(pMoves, currentMove);
+			writeMove(pMoves, extractMove(piece, origin, destination));
 		}
 	}
 	
