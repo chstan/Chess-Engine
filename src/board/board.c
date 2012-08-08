@@ -117,7 +117,7 @@ void rotateBoard(Board *pBoard) {
 	pBoard->info.displayRotated = !pBoard->info.displayRotated;
 }
 
-void debugBoard(Board *pBoard) {
+bool debugBoard(Board *pBoard) {
 	// we first check if the board is in a consistent state, and report to the user
 	// certain problems cannot be found at runtime however, and require prior knowledge of the
 	// state of the board, for instance in the case of castling.
@@ -211,6 +211,7 @@ void debugBoard(Board *pBoard) {
 		displayBoard(pBoard);
 		// other info would be nice too, but this is fine for the moment
 	}
+	return boardConsistent;
 }
 
 //---------------------MAKE FUNCTIONS------------------------

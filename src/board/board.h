@@ -1,7 +1,10 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <stdbool.h>
+
 #include "../defines.h"
+
 
 #define sq(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
 #define MAX_MOVES_PER_GAME 512
@@ -66,7 +69,7 @@ void displayBoard(Board *pBoard);
 void rotateBoard(Board *pBoard);
 
 //------------------------DEBUG------------------------------
-void debugBoard(Board *pBoard);
+bool debugBoard(Board *pBoard);
 
 //---------------------MAKE FUNCTIONS------------------------
 void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
