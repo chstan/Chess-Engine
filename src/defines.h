@@ -37,6 +37,8 @@
 #define CAN_CASTLE_OOO 2
 #define CAN_CASTLE (CAN_CASTLE_OO | CAN_CASTLE_OOO)
 
+#define BITSET(i) (1 << (i))
+
 typedef unsigned long long U64;
 typedef unsigned long long BitMap;
 typedef short SHORTINT;

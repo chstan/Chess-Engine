@@ -79,7 +79,7 @@ static void debugMoves(MoveSet *pMoves) {
 static Move extractMove(int piece, int origin, int destination) {
 	int occupant = 0;
 	// we assume it's occupied by the appropriate color if this function is called
-	if (pBoard->position.occupied & BITSET[destination]) {
+	if (pBoard->position.occupied & BITSET(destination)) {
 		occupant = pBoard->position.square[destination];
 	}
 	// TODO detect enpassant
@@ -190,10 +190,9 @@ int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	return generatedMoves;
 }
 
-BitBoard generateAllAttacks(Board *pBoard) {
+BitBoard generateAllAttacks(Board *pBoard, int color) {
 	BitBoard attacks;
 	BitBoard currentPieces = 0;
-	int color = pBoard->info.toPlay;
 	int piece, endpiece;
 
 	if (color == BLACK) {
@@ -213,21 +212,19 @@ BitBoard generateAllAttacks(Board *pBoard) {
 	return attacks;
 }
 
+BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
+	return (1 << attackeeIndex) & generateAllAttacks(pBoard, (side == WHITE) ? BLACK : WHITE);
+}
+
+BitBoard checks(Board *pBoard, int side) {
+	return attacks(pBoard, pBoard->info.kings[side]);
+}
+
 //===============UNFINISHED===================
 
 void generateCheck(Board *pBoard, MoveSet *pMoves) {
 	
 	return;
-}
-
-BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
-	
-	return 0;
-}
-
-BitBoard checks(Board *pBoard, int side) {
-	
-	return 0;
 }
 
 void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
