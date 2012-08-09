@@ -7,16 +7,16 @@
 
 typedef bool (*CommandCB)(const int tokenCount, const char **tokens);
 
-bool listMovesCommand(int tokenCount, const char **tokens);
-bool randomMoveCommand(int tokenCount, const char **tokens);
-bool performanceTestCommand(int tokenCount, const char **tokens);
-bool helpCommand(int tokenCount, const char **tokens);
-bool moveCommand(int tokenCount, const char **tokens);
-bool aboutCommand(int tokenCount, const char **tokens);
-bool displayCommand(int tokenCount, const char **tokens);
-bool debugCommand(int tokenCount, const char **tokens);
-bool rotateCommand(int tokenCount, const char **tokens);
-bool todoCommand(int tokenCount, const char **tokens);
-bool quitCommand(int tokenCount, const char **tokens);
+bool listMovesCommand(const int tokenCount, const char **tokens);
+bool randomMoveCommand(const int tokenCount, const char **tokens);
+bool performanceTestCommand(const int tokenCount, const char **tokens);
+bool helpCommand(const int tokenCount, const char **tokens);
+bool moveCommand(const int tokenCount, const char **tokens);
+bool aboutCommand(const int tokenCount, const char **tokens);
+bool displayCommand(const int tokenCount, const char **tokens);
+bool debugCommand(const int tokenCount, const char **tokens);
+bool rotateCommand(const int tokenCount, const char **tokens);
+bool todoCommand(const int tokenCount, const char **tokens);
+bool quitCommand(const int tokenCount, const char **tokens);
 
 #endif

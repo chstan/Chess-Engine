@@ -54,7 +54,7 @@ char *commandDescription[] = {
 	"quit: quits from the chess engine back to your ::1ly terminal"
 };
 
-bool listMovesCommand(int tokenCount, const char **tokens) {
+bool listMovesCommand(const int tokenCount, const char **tokens) {
 	MoveSet moves;
 	resetMoveSet(&moves);
 	initializeMoveSet(pBoard, &moves);
@@ -62,7 +62,7 @@ bool listMovesCommand(int tokenCount, const char **tokens) {
 	return true;
 }
 
-bool randomMoveCommand(int tokenCount, const char **tokens) {
+bool randomMoveCommand(const int tokenCount, const char **tokens) {
 	MoveSet moves;
 	resetMoveSet(&moves);
 	initializeMoveSetQuiet(pBoard, &moves);
@@ -74,7 +74,7 @@ bool randomMoveCommand(int tokenCount, const char **tokens) {
 	return true;
 }
 
-bool performanceTestCommand(int tokenCount, const char **tokens) {
+bool performanceTestCommand(const int tokenCount, const char **tokens) {
 	if(tokenCount != 1) {
 		printf("Performance test usage: This command takes one parameter, the depth to be searched.\n");
 		return true;
@@ -85,7 +85,7 @@ bool performanceTestCommand(int tokenCount, const char **tokens) {
 	return true;
 }
 
-bool helpCommand(int tokenCount, const char **tokens) {
+bool helpCommand(const int tokenCount, const char **tokens) {
 	printf("Command list:\n\n\n");
 	for(int commandIndex = 0; commandIndex < COMMAND_COUNT; commandIndex++) {
 		printf(" %s\n\n", commandDescription[commandIndex]);
@@ -93,7 +93,7 @@ bool helpCommand(int tokenCount, const char **tokens) {
 	return true;
 }
 
-bool moveCommand(int tokenCount, const char **tokens) {
+bool moveCommand(const int tokenCount, const char **tokens) {
 	if(tokenCount == 0) {
 		printf("You have to specify a move as an additional parameter.\n\n");
 		printf("\tmove [PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROM]\n");
@@ -108,31 +108,31 @@ bool moveCommand(int tokenCount, const char **tokens) {
 	return true;
 }
 
-bool aboutCommand(int tokenCount, const char **tokens) {
+bool aboutCommand(const int tokenCount, const char **tokens) {
 	printf("\nThis is a computer chess engine being developed by Conrad and Tom (and Marc).\n%s\n\n", ENGINE_VERSION);
 	return true;
 }
 
-bool displayCommand(int tokenCount, const char **tokens) {
+bool displayCommand(const int tokenCount, const char **tokens) {
 	displayBoard(pBoard);
 	return true;
 }
 
-bool debugCommand(int tokenCount, const char **tokens) {
+bool debugCommand(const int tokenCount, const char **tokens) {
 	debugBoard(pBoard);
 	return true;
 }
 
-bool rotateCommand(int tokenCount, const char **tokens) {
+bool rotateCommand(const int tokenCount, const char **tokens) {
 	rotateBoard(pBoard);
 	return true;
 }
 
-bool todoCommand(int tokenCount, const char **tokens) {
+bool todoCommand(const int tokenCount, const char **tokens) {
 	printf("This is for the developers so they can check what there is to implement.\n");
 	return true;
 }
 
-bool quitCommand(int tokenCount, const char **tokens) {
+bool quitCommand(const int tokenCount, const char **tokens) {
 	return false;
 }
