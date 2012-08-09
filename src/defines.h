@@ -15,6 +15,8 @@
 #define B 1
 #define color(p) (((p & 8) == 8) ? B : W)
 
+#define DEBUG
+
 #define NO_PIECE 0
 #define E 0
 #define WP 1

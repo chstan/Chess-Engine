@@ -11,9 +11,8 @@ typedef struct {
 	U64 enPassants;
 	U64 promotions;
 	U64 checks;
-	U64 mates;
 	U64 castles;
-} moveCounts;
+} MoveCount;
 
 /** Function: performanceTest
  *  -------------------------
