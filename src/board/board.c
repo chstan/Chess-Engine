@@ -152,7 +152,8 @@ bool debugBoard(Board *pBoard) {
 			int index = -1, shift = 0;
 			while(currentBitBoard) {
 				shift = LSB(currentBitBoard)+1;
-				currentBitBoard >>= shift;
+				if (shift < 64) currentBitBoard >>= shift;
+				else currentBitBoard = 0;
 				index += shift;
 				if(pBoard->position.square[index] != currentPieceType) {
 					boardConsistent = false;

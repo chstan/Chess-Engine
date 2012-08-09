@@ -93,7 +93,8 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 	BitBoard generatedMoves = 0;
 	while(currentPieces) {
 		shift = LSB(currentPieces)+1;
-		currentPieces >>= shift;
+		if (shift < 64) currentPieces >>= shift;
+		else currentPieces = 0;
 		origin += shift;
 		generatedMoves = moveGen(pBoard, origin, color);
 		//if(generatedMoves) printBitMap(generatedMoves);
@@ -102,7 +103,8 @@ int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int
 		while(generatedMoves) {
 			count += 1;
 			i = LSB(generatedMoves)+1;
-			generatedMoves >>= i;
+			if (i < 64) generatedMoves >>= i;
+			else generatedMoves = 0;
 			destination += i;
 			writeMove(pMoves, extractMove(piece, origin, destination));
 		}
@@ -183,13 +185,15 @@ int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	BitBoard generatedMoves = 0;
 	while(currentPieces) {
 		shift = LSB(currentPieces)+1;
-		currentPieces >>= shift;
+		if (shift < 64) currentPieces >>= shift;
+		else currentPieces = 0;
 		origin += shift;
 		generatedMoves |= moveGen(pBoard, origin, color);
 	}
 	return generatedMoves;
 }
 
+// attacks on a particular color (not by the color)
 BitBoard generateAllAttacks(Board *pBoard, int color) {
 	BitBoard attacks;
 	BitBoard currentPieces = 0;
@@ -213,11 +217,11 @@ BitBoard generateAllAttacks(Board *pBoard, int color) {
 }
 
 BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
-	return (1 << attackeeIndex) & generateAllAttacks(pBoard, (side == WHITE) ? BLACK : WHITE);
+	return (1 << attackeeIndex) & generateAllAttacks(pBoard, side);
 }
 
 BitBoard checks(Board *pBoard, int side) {
-	return attacks(pBoard, pBoard->info.kings[side]);
+	return attacks(pBoard, pBoard->position.kings[side], side);
 }
 
 //===============UNFINISHED===================
