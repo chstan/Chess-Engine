@@ -232,17 +232,15 @@ BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 			oneStep = pawnMoveWhite[pawnIndex] & ~pBoard->position.occupied;
 			if(oneStep) {
 				return oneStep | (pawnDoubleWhite[pawnIndex] & ~pBoard->position.occupied);
-			} else {
-				return oneStep;
 			}
+			return 0;
 		break;
 		case B:
 			oneStep = pawnMoveBlack[pawnIndex] & ~pBoard->position.occupied;
 			if(oneStep) {
 				return oneStep | (pawnDoubleBlack[pawnIndex] & ~pBoard->position.occupied);
-			} else {
-				return oneStep;
 			}
+			return 0;
 		break;
 	}
 	return 0;
