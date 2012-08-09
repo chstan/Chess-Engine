@@ -7,25 +7,25 @@
 BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
-	BitBoard currentIndex = BITSET[rookIndex] << 8;
+	BitBoard currentIndex = BITSET(rookIndex) << 8;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex <<= 8;
 	}
 	// DOWN
-	currentIndex = BITSET[rookIndex] >> 8;
+	currentIndex = BITSET(rookIndex) >> 8;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex >>= 8;
 	}
 	// RIGHT
-	currentIndex = BITSET[rookIndex] << 1;
+	currentIndex = BITSET(rookIndex) << 1;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex <<= 1;
 	}
 	// LEFT
-	currentIndex = BITSET[rookIndex] >> 1;
+	currentIndex = BITSET(rookIndex) >> 1;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex >>= 1;
@@ -37,7 +37,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
 	// UP
-	BitBoard currentIndex = BITSET[rookIndex] << 8;
+	BitBoard currentIndex = BITSET(rookIndex) << 8;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 8;
 	}
@@ -45,7 +45,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// DOWN
-	currentIndex = BITSET[rookIndex] >> 8;
+	currentIndex = BITSET(rookIndex) >> 8;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 8;
 	}
@@ -53,7 +53,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// RIGHT
-	currentIndex = BITSET[rookIndex] << 1;
+	currentIndex = BITSET(rookIndex) << 1;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 1;
 	}
@@ -61,7 +61,7 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// LEFT
-	currentIndex = BITSET[rookIndex] >> 1;
+	currentIndex = BITSET(rookIndex) >> 1;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 1;
 	}
@@ -81,25 +81,25 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
-	BitBoard currentIndex = BITSET[bishopIndex] << 9;
+	BitBoard currentIndex = BITSET(bishopIndex) << 9;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex <<= 9;
 	}
 	// UR
-	currentIndex = BITSET[bishopIndex] << 7;
+	currentIndex = BITSET(bishopIndex) << 7;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex <<= 7;
 	}
 	// DL
-	currentIndex = BITSET[bishopIndex] >> 9;
+	currentIndex = BITSET(bishopIndex) >> 9;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex >>= 9;
 	}
 	// DR
-	currentIndex = BITSET[bishopIndex] >> 7;
+	currentIndex = BITSET(bishopIndex) >> 7;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
 		currentIndex >>= 7;
@@ -111,7 +111,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
 	// UL
-	BitBoard currentIndex = BITSET[bishopIndex] << 9;
+	BitBoard currentIndex = BITSET(bishopIndex) << 9;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 9;
 	}
@@ -119,7 +119,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// UR
-	currentIndex = BITSET[bishopIndex] << 7;
+	currentIndex = BITSET(bishopIndex) << 7;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex <<= 7;
 	}
@@ -127,7 +127,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// DL
-	currentIndex = BITSET[bishopIndex] >> 9;
+	currentIndex = BITSET(bishopIndex) >> 9;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 9;
 	}
@@ -135,7 +135,7 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 		validMoves |= currentIndex;
 	}
 	// DR
-	currentIndex = BITSET[bishopIndex] >> 7;
+	currentIndex = BITSET(bishopIndex) >> 7;
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		currentIndex >>= 7;
 	}

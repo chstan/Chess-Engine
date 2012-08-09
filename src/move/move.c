@@ -152,11 +152,11 @@ void printMove(Move m) {
 	"E-H:  UNUSED FLAGS\n";
 	printf("%s\t", lineA);
 	for(int i = 31; i >= 16; i--) {
-		printf("%d ", (m & BITSET[i]) ? 1 : 0);
+		printf("%d ", (m & BITSET(i)) ? 1 : 0);
 	}
 	printf("\n%s\t", lineB);
 	for(int i = 15; i >= 0; i--) {
-		printf("%d ", (m & BITSET[i]) ? 1 : 0);
+		printf("%d ", (m & BITSET(i)) ? 1 : 0);
 	}
 	printf("\n%s", footer);
 }

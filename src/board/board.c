@@ -125,7 +125,7 @@ bool debugBoard(Board *pBoard) {
 	for(int i = 0; i < 64; i++) {
 		UCHAR currentPiece = pBoard->position.square[i];
 		if(currentPiece != EMPTY) {
-			if(!(BITSET[i] & pBoard->position.pieceBB[currentPiece])) {
+			if(!(BITSET(i) & pBoard->position.pieceBB[currentPiece])) {
 				boardConsistent = false;
 				printf("The array of squares reports a %s at %s, but the bitboard is empty.\n", PIECE_NAMES_FULL[currentPiece], SQUARENAME[i]);
 			}
@@ -133,11 +133,11 @@ bool debugBoard(Board *pBoard) {
 	}
 	
 	// array of kings
-	if(!(BITSET[pBoard->position.kings[BLACK]] & pBoard->position.pieceBB[BLACK_KING])) {
+	if(!(BITSET(pBoard->position.kings[BLACK]) & pBoard->position.pieceBB[BLACK_KING])) {
 		boardConsistent = false;
 		printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
 	}
-	if(!(BITSET[pBoard->position.kings[WHITE]] & pBoard->position.pieceBB[WHITE_KING])) {
+	if(!(BITSET(pBoard->position.kings[WHITE]) & pBoard->position.pieceBB[WHITE_KING])) {
 		boardConsistent = false;
 		printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
 	}
@@ -218,16 +218,16 @@ bool debugBoard(Board *pBoard) {
 //---------------------MAKE FUNCTIONS------------------------
 void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
 	//DOES NOT UPDATE ANY MATERIAL COUNTS!!!
-	pBoard->position.pieceBB[lastOccupant] &= ~BITSET[index];
-	pBoard->position.occupied &= ~BITSET[index];
+	pBoard->position.pieceBB[lastOccupant] &= ~BITSET(index);
+	pBoard->position.occupied &= ~BITSET(index);
 	pBoard->position.square[index] = EMPTY;
 	if(lastOccupant == WHITE_KING || lastOccupant == BLACK_KING) {
 		pBoard->position.kings[color(lastOccupant)] = INVALID_SQUARE;
 	}
 	if(color(lastOccupant) == B) {
-		pBoard->position.blackOccupied &= ~BITSET[index];
+		pBoard->position.blackOccupied &= ~BITSET(index);
 	} else {
-		pBoard->position.whiteOccupied &= ~BITSET[index];
+		pBoard->position.whiteOccupied &= ~BITSET(index);
 	}
 }
 
@@ -235,16 +235,16 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
 	if(capturedPiece) {
 		setEmptyAt(pBoard, index, capturedPiece);
 	}
-	pBoard->position.pieceBB[movedPiece] |= BITSET[index];
-	pBoard->position.occupied |= BITSET[index];
+	pBoard->position.pieceBB[movedPiece] |= BITSET(index);
+	pBoard->position.occupied |= BITSET(index);
 	pBoard->position.square[index] = movedPiece;
 	if(movedPiece == WHITE_KING || movedPiece == BLACK_KING) {
 		pBoard->position.kings[color(movedPiece)] = index;
 	}
 	if(color(movedPiece) == B) {
-		pBoard->position.blackOccupied |= BITSET[index];
+		pBoard->position.blackOccupied |= BITSET(index);
 	} else {
-		pBoard->position.whiteOccupied |= BITSET[index];
+		pBoard->position.whiteOccupied |= BITSET(index);
 	}
 }
 
@@ -482,7 +482,7 @@ void updateBBFromSquares(Board *pBoard) {
 	for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
 		UCHAR currentPiece = pBoard->position.square[currentSquare];
 		if(isPiece(currentPiece)) {
-			pBoard->position.pieceBB[currentPiece] |= BITSET[currentSquare];
+			pBoard->position.pieceBB[currentPiece] |= BITSET(currentSquare);
 		}
 	}
 	
