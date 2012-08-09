@@ -5,6 +5,16 @@
 #include "../move/move.h"
 #include "../move/movegen.h"
 
+typedef struct {
+	U64 moves;
+	U64 captures;
+	U64 enPassants;
+	U64 promotions;
+	U64 checks;
+	U64 mates;
+	U64 castles;
+} moveCounts;
+
 /** Function: performanceTest
  *  -------------------------
  * Times the move generator up to a depth specified
@@ -22,6 +32,6 @@ void performanceTest(Board *pBoard, int depth);
  * though generating more than 4 billion or so moves would probably take an unreasonably
  * long time anyway.
 **/
-U64 recursiveMoveCount(Board *pBoard, int depth);
+U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount);
 
 #endif

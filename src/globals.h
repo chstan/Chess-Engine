@@ -122,7 +122,6 @@ const char *PIECE_NAMES[16] = {"   ", " P ", " K ", " N ", "   ", " B ", " R ", 
 const char *PIECE_NAMES_FULL[16] = {"empty square", "white pawn", "white king", "white knight", "N/A", "white bishop", "white rook", "white queen",
 																    "empty square", "black pawn", "black king", "black knight", "N/A", "black bishop", "black rook", "black queen"};
 
-BitMap BITSET[64];
 int BOARDINDEX[9][9];
 
 const int PAWN_VALUE = 100;
