@@ -64,6 +64,18 @@ MoveGenCB captureCB[] = {
 	queenCaptureBB
 };
 
+static void debugMoves(MoveSet *pMoves) {
+	for(int currentMoveIndex = 0; currentMoveIndex < pMoves->totalMoves; currentMoveIndex++) {
+		Move toCheck = pMoves->moveList[currentMoveIndex];
+		for(int checkIndex = currentMoveIndex+1; checkIndex < pMoves->totalMoves; checkIndex++) {
+			if(toCheck == pMoves->moveList[checkIndex]) {
+				printf("Found duplicate move:\n");
+				printMove(toCheck);
+			}
+		}
+	}
+}
+
 static Move extractMove(int piece, int origin, int destination) {
 	int occupant = 0;
 	// we assume it's occupied by the appropriate color if this function is called
@@ -161,7 +173,7 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 		currentPieces = pBoard->position.pieceBB[piece];
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, moveCB[piece]);
 	}
-	
+	debugMoves(pMoves);
 	return;
 }
 
