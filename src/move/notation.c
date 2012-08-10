@@ -41,14 +41,6 @@ int getSquare(char *sq) {
 	return sq(rank - 'a', file - '1');
 }
 
-int getSquare(char *sq) {
-	for(int i = 0; i < 64; i++) {
-		if(!strcmp(sq, SQUARENAME[i]))
-			return i;
-	}
-	return INVALID_SQUARE;
-}
-
 char *moveToNotation(Board *pBoard, Move m) {
 	return "Haha! This isn't done!";
 }
