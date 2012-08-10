@@ -38,7 +38,7 @@ int getSquare(char *sq) {
 	if(strlen(sq) != 2) return INVALID_SQUARE;
 	char file = sq[0];
 	char rank = sq[1];
-	return sq(rank - 'a', file - '1');
+	return SQ(rank - 'a', file - '1');
 }
 
 char *moveToNotation(Board *pBoard, Move m) {

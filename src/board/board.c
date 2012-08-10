@@ -82,10 +82,10 @@ void displayBoard(Board *pBoard) {
 		for(j = 0; j < 8; j++) {
 			switch(pBoard->info.toPlay) {
 				case W:
-					printf("| %s ", PIECE_NAMES[pBoard->position.square[sq(8-i, j+1)]]);	
+					printf("| %s ", PIECE_NAMES[pBoard->position.square[SQ(8-i, j+1)]]);	
 				break;
 				case B:
-					printf("| %s ", PIECE_NAMES[pBoard->position.square[sq(i+1, 8-j)]]);
+					printf("| %s ", PIECE_NAMES[pBoard->position.square[SQ(i+1, 8-j)]]);
 				break;
 			}
 		}

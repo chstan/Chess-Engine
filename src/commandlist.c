@@ -95,13 +95,11 @@ bool helpCommand(int tokenCount, char **tokens) {
 
 bool moveCommand(int tokenCount, char **tokens) {
 	if(tokenCount == 0) {
-		printf("You have to specify a move as an additional parameter.\n\n");
-		printf("\tmove [PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROM]\n");
-		printf("or\n\tmove [CASTLE]\n\n");
+		printf("You have to specify a move as an additional parameter in algebraic chess notation\n\n");
 		return true;
 	}
 	Move m;
-	if((m = notationToMove(pBoard, tokenCount, tokens))) {
+	if((m = notationToMove(pBoard, tokens[0]))) {
 		printMove(m);
 		makeMove(pBoard, m);
 	}

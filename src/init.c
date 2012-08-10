@@ -110,7 +110,7 @@ void moveTableInit() {
 			int iR;
 			for(iR = lRank; iR <= hRank; iR++) {
 				for(iF = lFile; iF <= hFile; iF++) {
-					bits |= BITSET(sq(iR, iF));
+					bits |= BITSET(SQ(iR, iF));
 				}
 			}
 			kingMove[index] = bits & ~BITSET(index);
@@ -118,70 +118,70 @@ void moveTableInit() {
 			//--------KNIGHT  MOVEMENTS--------
 			bits = 0;
 			if(rank + 2 <= 8 && file + 1 <= 8) {
-				bits |= BITSET(sq(rank+2, file+1));
+				bits |= BITSET(SQ(rank+2, file+1));
 			}
 			if(rank + 2 <= 8 && file - 1 >= 1) {
-				bits |= BITSET(sq(rank+2, file-1));
+				bits |= BITSET(SQ(rank+2, file-1));
 			}
 			if(rank + 1 <= 8 && file + 2 <= 8) {
-				bits |= BITSET(sq(rank+1, file+2));
+				bits |= BITSET(SQ(rank+1, file+2));
 			}
 			if(rank + 1 <= 8 && file - 2 >= 1) {
-				bits |= BITSET(sq(rank+1, file-2));
+				bits |= BITSET(SQ(rank+1, file-2));
 			}
 			if(rank - 1 >= 1 && file + 2 <= 8) {
-				bits |= BITSET(sq(rank-1, file+2));
+				bits |= BITSET(SQ(rank-1, file+2));
 			}
 			if(rank - 1 >= 1 && file - 2 >= 1) {
-				bits |= BITSET(sq(rank-1, file-2));
+				bits |= BITSET(SQ(rank-1, file-2));
 			}
 			if(rank - 2 >= 1 && file + 1 <= 8) {
-				bits |= BITSET(sq(rank-2, file+1));
+				bits |= BITSET(SQ(rank-2, file+1));
 			}
 			if(rank - 2 >= 1 && file - 1 >= 1) {
-				bits |= BITSET(sq(rank-2, file-1));
+				bits |= BITSET(SQ(rank-2, file-1));
 			}
 			knightMove[index] = bits;
 			
 			//--------DIAGON  MOVEMENTS--------
 			for(lFile = file+1, lRank = rank+1, bits = 0; lFile <= 8 && lRank <= 8; lFile++, lRank++) {
-				bits |= BITSET(sq(lFile, lRank));
+				bits |= BITSET(SQ(lFile, lRank));
 			}
 			rightUpMove[index] = bits;
 			
 			for(lFile = file+1, lRank = rank-1, bits = 0; lFile <= 8 && lRank >= 1; lFile++, lRank--) {
-				bits |= BITSET(sq(lFile, lRank));
+				bits |= BITSET(SQ(lFile, lRank));
 			}
 			leftUpMove[index] = bits;
 			
 			for(lFile = file-1, lRank = rank+1, bits = 0; lFile >= 1 && lRank <= 8; lFile--, lRank++) {
-				bits |= BITSET(sq(lFile, lRank));
+				bits |= BITSET(SQ(lFile, lRank));
 			}
 			rightDownMove[index] = bits;
 			
 			for(lFile = file-1, lRank = rank-1, bits = 0; lFile >= 1 && lRank >= 1; lFile--, lRank--) {
-				bits |= BITSET(sq(lFile, lRank));
+				bits |= BITSET(SQ(lFile, lRank));
 			}
 			leftDownMove[index] = bits;
 			
 			//--------ORTHOG  MOVEMENTS--------
 			for(lFile = file+1, bits = 0; lFile <= 8; lFile++) {
-				bits |= BITSET(sq(lFile, rank));
+				bits |= BITSET(SQ(lFile, rank));
 			}
 			upMove[index] = bits;
 			
 			for(lFile = file-1, bits = 0; lFile >= 1; lFile--) {
-				bits |= BITSET(sq(lFile, rank));
+				bits |= BITSET(SQ(lFile, rank));
 			}
 			downMove[index] = bits;
 			
 			for(lRank = rank+1, bits = 0; lRank <= 8; lRank++) {
-				bits |= BITSET(sq(file, lRank));
+				bits |= BITSET(SQ(file, lRank));
 			}
 			rightMove[index] = bits;
 			
 			for(lRank = rank-1, bits = 0; lRank >= 1; lRank--) {
-				bits |= BITSET(sq(file, lRank));
+				bits |= BITSET(SQ(file, lRank));
 			}
 			leftMove[index] = bits;
 		}
@@ -198,12 +198,12 @@ void dataInit() {
 	}
 	
 	// Sets up a 2D array for looking up
-	// squares on the board.
+	// SQuares on the board.
 	for(rank = 0; rank < 9; rank++) {
 		for(file = 0; file < 9; file++) {
-			BOARDINDEX[rank][file] = sq(rank, file);
-			rankBB[rank] |= BITSET(sq(rank, file));
-			fileBB[file] |= BITSET(sq(rank, file));
+			BOARDINDEX[rank][file] = SQ(rank, file);
+			rankBB[rank] |= BITSET(SQ(rank, file));
+			fileBB[file] |= BITSET(SQ(rank, file));
 		}
 	}
 	
