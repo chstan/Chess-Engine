@@ -38,6 +38,9 @@ extern const int RANKS[];
 extern const BitBoard fullBoard;
 extern const BitBoard emptyBoard;
 
+extern BitBoard rankBB[];
+extern BitBoard fileBB[];
+
 extern BitBoard rightMove[];
 extern BitBoard upMove[];
 extern BitBoard leftMove[];

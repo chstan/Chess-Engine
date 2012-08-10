@@ -15,6 +15,9 @@
 #define B 1
 #define color(p) (((p & 8) == 8) ? B : W)
 
+#define FILE(i) ((i) % 8)
+#define RANK(i) ((i-FILE(i))/8)
+
 #define DEBUG
 
 #define NO_PIECE 0

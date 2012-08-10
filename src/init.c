@@ -28,7 +28,7 @@ void moveTableInit() {
 			index = BOARDINDEX[rank][file];
 			
 			//--------PAWN ONE SQUARE----------
-			if(rank < 7){
+			if(rank < 7) {
 				pawnMoveWhite[index] = BITSET(index + 8);
 			} else {
 				pawnMoveWhite[index] = emptyBoard;
@@ -191,13 +191,19 @@ void moveTableInit() {
 
 void dataInit() {
 	int i, rank, file;
-
+	
+	for(int i = 0; i < 8; i++) {
+		rankBB[i] = 0;
+		fileBB[i] = 0;
+	}
 	
 	// Sets up a 2D array for looking up
 	// squares on the board.
 	for(rank = 0; rank < 9; rank++) {
 		for(file = 0; file < 9; file++) {
 			BOARDINDEX[rank][file] = sq(rank, file);
+			rankBB[rank] |= BITSET(sq(rank, file));
+			fileBB[file] |= BITSET(sq(rank, file));
 		}
 	}
 	

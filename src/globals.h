@@ -67,6 +67,9 @@ const int RANKS[64] = {
 const BitBoard fullBoard = -1LL;
 const BitBoard emptyBoard = 0LL;
 
+BitBoard rankBB[8];
+BitBoard fileBB[8];
+
 BitBoard rightMove[64];
 BitBoard upMove[64];
 BitBoard leftMove[64];
