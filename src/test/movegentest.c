@@ -34,24 +34,28 @@ U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
 	// now find all the nodes immediately off the current board state
 	generateMove(pBoard, &moves);
 	
-	if(depth == 1) return moves.totalMoves;
+	if(depth == 1) {
+		#ifdef DEBUG
+		for (int i = 0; i < moves.totalMoves; i++) {
+			Move m = moves.moveList[i];
+			if(capturedPiece(m)) pCount->captures++;
+			if(whiteEnPassant(m) || blackEnPassant(m)) pCount->enPassants++;
+			if(promote(m)) pCount->promotions++;
+			if(whiteCastle(m) || blackCastle(m)) pCount->castles++;
+			if(checks(pBoard, pBoard->position.kings[pBoard->info.toPlay])) pCount->checks++;
+		}
+		#endif
+		return moves.totalMoves;
+	}
 	
 	for(int i = 0; i < moves.totalMoves; i++) {
-		makeMove(pBoard, moves.moveList[i]);
-		if(!checks(pBoard, pBoard->position.kings[(pBoard->info.toPlay == WHITE) ? BLACK : WHITE])) {
+		Move m = moves.moveList[i];
+		makeMove(pBoard, m);
+		// TODO this is broken
+		//if(!checks(pBoard, pBoard->position.kings[(pBoard->info.toPlay == WHITE) ? BLACK : WHITE])) {
 			countedMoves += recursiveMoveCount(pBoard, depth-1, pCount);
-			#ifdef DEBUG
-			if(depth == 1) {
-				Move m = moves.moveList[i];
-				if(capturedPiece(m)) pCount->captures++;
-				if(whiteEnPassant(m) || blackEnPassant(m)) pCount->enPassants++;
-				if(promote(m)) pCount->promotions++;
-				if(whiteCastle(m) || blackCastle(m)) pCount->castles++;
-				if(checks(pBoard, pBoard->position.kings[pBoard->info.toPlay])) pCount->checks++;
-			}
-			#endif
-		}
-		unmakeMove(pBoard, moves.moveList[i]); 
+		//}
+		unmakeMove(pBoard, m); 
 	}
 	return countedMoves;
 }

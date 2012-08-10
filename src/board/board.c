@@ -211,6 +211,7 @@ bool debugBoard(Board *pBoard) {
 	if(!boardConsistent) {
 		displayBoard(pBoard);
 		// other info would be nice too, but this is fine for the moment
+		asm("int3");
 	}
 	return boardConsistent;
 }
