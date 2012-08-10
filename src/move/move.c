@@ -127,7 +127,7 @@ void advanceState(Board *pBoard, Move m) {
 		} else if (square == H8) {
 			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OO;
 		}
-	} else if(movedPiece(m) == WHITE_ROOK && from(m) == A1) {
+	} else if(movedPiece(m) == BLACK_KING && from(m) == E8) {
 		pBoard->info.state[currentMove+1].castleBlack = CANNOT_CASTLE;
 	}
 	
