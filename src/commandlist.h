@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define COMMAND_COUNT 11
+#define COMMAND_COUNT 12
 
 typedef bool (*CommandCB)(int tokenCount, char **tokens);
 
