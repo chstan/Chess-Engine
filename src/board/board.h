@@ -6,7 +6,6 @@
 #include "../defines.h"
 
 
-#define sq(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
 #define MAX_MOVES_PER_GAME 512
 
 

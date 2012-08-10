@@ -18,6 +18,8 @@
 #define FILE(i) ((i) % 8)
 #define RANK(i) ((i-FILE(i))/8)
 
+#define sq(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
+
 #define DEBUG
 
 #define NO_PIECE 0

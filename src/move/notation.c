@@ -35,6 +35,13 @@ Move kingSide(unsigned char color) {
 }
 
 int getSquare(char *sq) {
+	if(strlen(sq) != 2) return INVALID_SQUARE;
+	char file = sq[0];
+	char rank = sq[1];
+	return sq(rank - 'a', file - '1');
+}
+
+int getSquare(char *sq) {
 	for(int i = 0; i < 64; i++) {
 		if(!strcmp(sq, SQUARENAME[i]))
 			return i;
