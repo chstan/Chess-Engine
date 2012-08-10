@@ -40,7 +40,8 @@ void makeMove(Board *pBoard, Move m) {
 			removeMaterial(pBoard, movedPiece(m));
 			addMaterial(pBoard, promote(m));
 		}
-		removeMaterial(pBoard, capturedPiece(m));
+		if (capturedPiece(m))
+			removeMaterial(pBoard, capturedPiece(m));
 	}
 	advanceState(pBoard, m);
 	if(!debugBoard(pBoard)) {
@@ -68,13 +69,13 @@ void unmakeMove(Board *pBoard, Move m) {
 			if(capturedPiece(m)) {
 				setPieceAt(pBoard, to(m), capturedPiece(m), 0);
 			} 
-				setPieceAt(pBoard, from(m), movedPiece(m), 0);
-		} else {
-			// EN PASSANT
-			// NEED TO UNDO THE EN PASSANT!!! NOT DONE YET
 			setPieceAt(pBoard, from(m), movedPiece(m), 0);
+		} else {
+			setPieceAt(pBoard, from(m), movedPiece(m), 0);
+			unPassant(pBoard, to(m), color(movedPiece(m)));
 		}
-		addMaterial(pBoard, capturedPiece(m));
+		if (capturedPiece(m))
+			addMaterial(pBoard, capturedPiece(m));
 	}
 	rewindState(pBoard, m);
 	if(!debugBoard(pBoard)) {
@@ -103,21 +104,23 @@ void advanceState(Board *pBoard, Move m) {
 	
 	// castling
 	// white
+	pBoard->info.state[currentMove+1].castleWhite = pBoard->info.state[currentMove].castleWhite;
 	if(movedPiece(m) == WHITE_ROOK) {
 		if(from(m) == A1) {
-			pBoard->info.state[currentMove+1].castleWhite = (pBoard->info.state[currentMove].castleWhite & ~CAN_CASTLE_OOO);
+			pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OOO;
 		} else if(from(m) == H1) {
-			pBoard->info.state[currentMove+1].castleWhite = (pBoard->info.state[currentMove].castleWhite & ~CAN_CASTLE_OO);
+			pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OO;
 		}
 	} else if(movedPiece(m) == WHITE_KING && from(m) == E1) {
 		pBoard->info.state[currentMove+1].castleWhite = CANNOT_CASTLE;
 	}
 	// black
+	pBoard->info.state[currentMove+1].castleBlack = pBoard->info.state[currentMove].castleBlack;
 	if(movedPiece(m) == BLACK_ROOK) {
 		if(from(m) == A8) {
-			pBoard->info.state[currentMove+1].castleBlack = (pBoard->info.state[currentMove].castleBlack & ~CAN_CASTLE_OOO);
+			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OOO;
 		} else if(from(m) == H8) {
-			pBoard->info.state[currentMove+1].castleBlack = (pBoard->info.state[currentMove].castleBlack & ~CAN_CASTLE_OO);
+			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OO;
 		}
 	} else if(movedPiece(m) == WHITE_ROOK && from(m) == A1) {
 		pBoard->info.state[currentMove+1].castleBlack = CANNOT_CASTLE;
