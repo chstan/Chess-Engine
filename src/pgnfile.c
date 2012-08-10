@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+#include "extglobals.h"
 #include "defines.h"
 #include "move/move.h"
 #include "pgnfile.h"
+#include "move/notation.h"
 
 #define NONE -1
 
@@ -91,6 +94,10 @@ int loadpgn(const char* filename, Board *pBoard) {
 		// TODO get m and makeMove(pBoard, m);
 		printf("Turn %d color %s string %s\n", turn, (color == W)? "white" :
 			(color == B)? "black" : "none", movestr);
+		m = notationToMove(pBoard, movestr);
+		printMove(m);
+		makeMove(pBoard, m);
+		displayBoard(pBoard);
 		if (color == W) color = B;
 		else color = NONE;
 		
