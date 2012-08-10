@@ -85,6 +85,7 @@ void unmakeMove(Board *pBoard, Move m) {
 
 void advanceState(Board *pBoard, Move m) {
 	int currentMove = pBoard->info.currentMove;
+	int square;
 	
 	// update according to the fifty move rule
 	if(capturedPiece(m) || movedPiece(m) % 8 == WHITE_PAWN) {
@@ -105,21 +106,25 @@ void advanceState(Board *pBoard, Move m) {
 	// castling
 	// white
 	pBoard->info.state[currentMove+1].castleWhite = pBoard->info.state[currentMove].castleWhite;
-	if(movedPiece(m) == WHITE_ROOK) {
-		if(from(m) == A1) {
+	if (movedPiece(m) == WHITE_ROOK || capturedPiece(m) == WHITE_ROOK) {
+		if (movedPiece(m) == WHITE_ROOK) square = from(m);
+		else square = to(m);
+		if(square == A1) {
 			pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OOO;
-		} else if(from(m) == H1) {
+		} else if (square == H1) {
 			pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OO;
 		}
-	} else if(movedPiece(m) == WHITE_KING && from(m) == E1) {
+	} else if (movedPiece(m) == WHITE_KING && from(m) == E1) {
 		pBoard->info.state[currentMove+1].castleWhite = CANNOT_CASTLE;
 	}
 	// black
 	pBoard->info.state[currentMove+1].castleBlack = pBoard->info.state[currentMove].castleBlack;
-	if(movedPiece(m) == BLACK_ROOK) {
-		if(from(m) == A8) {
+	if (movedPiece(m) == BLACK_ROOK || capturedPiece(m) == BLACK_ROOK) {
+		if (movedPiece(m) == BLACK_ROOK) square = from(m);
+		else square = to(m);
+		if (square == A8) {
 			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OOO;
-		} else if(from(m) == H8) {
+		} else if (square == H8) {
 			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OO;
 		}
 	} else if(movedPiece(m) == WHITE_ROOK && from(m) == A1) {
