@@ -10,6 +10,7 @@
 #include "move/notation.h"
 #include "aux/random.h"
 #include "test/movegentest.h"
+#include "pgnfile.h"
 
 CommandCB commandCallbacks[] = {
 	listMovesCommand,
@@ -19,6 +20,7 @@ CommandCB commandCallbacks[] = {
 	moveCommand,
 	aboutCommand,
 	displayCommand,
+	loadpgnCommand,
 	debugCommand,
 	rotateCommand,
 	todoCommand,
@@ -33,6 +35,7 @@ char *commandTriggers[] = {
 	"move",
 	"about",
 	"display",
+	"load-pgn",
 	"debug-board",
 	"rotate",
 	"todo",
@@ -48,6 +51,7 @@ char *commandDescription[] = {
 		"\t[PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROMO] or [CASTLE]",
 	"about: prints information about the chess engine",
 	"display: prints the board state along with certain internal information",
+	"load-pgn: loads a .pgn file specified by [FILENAME]\n",
 	"debug-board: runs an internal board consistency check. No results are good results.",
 	"rotate: rotates the board when displaying.",
 	"todo: prints a todo list for the developers, largely unnecessary now they project is on Github",
@@ -115,6 +119,11 @@ bool aboutCommand(int tokenCount, char **tokens) {
 
 bool displayCommand(int tokenCount, char **tokens) {
 	displayBoard(pBoard);
+	return true;
+}
+
+bool loadpgnCommand(int tokenCount, char **tokens) {
+	if (tokenCount >= 1) loadpgn(tokens[0], pBoard);
 	return true;
 }
 
