@@ -35,21 +35,20 @@ int getSquare(char *sq) {
 	return INVALID_SQUARE;
 }
 
-Move notationToMove(Board *pBoard) {
+Move notationToMove(Board *pBoard, int totalArgs, char **tokens) {
 	unsigned char color = pBoard->info.toPlay;
-	if(!strcmp(TOKENS[1], "O-O-O")) {
+	if(!strcmp(tokens[1], "O-O-O")) {
 		return queenSide(color);
-	} else if (!strcmp(TOKENS[1], "O-O")) {
+	} else if (!strcmp(tokens[1], "O-O")) {
 		return kingSide(color);
 	}
 	unsigned int piece, orig, dest;
 	Move m = 0;
-	int totalArgs = TOKEN_COUNT-1;
-	if(!strcmp(TOKENS[1], "p")) {
+	if(!strcmp(tokens[1], "p")) {
 		if(totalArgs >= 3) {
 			piece = (color ? BLACK_PAWN : WHITE_PAWN);
-			orig = getSquare(TOKENS[2]);
-			dest = getSquare(TOKENS[3]);
+			orig = getSquare(tokens[2]);
+			dest = getSquare(tokens[3]);
 			// capt, prom, en passant	
 		} else {
 			printf("Improper number of arguments to specify a pawn move.\n\n");
@@ -58,13 +57,13 @@ Move notationToMove(Board *pBoard) {
 		
 	} else {
 		if(totalArgs >= 3) {
-			if(!strcmp(TOKENS[1], "b")) piece = (color ? BLACK_BISHOP : WHITE_BISHOP);
-			if(!strcmp(TOKENS[1], "k")) piece = (color ? BLACK_KING : WHITE_KING);
-			if(!strcmp(TOKENS[1], "q")) piece = (color ? BLACK_QUEEN : WHITE_QUEEN);
-			if(!strcmp(TOKENS[1], "n")) piece = (color ? BLACK_KNIGHT : WHITE_KNIGHT);
-			if(!strcmp(TOKENS[1], "r")) piece = (color ? BLACK_ROOK : WHITE_ROOK);
-			orig = getSquare(TOKENS[2]);
-			dest = getSquare(TOKENS[3]);			
+			if(!strcmp(tokens[1], "b")) piece = (color ? BLACK_BISHOP : WHITE_BISHOP);
+			if(!strcmp(tokens[1], "k")) piece = (color ? BLACK_KING : WHITE_KING);
+			if(!strcmp(tokens[1], "q")) piece = (color ? BLACK_QUEEN : WHITE_QUEEN);
+			if(!strcmp(tokens[1], "n")) piece = (color ? BLACK_KNIGHT : WHITE_KNIGHT);
+			if(!strcmp(tokens[1], "r")) piece = (color ? BLACK_ROOK : WHITE_ROOK);
+			orig = getSquare(tokens[2]);
+			dest = getSquare(tokens[3]);			
 		} else {
 			printf("Improper number of arguments to specify a non-pawn move.\n\n");
 			return 0;

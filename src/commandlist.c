@@ -101,7 +101,7 @@ bool moveCommand(int tokenCount, char **tokens) {
 		return true;
 	}
 	Move m;
-	if((m = notationToMove(pBoard))) {
+	if((m = notationToMove(pBoard, tokenCount, tokens))) {
 		printMove(m);
 		makeMove(pBoard, m);
 	}

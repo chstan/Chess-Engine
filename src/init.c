@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "init.h"
+#include "bit.h"
 #include "defines.h"
 #include "extglobals.h"
 #include "board/board.h"
