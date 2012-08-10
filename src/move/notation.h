@@ -9,6 +9,6 @@ Move kingSide(unsigned char color);
 
 int getSquare(char *sq);
 
-Move notationToMove(Board *pBoard);
+Move notationToMove(Board *pBoard, int totalArgs, char **tokens);
 
 #endif

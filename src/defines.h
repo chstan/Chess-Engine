@@ -43,8 +43,6 @@
 
 typedef unsigned long long U64;
 typedef unsigned long long BitMap;
-typedef short SHORTINT;
-typedef unsigned short USHORTINT;
 
 typedef unsigned long long BitBoard;
 typedef unsigned char UCHAR;
