@@ -33,6 +33,12 @@ void performanceTest(Board *pBoard, int depth);
 **/
 U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount);
 
+/** Function: divide
+ *  ----------------
+ * Generates all possible moves at the starting node. For each generated node, divide prints
+ * the move in algebraic notation, and runs performanceTest with depth-1, allowing us to easily
+ * isolate bugs in the move generator.
+**/
 void divide(Board *pBoard, int depth);
 
 #endif
