@@ -33,4 +33,6 @@ void performanceTest(Board *pBoard, int depth);
 **/
 U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount);
 
+void divide(Board *pBoard, int depth);
+
 #endif

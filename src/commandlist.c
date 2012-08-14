@@ -16,6 +16,7 @@ CommandCB commandCallbacks[] = {
 	listMovesCommand,
 	randomMoveCommand,
 	performanceTestCommand,
+	divideCommand,
 	helpCommand,
 	moveCommand,
 	aboutCommand,
@@ -32,6 +33,7 @@ char *commandTriggers[] = {
 	"list-moves",
 	"random-move",
 	"performance-test",
+	"divide",
 	"help",
 	"move",
 	"about",
@@ -48,6 +50,7 @@ char *commandDescription[] = {
 	"list-moves: generates all the moves from the current board position and display them.",
 	"random-move: generates all the moves from the current board position and applies one to the board.",
 	"performance-test: will print the time to generate and the number of generated positions to a specified depth.",
+	"divide: will print out all moves at depth one in algebraic notation, and run performance-test off each node to depth-1.",
 	"help: prints the list of all commands.",
 	"move: applies a move to the board using the following format:\n"
 		"\t[PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROMO] or [CASTLE]",
@@ -167,5 +170,16 @@ bool debugNotationCommand(int tokenCount, char **tokens) {
 		free(notation);
 	}
 	printf("%d/%d passed.\n", passed, moves.totalMoves);
+	return true;
+}
+
+bool divideCommand(int tokenCount, char **tokens) {
+	if(tokenCount != 1) {
+		printf("Divide usage: This command takes one parameter, the depth to be searched.\n");
+		return true;
+	}
+	int depth = atoi(tokens[0]);
+	divide(pBoard, depth);
+	
 	return true;
 }

@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define COMMAND_COUNT 13
+#define COMMAND_COUNT 14
 
 typedef bool (*CommandCB)(int tokenCount, char **tokens);
 
@@ -20,5 +20,6 @@ bool rotateCommand(int tokenCount, char **tokens);
 bool todoCommand(int tokenCount, char **tokens);
 bool quitCommand(int tokenCount, char **tokens);
 bool debugNotationCommand(int tokenCount, char **tokens);
+bool divideCommand(int tokenCount, char **tokens);
 
 #endif

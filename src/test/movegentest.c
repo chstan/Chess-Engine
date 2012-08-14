@@ -1,11 +1,32 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "movegentest.h"
+#include "../move/notation.h"
 #include "../move/movegen.h"
 #include "../defines.h"
 
+void divide(Board *pBoard, int depth) {
+	if(depth < 1) return;
+	
+	MoveSet moves;
+	resetMoveSet(&moves);
+	generateMove(pBoard, &moves);
+	
+	for(int i = 0; i < moves.totalMoves; i++) {
+		Move m = moves.moveList[i];
+		char *notation = moveToNotation(pBoard, m);
+		printf("%s\n", notation);
+		free(notation);
+		
+		makeMove(pBoard, m);
+		performanceTest(pBoard, depth-1);
+		unmakeMove(pBoard, m);
+		printf("\n\n\n");
+	}
+}
 
 void performanceTest(Board *pBoard, int depth) {
 	MoveCount count;
