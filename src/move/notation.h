@@ -11,4 +11,6 @@ int getSquare(char *sq);
 
 Move notationToMove(Board *pBoard, char *notation);
 
+char *moveToNotation(Board *pBoard, Move m);
+
 #endif
