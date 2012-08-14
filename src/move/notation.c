@@ -180,7 +180,7 @@ char *moveToNotation(Board *pBoard, Move m) {
 	
 	char *disambiguationString;
 	bool ambiguous = false;
-	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, color);
+	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, (color == WHITE) ? BLACK : WHITE);
 	if(countBits(originCandidates) != 1) {
 		ambiguous = true;
 		disambiguationString = disambiguateOriginFromMove(pBoard, piece, dest, m);
