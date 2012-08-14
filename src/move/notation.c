@@ -96,7 +96,7 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
 	
 	if(capturedPiece(m)) {
 		length++; // we will need another character in the string to denote the capture
-		originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, to(m), (color == WHITE) ? BLACK : WHITE);
+		originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, to(m), otherColor(color));
 		if(countBits(originCandidates) != 1) {
 			length++; // and another to disambiguate
 			ambiguous = true;
@@ -180,7 +180,7 @@ char *moveToNotation(Board *pBoard, Move m) {
 	
 	char *disambiguationString;
 	bool ambiguous = false;
-	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, (color == WHITE) ? BLACK : WHITE);
+	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, otherColor(color));
 	if(countBits(originCandidates) != 1) {
 		ambiguous = true;
 		disambiguationString = disambiguateOriginFromMove(pBoard, piece, dest, m);

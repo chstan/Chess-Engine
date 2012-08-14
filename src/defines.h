@@ -39,6 +39,8 @@
 #define isPiece(p) ((0 < (p)) && ((p) < 16) && ((p) != 4) && ((p) != 8) && ((p) != 12))
 #define TOTAL_PIECE_TYPES 16
 
+#define otherColor(c) ((c) ^ 1)
+
 #define CANNOT_CASTLE 0
 #define CAN_CASTLE_OO 1
 #define CAN_CASTLE_OOO 2
