@@ -3,11 +3,7 @@
 
 #include "move.h"
 
-Move queenSide(unsigned char color);
 
-Move kingSide(unsigned char color);
-
-int getSquare(char *sq);
 
 Move notationToMove(Board *pBoard, char *notation);
 

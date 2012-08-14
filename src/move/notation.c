@@ -197,6 +197,8 @@ char *moveToNotation(Board *pBoard, Move m) {
 	if(capturedPiece(m))
 		strcat(notation, "x");
 	strcat(notation, SQUARENAME[dest]);
+	
+	return notation;
 }
 
 bool isCapture(char *notation) {
