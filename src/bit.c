@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include "bit.h"
 #include "defines.h"
@@ -47,4 +48,20 @@ void printBitMap(BitMap bits) {
 	}
 	printf("\n");
 	return;
+}
+
+bool sharedFile(BitMap bits) {
+	bits >>= LSB(bits);
+	while(bits && bits != 1) {
+		if(LSB(bits) % 8 == 0)
+			bits >>= LSB(bits);
+		else
+			return false;
+	}
+	return true;
+}
+
+bool sharedRank(BitMap bits) {
+	int shift = LSB(bits) - (LSB(bits) % 8);
+	return (bits >> shift) < (1 << 8);
 }

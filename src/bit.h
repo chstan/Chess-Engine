@@ -40,4 +40,18 @@ unsigned int GSB(BitMap bits);
  */
 void printBitMap(BitMap bits);
 
+/** Function: sharedRank
+ *  --------------------
+ * Determines whether all the on bits in a bitboard fall
+ * in the same rank.
+**/
+bool sharedRank(BitMap bits);
+
+/** Function: sharedFile
+ *  --------------------
+ * Determines whether all the on bits in a bitboard fall
+ * in the same file.
+**/
+bool sharedFile(BitMap bits);
+
 #endif

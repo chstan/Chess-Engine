@@ -41,8 +41,162 @@ int getSquare(char *sq) {
 	return SQ(rank - '1'+1, file - 'a'+1);
 }
 
+char *extractFile(BitBoard bits) {
+	char *file = malloc(2);
+	if(!file) return NULL;
+	file[0] = 'a' + (LSB(bits) % 8);
+	file[1] = '\0';
+	return file;
+}
+
+char *extractRank(BitBoard bits) {
+	char *rank = malloc(2);
+	if(!rank) return NULL;
+	rank[0] = '1' + (LSB(bits) - (LSB(bits) % 8))/8;
+	rank[1] = '\0';
+	return rank;
+}
+
+char getPieceName(UCHAR piece) {
+	switch(piece) {
+		case WK:
+		case BK:
+			return 'K';
+		break;
+		case WQ:
+		case BQ:
+			return 'Q';
+		break;
+		case WR:
+		case BR:
+			return 'R';
+		break;
+		case WN:
+		case BN:
+			return 'N';
+		break;
+		case WB:
+		case BB:
+			return 'B';
+		break;
+	}
+	printf("Unknown piece received %d\n", piece);
+	return '?';
+}
+
+char *pawnMoveToNotation(Board *pBoard, Move m) {
+	UCHAR piece = movedPiece(m);
+	int color = color(piece);
+	BitBoard originCandidates;
+	
+	int length = 3;
+	
+	bool ambiguous = false;
+	char *disambiguationString;
+	
+	if(capturedPiece(m)) {
+		length++; // we will need another character in the string to denote the capture
+		originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, to(m), (color == WHITE) ? BLACK : WHITE);
+		if(countBits(originCandidates) != 1) {
+			length++; // and another to disambiguate
+			ambiguous = true;
+			// we need only the file, as there are only ever two spots a pawn can capture from!
+			disambiguationString = extractFile(originCandidates);
+		}
+	}
+	// note that there is no need to disambiguate if the move was not a capture
+	
+	bool promote = false;
+	char promoteChar;
+	if(promote(m)) {
+		length++;
+		promoteChar = getPieceName(promote(m));
+	}
+	
+	char *notation = malloc(length);
+	int idx = 0;
+	if(ambiguous) {
+		strcpy(notation, disambiguationString);
+		idx++;
+		free(disambiguationString);
+	}
+	if(capturedPiece(m)) {
+		notation[idx] = 'x';
+		idx++;
+		notation[idx] = '\0';
+	}
+	strcat(notation, SQUARENAME[to(m)]);
+	if(promote) {
+		notation[length-2] = promoteChar;
+	}
+	notation[length-1] = '\0';
+	return notation;
+}
+
+char *castleMoveToNotation(Board *pBoard, Move m) {
+	if(from(m) == E1) {
+		// white
+		if(to(m) == C1)
+			return strdup("O-O-O");
+		else
+			return strdup("O-O");
+	} else {
+		if(to(m) == C8)
+			return strdup("O-O-O");
+		else
+			return strdup("O-O");
+	}
+	return NULL;
+}
+
+char *disambiguateOriginFromMove(Board *pBoard, UCHAR piece, int destination, Move m) {
+	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (color(piece) == WHITE) ? BLACK : WHITE);
+	
+	// algebraic chess notation requires we disambiguate by file, then rank, then both if needed
+	// try disambiguate from file (a-h)
+	if(sharedFile(originCandidates))
+		return extractFile(originCandidates);
+	
+	// try disambiguate from rank (1-8)
+	if(sharedRank(originCandidates))
+		return extractRank(originCandidates);
+		
+	// we have to return both the file and rank, which is simple enough
+	return strdup(SQUARENAME[from(m)]);
+}
+
 char *moveToNotation(Board *pBoard, Move m) {
-	return "Haha! This isn't done!";
+	if(whiteCastle(m) || blackCastle(m))
+		return castleMoveToNotation(pBoard, m);
+		
+	UCHAR piece = movedPiece(m);
+	int color = color(piece);
+	if((piece % 8) == PAWN)
+		return pawnMoveToNotation(pBoard, m);
+	
+	char pieceChar = getPieceName(piece);
+	int dest = to(m);
+	
+	char *disambiguationString;
+	bool ambiguous = false;
+	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, color);
+	if(countBits(originCandidates) != 1) {
+		ambiguous = true;
+		disambiguationString = disambiguateOriginFromMove(pBoard, piece, dest, m);
+	}
+	
+	int len = (1 + ((ambiguous) ? strlen(disambiguationString) : 0) + ((capturedPiece(m)) ? 1 : 0) + 2);
+	// one character for the moved piece, up to two to disambiguate the origin, potentially an 'x' for a capture, and a 2 character destination
+	char *notation = malloc(len);
+	notation[0] = pieceChar;
+	notation[1] = '\0';
+	if(ambiguous) {
+		strcat(notation, disambiguationString);
+		free(disambiguationString);
+	}
+	if(capturedPiece(m))
+		strcat(notation, "x");
+	strcat(notation, SQUARENAME[dest]);
 }
 
 bool isCapture(char *notation) {
@@ -59,7 +213,7 @@ unsigned int getDestination(Board *pBoard, UCHAR piece, char *notation) {
 }
 
 unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
-	// This might not work in chess 960.
+	// This might not work in chess variants with fully randomized starting positions.
 	if(isCapture(notation)) {
 		BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
 		if(countBits(originCandidates) == 1) return LSB(originCandidates);
