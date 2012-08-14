@@ -22,6 +22,7 @@ CommandCB commandCallbacks[] = {
 	displayCommand,
 	loadpgnCommand,
 	debugCommand,
+	debugNotationCommand,
 	rotateCommand,
 	todoCommand,
 	quitCommand
@@ -37,6 +38,7 @@ char *commandTriggers[] = {
 	"display",
 	"load-pgn",
 	"debug-board",
+	"debug-notation",
 	"rotate",
 	"todo",
 	"quit"
@@ -45,7 +47,7 @@ char *commandTriggers[] = {
 char *commandDescription[] = {
 	"list-moves: generates all the moves from the current board position and display them.",
 	"random-move: generates all the moves from the current board position and applies one to the board.",
-	"performance-test: will print the time to generate and the number of generated positions to a specified dpeth.",
+	"performance-test: will print the time to generate and the number of generated positions to a specified depth.",
 	"help: prints the list of all commands.",
 	"move: applies a move to the board using the following format:\n"
 		"\t[PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROMO] or [CASTLE]",
@@ -53,6 +55,7 @@ char *commandDescription[] = {
 	"display: prints the board state along with certain internal information",
 	"load-pgn: loads a .pgn file specified by [FILENAME]\n",
 	"debug-board: runs an internal board consistency check. No results are good results.",
+	"debug-notation: generates all moves from the current board position, and runs a check by converting through the notation functions.",
 	"rotate: rotates the board when displaying.",
 	"todo: prints a todo list for the developers, largely unnecessary now they project is on Github",
 	"quit: quits from the chess engine back to your ::1ly terminal"
@@ -142,4 +145,26 @@ bool todoCommand(int tokenCount, char **tokens) {
 
 bool quitCommand(int tokenCount, char **tokens) {
 	return false;
+}
+
+bool debugNotationCommand(int tokenCount, char **tokens) {
+	MoveSet moves;
+	resetMoveSet(&moves);
+	initializeMoveSetQuiet(pBoard, &moves);
+	
+	for(int i = 0; i < moves.totalMoves; i++) {
+		Move currentMove = moves.moveList[i];
+		char *notation = moveToNotation(pBoard, currentMove);
+		Move checkMove = notationToMove(pBoard, notation);
+		if(currentMove != checkMove) {
+			printf("Generated:\n");
+			printMove(currentMove);
+			printf("Converted to: %s\n", notation);
+			printf("Reconverted to:\n");
+			printMove(checkMove);
+		}
+		free(notation);
+	}
+	
+	return true;
 }
