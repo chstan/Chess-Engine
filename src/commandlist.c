@@ -151,7 +151,7 @@ bool debugNotationCommand(int tokenCount, char **tokens) {
 	MoveSet moves;
 	resetMoveSet(&moves);
 	initializeMoveSetQuiet(pBoard, &moves);
-	
+	int passed = moves.totalMoves;
 	for(int i = 0; i < moves.totalMoves; i++) {
 		Move currentMove = moves.moveList[i];
 		char *notation = moveToNotation(pBoard, currentMove);
@@ -162,9 +162,10 @@ bool debugNotationCommand(int tokenCount, char **tokens) {
 			printf("Converted to: %s\n", notation);
 			printf("Reconverted to:\n");
 			printMove(checkMove);
+			passed--;
 		}
 		free(notation);
 	}
-	
+	printf("%d/%d passed.\n", passed, moves.totalMoves);
 	return true;
 }

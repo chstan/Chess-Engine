@@ -114,6 +114,7 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
 	}
 	
 	char *notation = malloc(length);
+	memset(notation, 0, length);
 	int idx = 0;
 	if(ambiguous) {
 		strcpy(notation, disambiguationString);
@@ -171,7 +172,7 @@ char *moveToNotation(Board *pBoard, Move m) {
 		
 	UCHAR piece = movedPiece(m);
 	int color = color(piece);
-	if((piece % 8) == PAWN)
+	if(piece == WHITE_PAWN || piece == BLACK_PAWN)
 		return pawnMoveToNotation(pBoard, m);
 	
 	char pieceChar = getPieceName(piece);
@@ -210,7 +211,7 @@ unsigned int getDestination(Board *pBoard, UCHAR piece, char *notation) {
 	while(end != notation && !isalpha(*end)) end--;
 	if((end == notation && strlen(end) != 2) || strlen(end) < 2) return INVALID_SQUARE;
 	char destinationSquare[3];
-	strncpy(destinationSquare, end, 2);
+	strncpy(destinationSquare, end, 3);
 	return getSquare(destinationSquare);
 }
 
