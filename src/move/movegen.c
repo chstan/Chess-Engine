@@ -195,7 +195,7 @@ int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 
 // attacks on a particular color (not by the color)
 BitBoard generateAllAttacks(Board *pBoard, int color) {
-	BitBoard attacks;
+	BitBoard attacks = 0;
 	BitBoard currentPieces = 0;
 	int piece, endpiece;
 

@@ -142,6 +142,7 @@ void moveTableInit() {
 				bits |= BITSET(SQ(rank-2, file-1));
 			}
 			knightMove[index] = bits;
+			printBitMap(knightMove[index]);
 			
 			//--------DIAGON  MOVEMENTS--------
 			for(lFile = file+1, lRank = rank+1, bits = 0; lFile <= 8 && lRank <= 8; lFile++, lRank++) {

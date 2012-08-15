@@ -91,15 +91,13 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
 	
 	int length = 3;
 	
-	bool ambiguous = false;
-	char *disambiguationString;
+	char *disambiguationString = NULL;
 	
 	if(capturedPiece(m)) {
 		length++; // we will need another character in the string to denote the capture
 		originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, to(m), otherColor(color));
 		if(countBits(originCandidates) != 1) {
 			length++; // and another to disambiguate
-			ambiguous = true;
 			// we need only the file, as there are only ever two spots a pawn can capture from!
 			disambiguationString = extractFile(originCandidates);
 		}
@@ -116,7 +114,7 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
 	char *notation = malloc(length);
 	memset(notation, 0, length);
 	int idx = 0;
-	if(ambiguous) {
+	if(disambiguationString) {
 		strcpy(notation, disambiguationString);
 		idx++;
 		free(disambiguationString);
@@ -178,20 +176,18 @@ char *moveToNotation(Board *pBoard, Move m) {
 	char pieceChar = getPieceName(piece);
 	int dest = to(m);
 	
-	char *disambiguationString;
-	bool ambiguous = false;
+	char *disambiguationString = NULL;
 	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, otherColor(color));
 	if(countBits(originCandidates) != 1) {
-		ambiguous = true;
 		disambiguationString = disambiguateOriginFromMove(pBoard, piece, dest, m);
 	}
 	
-	int len = (1 + ((ambiguous) ? strlen(disambiguationString) : 0) + ((capturedPiece(m)) ? 1 : 0) + 2);
+	int len = (1 + ((disambiguationString) ? strlen(disambiguationString) : 0) + ((capturedPiece(m)) ? 1 : 0) + 2);
 	// one character for the moved piece, up to two to disambiguate the origin, potentially an 'x' for a capture, and a 2 character destination
 	char *notation = malloc(len);
 	notation[0] = pieceChar;
 	notation[1] = '\0';
-	if(ambiguous) {
+	if(disambiguationString) {
 		strcat(notation, disambiguationString);
 		free(disambiguationString);
 	}
