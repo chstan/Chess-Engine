@@ -92,8 +92,6 @@ extern const unsigned char BLACK_QUEEN;
 extern const char *PIECE_NAMES[];
 extern const char *PIECE_NAMES_FULL[];
  
-extern int BOARDINDEX[9][9]; 
- 
 extern const int PAWN_VALUE;
 extern const int KNIGHT_VALUE;
 extern const int BISHOP_VALUE; 

@@ -25,7 +25,7 @@ void moveTableInit() {
 	// i will be rank and j will be file
 	for(rank = 1; rank <= 8; rank++) {
 		for(file = 1; file <= 8; file++) {
-			index = BOARDINDEX[rank][file];
+			index = SQ(rank, file);
 			
 			//--------PAWN ONE SQUARE----------
 			if(rank < 7) {
@@ -202,7 +202,6 @@ void dataInit() {
 	// SQuares on the board.
 	for(rank = 0; rank < 8; rank++) {
 		for(file = 0; file < 8; file++) {
-			BOARDINDEX[rank][file] = SQ(rank, file);
 			rankBB[rank] |= BITSET(SQ(rank+1, file+1));
 			fileBB[file] |= BITSET(SQ(rank+1, file+1));
 		}
