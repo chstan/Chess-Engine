@@ -329,3 +329,4 @@ Move notationToMove(Board *pBoard, char *notation) {
 		return moveF((color == BLACK && ep) ? 1 : 0, (color == WHITE && ep) ? 1 : 0, 0, 0, promo, capture, piece, orig, dest);
 	}
 }
+
