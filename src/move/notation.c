@@ -218,12 +218,12 @@ unsigned int getDestination(Board *pBoard, UCHAR piece, char *notation) {
 unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
 	// This might not work in chess variants with fully randomized starting positions.
 	if(isCapture(notation)) {
-		BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
+		BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, otherColor(pBoard->info.toPlay));
 		if(countBits(originCandidates) == 1) return LSB(originCandidates);
 		originCandidates &= fileBB[notation[0] - 'a'];
 		return LSB(originCandidates);
 	} else {
-		BitBoard originHint = pawnTimidBB(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
+		BitBoard originHint = pawnTimidBB(pBoard, destination, otherColor(pBoard->info.toPlay));
 		if(originHint) {
 			// the piece must be two back
 			return (pBoard->info.toPlay == WHITE) ? destination - 16 : destination + 16;
@@ -235,7 +235,7 @@ unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *no
 }
 
 unsigned int getOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
-	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
+	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, otherColor(pBoard->info.toPlay));
 	if(!originCandidates) return INVALID_SQUARE;
 	if(countBits(originCandidates) == 1) return LSB(originCandidates);
 	char disambiguateChar = *notation;
