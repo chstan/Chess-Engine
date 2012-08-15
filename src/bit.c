@@ -20,7 +20,22 @@ unsigned int LSB(BitMap bits) {
 	if(!bits) return 0;
 	unsigned long long lsb;	
 	#ifdef __clang__
+	#if __SIZEOF_POINTER__ == 8
+	// we're in a 64 bit world and can just use the 64 bit instruction
 	asm("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
+	#else
+	// we have to be careful and use the 32 bit version.
+	unsigned int bits32, lsb32;
+	if(!(bits >> 32)) {
+		bits32 = (unsigned int) (bits >> 32);
+		asm("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
+		return lsb32 + 32;
+	} else {
+		bits32 = (unsigned int) bits;
+		asm("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
+		return lsb32;
+	}
+	#endif
 	#elif (__GNUC__ || __cplusplus)
 	__asm__("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
 	#endif
@@ -31,7 +46,20 @@ unsigned int GSB(BitMap bits) {
 	if(!bits) return 0;
 	unsigned long long gsb;	
 	#ifdef __clang__
+	#if __SIZEOF_POINTER__ == 8
 	asm("bsrq %0, %1" : "=r" (gsb) : "r" (bits));
+	#else
+	unsigned int bits32, gsb32;
+	if(bits >= BITSET(32)) {
+		bits32 = (unsigned int) (bits >> 32);
+		asm("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
+		return gsb32 + 32;
+	} else {
+		bits32 = (unsigned int) bits;
+		asm("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
+		return gsb32;
+	}
+	#endif
 	#elif (__GNUC__ || __cplusplus)
 	__asm__("bsrq %0, %1" : "=r" (gsb) : "r" (bits));
 	#endif
