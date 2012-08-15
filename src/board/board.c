@@ -212,7 +212,7 @@ bool debugBoard(Board *pBoard) {
 		displayBoard(pBoard);
 		// other info would be nice too, but this is fine for the moment
 		// leave a breakpoint for debugging, not that much can be found here...
-		//asm("int3");
+		asm("int3");
 	}
 	return boardConsistent;
 }

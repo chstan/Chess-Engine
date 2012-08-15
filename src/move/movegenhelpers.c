@@ -2,33 +2,45 @@
 #include "../defines.h"
 #include "../extglobals.h"
 
+#define FILE_0_MASK 0xFEFEFEFEFEFEFEFEUL
+#define FILE_7_MASK 0x7F7F7F7F7F7F7F7FUL
+
+#define UP(bb)   ((bb) << 8)
+#define DOWN(bb) ((bb) >> 8)
+#define LEFT(bb)       (((bb) & FILE_7_MASK) << 1)
+#define RIGHT(bb)      (((bb) & FILE_0_MASK) >> 1)
+#define UP_LEFT(bb)    (((bb) & FILE_7_MASK) << 9)
+#define UP_RIGHT(bb)   (((bb) & FILE_0_MASK) << 7)
+#define DOWN_LEFT(bb)  (((bb) & FILE_7_MASK) >> 7)
+#define DOWN_RIGHT(bb) (((bb) & FILE_0_MASK) >> 9)
+
 //----------------ROOK-----------------
 
 BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	// UP
-	BitBoard currentIndex = BITSET(rookIndex) << 8;
+	BitBoard currentIndex = UP(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex <<= 8;
+		currentIndex = UP(currentIndex);
 	}
 	// DOWN
-	currentIndex = BITSET(rookIndex) >> 8;
+	currentIndex = DOWN(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex >>= 8;
+		currentIndex = DOWN(currentIndex);
 	}
 	// RIGHT
-	currentIndex = BITSET(rookIndex) << 1;
+	currentIndex = RIGHT(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex <<= 1;
+		currentIndex = RIGHT(currentIndex);
 	}
 	// LEFT
-	currentIndex = BITSET(rookIndex) >> 1;
+	currentIndex = LEFT(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex >>= 1;
+		currentIndex = LEFT(currentIndex);
 	}
 	return validMoves;
 }
@@ -37,33 +49,33 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
 	BitBoard validMoves = 0;
 	BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
 	// UP
-	BitBoard currentIndex = BITSET(rookIndex) << 8;
+	BitBoard currentIndex = UP(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex <<= 8;
+		currentIndex = UP(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// DOWN
-	currentIndex = BITSET(rookIndex) >> 8;
+	currentIndex = DOWN(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex >>= 8;
+		currentIndex = DOWN(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// RIGHT
-	currentIndex = BITSET(rookIndex) << 1;
+	currentIndex = RIGHT(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex <<= 1;
+		currentIndex = RIGHT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// LEFT
-	currentIndex = BITSET(rookIndex) >> 1;
+	currentIndex = LEFT(BITSET(rookIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex >>= 1;
+		currentIndex = LEFT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
@@ -81,28 +93,28 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	// UL
-	BitBoard currentIndex = BITSET(bishopIndex) << 9;
+	BitBoard currentIndex = UP_LEFT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex <<= 9;
+		currentIndex = UP_LEFT(currentIndex);
 	}
 	// UR
-	currentIndex = BITSET(bishopIndex) << 7;
+	currentIndex = UP_RIGHT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex <<= 7;
+		currentIndex = UP_RIGHT(currentIndex);
 	}
 	// DL
-	currentIndex = BITSET(bishopIndex) >> 9;
+	currentIndex = DOWN_LEFT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex >>= 9;
+		currentIndex = DOWN_LEFT(currentIndex);
 	}
 	// DR
-	currentIndex = BITSET(bishopIndex) >> 7;
+	currentIndex = DOWN_RIGHT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
 		validMoves |= currentIndex;
-		currentIndex >>= 7;
+		currentIndex = DOWN_RIGHT(currentIndex);
 	}
 	return validMoves;
 }
@@ -111,33 +123,33 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
 	BitBoard validMoves = 0;
 	BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
 	// UL
-	BitBoard currentIndex = BITSET(bishopIndex) << 9;
+	BitBoard currentIndex = UP_LEFT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex <<= 9;
+		currentIndex = UP_LEFT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// UR
-	currentIndex = BITSET(bishopIndex) << 7;
+	currentIndex = UP_RIGHT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex <<= 7;
+		currentIndex = UP_RIGHT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// DL
-	currentIndex = BITSET(bishopIndex) >> 9;
+	currentIndex = DOWN_LEFT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex >>= 9;
+		currentIndex = DOWN_LEFT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;
 	}
 	// DR
-	currentIndex = BITSET(bishopIndex) >> 7;
+	currentIndex = DOWN_RIGHT(BITSET(bishopIndex));
 	while(currentIndex & ~(pBoard->position.occupied)) {
-		currentIndex >>= 7;
+		currentIndex = DOWN_RIGHT(currentIndex);
 	}
 	if(currentIndex & takable) {
 		validMoves |= currentIndex;

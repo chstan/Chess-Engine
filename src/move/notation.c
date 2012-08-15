@@ -35,7 +35,8 @@ Move kingSide(unsigned char color) {
 }
 
 int getSquare(char *sq) {
-	if(strlen(sq) != 2) return INVALID_SQUARE;
+	//if(strlen(sq) != 2) return INVALID_SQUARE;
+	assert(strlen(sq) == 2);
 	char file = sq[0];
 	char rank = sq[1];
 	return SQ(rank - '1'+1, file - 'a'+1);
@@ -205,9 +206,11 @@ bool isCapture(char *notation) {
 unsigned int getDestination(Board *pBoard, UCHAR piece, char *notation) {
 	char *end = notation + strlen(notation) - 1;
 	while(end != notation && !isalpha(*end)) end--;
-	if((end == notation && strlen(end) != 2) || strlen(end) < 2) return INVALID_SQUARE;
+	//if((end == notation && strlen(end) != 2) || strlen(end) < 2) return INVALID_SQUARE;
+	assert(strlen(end) >= 2);
 	char destinationSquare[3];
-	strncpy(destinationSquare, end, 3);
+	strncpy(destinationSquare, end, 2);
+	destinationSquare[2] = '\0';
 	return getSquare(destinationSquare);
 }
 
@@ -232,19 +235,23 @@ unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *no
 
 unsigned int getOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
 	BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, otherColor(pBoard->info.toPlay));
-	if(!originCandidates) return INVALID_SQUARE;
+	//if(!originCandidates) return INVALID_SQUARE;
+	assert(originCandidates);
 	if(countBits(originCandidates) == 1) return LSB(originCandidates);
 	char disambiguateChar = *notation;
 	if(isalpha(disambiguateChar)) {
 		// we were given a file
-		int index = disambiguateChar - 'a'+1;
+		int index = disambiguateChar - 'a';
 		originCandidates &= fileBB[index];
 		if(countBits(originCandidates) == 1) return LSB(originCandidates);
-		originCandidates &= rankBB[*(notation+1)-'1'+1];
+		disambiguateChar = *(notation+1);
+		assert(isdigit(disambiguateChar));
+		originCandidates &= rankBB[disambiguateChar-'1'];
 		return LSB(originCandidates);
 	} else {
 		// a rank
-		int index = disambiguateChar - '1'+1;
+		assert(isdigit(disambiguateChar));
+		int index = disambiguateChar - '1';
 		originCandidates &= rankBB[index];
 		return LSB(originCandidates);
 	}
