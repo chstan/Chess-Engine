@@ -199,11 +199,11 @@ void dataInit() {
 	
 	// Sets up a 2D array for looking up
 	// SQuares on the board.
-	for(rank = 0; rank < 9; rank++) {
-		for(file = 0; file < 9; file++) {
+	for(rank = 0; rank < 8; rank++) {
+		for(file = 0; file < 8; file++) {
 			BOARDINDEX[rank][file] = SQ(rank, file);
-			rankBB[rank] |= BITSET(SQ(rank, file));
-			fileBB[file] |= BITSET(SQ(rank, file));
+			rankBB[rank] |= BITSET(SQ(rank+1, file+1));
+			fileBB[file] |= BITSET(SQ(rank+1, file+1));
 		}
 	}
 	
