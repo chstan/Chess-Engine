@@ -220,7 +220,7 @@ unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *no
 	if(isCapture(notation)) {
 		BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
 		if(countBits(originCandidates) == 1) return LSB(originCandidates);
-		originCandidates &= fileBB[notation[1] - 'a'];
+		originCandidates &= fileBB[notation[0] - 'a'];
 		return LSB(originCandidates);
 	} else {
 		BitBoard originHint = pawnTimidBB(pBoard, destination, (pBoard->info.toPlay == WHITE) ? BLACK : WHITE);
