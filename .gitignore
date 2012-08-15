@@ -3,6 +3,7 @@
 *.tmproj
 *.log
 *.pgn
+*.d
 
 doc
 engine

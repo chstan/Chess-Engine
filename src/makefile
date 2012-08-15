@@ -18,6 +18,7 @@ DIRS = board data-structures move test
 SOURCES = $(wildcard *.c) 
 OBJECTS = $(SOURCES:.c=.o) board.o linkedlist.o move.o movegen.o movegenhelpers.o notation.o random.o movegentest.o
 TARGET = engine
+DEPENDENCIES = $(SOURCES:.c=.d) board.d linkedlist.d move.d movegen.d movegenhelpers.d notation.d random.d movegentest.d
 
 #=============TARGETS=================
 $(TARGET) : $(OBJECTS)
@@ -25,5 +26,11 @@ $(TARGET) : $(OBJECTS)
 
 .PHONY: clean
 
+%.d: %.c
+	$(CC) -MM $< >> $@
+
 clean:
-	@rm -f $(TARGET) $(OBJECTS) core
+	@rm -f $(TARGET) $(OBJECTS) $(DEPENDENCIES) core
+
+
+include $(DEPENDENCIES)
