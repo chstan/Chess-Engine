@@ -59,11 +59,15 @@ U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
 		#ifdef DEBUG
 		for (int i = 0; i < moves.totalMoves; i++) {
 			Move m = moves.moveList[i];
-			if(capturedPiece(m)) pCount->captures++;
-			if(whiteEnPassant(m) || blackEnPassant(m)) pCount->enPassants++;
-			if(promote(m)) pCount->promotions++;
-			if(whiteCastle(m) || blackCastle(m)) pCount->castles++;
-			if(checks(pBoard, pBoard->position.kings[pBoard->info.toPlay])) pCount->checks++;
+			makeMove(pBoard, m);
+			if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
+				if (capturedPiece(m)) pCount->captures++;
+				if (whiteEnPassant(m) || blackEnPassant(m)) pCount->enPassants++;
+				if (promote(m)) pCount->promotions++;
+				if (whiteCastle(m) || blackCastle(m)) pCount->castles++;
+				if (checks(pBoard, pBoard->info.toPlay)) pCount->checks++;
+			}
+			unmakeMove(pBoard, m);
 		}
 		#endif
 		return moves.totalMoves;
@@ -72,10 +76,9 @@ U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
 	for(int i = 0; i < moves.totalMoves; i++) {
 		Move m = moves.moveList[i];
 		makeMove(pBoard, m);
-		// TODO this is broken
-		//if(!checks(pBoard, pBoard->position.kings[(pBoard->info.toPlay == WHITE) ? BLACK : WHITE])) {
+		if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
 			countedMoves += recursiveMoveCount(pBoard, depth-1, pCount);
-		//}
+		}
 		unmakeMove(pBoard, m); 
 	}
 	return countedMoves;

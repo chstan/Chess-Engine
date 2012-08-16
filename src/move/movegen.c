@@ -7,7 +7,7 @@
 #include "../bit.h"
 #include "../defines.h"
 
-MoveGenCB moveCB[] = {
+const MoveGenCB moveCB[] = {
 	NULL, 
 	pawnMoveBB,
 	kingMoveBB,
@@ -26,7 +26,7 @@ MoveGenCB moveCB[] = {
 	queenMoveBB
 };
 
-MoveGenCB timidCB[] = {
+const MoveGenCB timidCB[] = {
 	NULL, 
 	pawnTimidBB,
 	kingTimidBB,
@@ -45,7 +45,7 @@ MoveGenCB timidCB[] = {
 	queenTimidBB
 };
 
-MoveGenCB captureCB[] = {
+const MoveGenCB captureCB[] = {
 	NULL, 
 	pawnCaptureBB,
 	kingCaptureBB,
@@ -179,8 +179,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	return;
 }
 
-BitBoard generatePieceAttacks(Board *pBoard, int color, BitBoard currentPieces, 
-int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
+BitBoard generatePieceAttacks(Board *pBoard, int color, BitBoard currentPieces,
+int piece) {
 	int origin = -1, shift = 0;
 	BitBoard generatedMoves = 0;
 	while(currentPieces) {
@@ -188,21 +188,23 @@ int piece, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 		if (shift < 64) currentPieces >>= shift;
 		else currentPieces = 0;
 		origin += shift;
-		generatedMoves |= moveGen(pBoard, origin, color);
+		generatedMoves |= (*captureCB[piece])(pBoard, origin, color);
 	}
 	return generatedMoves;
 }
 
-// attacks on a particular color (not by the color)
+// attacks ON a particular color (not BY the color)
 BitBoard generateAllAttacks(Board *pBoard, int color) {
 	BitBoard attacks = 0;
 	BitBoard currentPieces = 0;
 	int piece, endpiece;
 
 	if (color == BLACK) {
+		color = WHITE;
 		piece = WP;
 		endpiece = WQ;
 	} else {
+		color = BLACK;
 		piece = BP;
 		endpiece = BQ;
 	}
@@ -210,7 +212,7 @@ BitBoard generateAllAttacks(Board *pBoard, int color) {
 	for (; piece <= endpiece; piece++) {
 		if (!isPiece(piece)) continue;
 		currentPieces = pBoard->position.pieceBB[piece];
-		attacks |= generatePieceAttacks(pBoard, color, currentPieces, piece, captureCB[piece]);
+		attacks |= generatePieceAttacks(pBoard, color, currentPieces, piece);
 	}
 	
 	return attacks;
