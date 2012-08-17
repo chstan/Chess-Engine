@@ -67,7 +67,13 @@ char *commandDescription[] = {
 bool listMovesCommand(int tokenCount, char **tokens) {
 	MoveSet moves;
 	resetMoveSet(&moves);
-	initializeMoveSet(pBoard, &moves);
+	initializeMoveSetQuiet(pBoard, &moves);
+	for(int i = 0; i < moves.totalMoves; i++) {
+		Move currentMove = moves.moveList[i];
+		char *notation = moveToNotation(pBoard, currentMove);
+		printf("%s\n", notation);
+		free(notation);
+	}
 	
 	return true;
 }
