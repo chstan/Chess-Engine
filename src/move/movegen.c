@@ -219,7 +219,7 @@ BitBoard generateAllAttacks(Board *pBoard, int color) {
 }
 
 BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
-	return (1 << attackeeIndex) & generateAllAttacks(pBoard, side);
+	return BITSET(attackeeIndex) & generateAllAttacks(pBoard, side);
 }
 
 BitBoard checks(Board *pBoard, int side) {
