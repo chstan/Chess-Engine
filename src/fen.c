@@ -10,7 +10,7 @@ void loadFromFEN(Board *pBoard, char *fen) {
 	char enPassantString[3];
 	int halfmoveClock; // since pawn advance or capture
 	int fullmoveClock;
-	if(sscanf(fen, "%72s %c %4s %2s %d %d", &boardString, &turnChar, &castleString, &enPassantString, &halfmoveClock, &fullmoveClock) != 6) {
+	if(sscanf(fen, "%72s %c %4s %2s %d %d", boardString, &turnChar, castleString, enPassantString, &halfmoveClock, &fullmoveClock) != 6) {
 		printf("sscanf failed to read from:\n%s\n", fen);
 		abort();
 	}

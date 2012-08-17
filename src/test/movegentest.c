@@ -24,7 +24,7 @@ void divide(Board *pBoard, int depth) {
 		makeMove(pBoard, m);
 		performanceTest(pBoard, depth-1);
 		unmakeMove(pBoard, m);
-		printf("\n\n\n");
+		//printf("\n");
 	}
 }
 
@@ -35,13 +35,15 @@ void performanceTest(Board *pBoard, int depth) {
 	U64 totalMoves = recursiveMoveCount(pBoard, depth, &count);
 	int endTime = clock();
 	double seconds = ((double)(endTime - startTime))/CLOCKS_PER_SEC;
-	printf("Performance test results:\n%llu move(s) generated in\n%f seconds.\n", totalMoves, seconds);
 	#ifdef DEBUG
-	printf("Captures   : %llu\n", count.captures);
-	printf("EP         : %llu\n", count.enPassants);
-	printf("Castles    : %llu\n", count.castles);
-	printf("Promotions : %llu\n", count.promotions);
-	printf("Checks     : %llu\n", count.checks);
+	printf("Performance test results:\n%llu move(s) generated in\n%f seconds.\n", totalMoves, seconds);
+	printf("\tCaptures   : %llu\n", count.captures);
+	printf("\tEP         : %llu\n", count.enPassants);
+	printf("\tCastles    : %llu\n", count.castles);
+	printf("\tPromotions : %llu\n", count.promotions);
+	printf("\tChecks     : %llu\n", count.checks);
+	#else
+	printf("%llu %f\n", totalMoves, seconds);
 	#endif
 }
 
