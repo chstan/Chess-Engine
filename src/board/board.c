@@ -109,7 +109,12 @@ void displayBoard(Board *pBoard) {
 			printf(" queenside");
 		if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CAN_CASTLE_OO)
 			printf(" kingside");
-		printf(".\n");
+		printf(".\n\n");
+	}
+	if(checks(pBoard, WHITE)) {
+		printf("White is in check.\n");
+	} else if(checks(pBoard, BLACK)) {
+		printf("Black is in check.\n");
 	}
 }
 
