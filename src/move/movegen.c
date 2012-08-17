@@ -214,7 +214,6 @@ BitBoard generateAllAttacks(Board *pBoard, int color) {
 		currentPieces = pBoard->position.pieceBB[piece];
 		attacks |= generatePieceAttacks(pBoard, color, currentPieces, piece);
 	}
-	
 	return attacks;
 }
 
@@ -222,8 +221,8 @@ BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
 	return BITSET(attackeeIndex) & generateAllAttacks(pBoard, side);
 }
 
-BitBoard checks(Board *pBoard, int side) {
-	return attacks(pBoard, pBoard->position.kings[side], side);
+bool checks(Board *pBoard, int side) {
+	return attacks(pBoard, pBoard->position.kings[side], side) != 0;
 }
 
 //===============UNFINISHED===================

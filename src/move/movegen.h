@@ -97,7 +97,7 @@ void generateCheck(Board *pBoard, MoveSet *pMoves);
 
 BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
 
-BitBoard checks(Board *pBoard, int side);
+bool checks(Board *pBoard, int side);
 
 #endif
 
