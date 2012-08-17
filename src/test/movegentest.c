@@ -18,7 +18,7 @@ void divide(Board *pBoard, int depth) {
 	for(int i = 0; i < moves.totalMoves; i++) {
 		Move m = moves.moveList[i];
 		char *notation = moveToNotation(pBoard, m);
-		printf("%s\n", notation);
+		printf("%s\t", notation);
 		free(notation);
 		
 		makeMove(pBoard, m);
@@ -43,7 +43,7 @@ void performanceTest(Board *pBoard, int depth) {
 	printf("\tPromotions : %llu\n", count.promotions);
 	printf("\tChecks     : %llu\n", count.checks);
 	#else
-	printf("%llu %f\n", totalMoves, seconds);
+	printf("%llu\t%f\n", totalMoves, seconds);
 	#endif
 }
 

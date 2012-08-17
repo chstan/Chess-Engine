@@ -16,3 +16,4 @@ void loadFromFEN(Board *pBoard, char *fen) {
 	}
 	// unfinished
 }
+
