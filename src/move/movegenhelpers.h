@@ -78,6 +78,8 @@ BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side);
 BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side);
 
 //----------------PAWN-----------------
+BitBoard enPassantBB(Board *pBoard, int side);
+
 BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side);
 
 BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side);

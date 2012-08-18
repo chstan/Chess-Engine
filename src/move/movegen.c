@@ -86,6 +86,23 @@ static Move extractMove(int piece, int origin, int destination) {
 	return move(occupant, piece, origin, destination);
 }
 
+static void extractEnPassant(Board *pBoard, MoveSet *pMoves) {
+	BitBoard generated = enPassantBB(pBoard, pBoard->info.toPlay);
+	int color = pBoard->info.toPlay;
+	int piece = (color == WHITE) ? WHITE_PAWN : BLACK_PAWN;
+	int taken = (color == WHITE) ? BLACK_PAWN : WHITE_PAWN;
+	int origin = -1, shift = 0, destination = 0;
+	while(generated) {
+		shift = LSB(generated)+1;
+		if (shift < 64) generated >>= shift;
+		origin += shift;
+		int to = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
+		writeMove(pMoves, moveF((color == BLACK) ? 1 : 0, (color == WHITE) ? 1 : 0, 0, 0, 0, taken, piece, origin, to));
+	}
+	
+	return;
+}
+
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
 int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color)) {
 	int origin = -1, shift = 0, destination = 0;
@@ -154,6 +171,9 @@ void generateCapture(Board *pBoard, MoveSet *pMoves) {
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, captureCB[piece]);
 	}
 	
+	// handle enPassant
+	extractEnPassant(pBoard, pMoves);
+	
 	return;
 }
 
@@ -175,6 +195,10 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 		currentPieces = pBoard->position.pieceBB[piece];
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, moveCB[piece]);
 	}
+	
+	// handle enPassant
+	extractEnPassant(pBoard, pMoves);
+	
 	debugMoves(pMoves);
 	return;
 }

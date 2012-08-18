@@ -237,6 +237,20 @@ BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side) {
 }
 
 //----------------PAWN-----------------
+BitBoard enPassantBB(Board *pBoard, int side) {
+	if(pBoard->info.state[pBoard->info.currentMove].enPassantSquare == INVALID_SQUARE) return 0;
+	
+	switch(side) {
+		case W:
+			return pawnCaptureBlack[pBoard->info.state[pBoard->info.currentMove].enPassantSquare] & pBoard->position.pieceBB[WHITE_PAWN];
+		break;
+		case B:
+			return pawnCaptureWhite[pBoard->info.state[pBoard->info.currentMove].enPassantSquare] & pBoard->position.pieceBB[BLACK_PAWN];
+		break;
+	}
+	return 0;
+}
+
 BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
 	BitBoard oneStep;
 	switch(side) {
