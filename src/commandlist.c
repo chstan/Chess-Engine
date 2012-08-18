@@ -11,6 +11,7 @@
 #include "aux/random.h"
 #include "test/movegentest.h"
 #include "pgnfile.h"
+#include "fen.h"
 
 CommandCB commandCallbacks[] = {
 	listMovesCommand,
@@ -22,6 +23,7 @@ CommandCB commandCallbacks[] = {
 	aboutCommand,
 	displayCommand,
 	loadpgnCommand,
+	loadFENCommand,
 	debugCommand,
 	debugNotationCommand,
 	rotateCommand,
@@ -39,6 +41,7 @@ char *commandTriggers[] = {
 	"about",
 	"display",
 	"load-pgn",
+	"load-fen",
 	"debug-board",
 	"debug-notation",
 	"rotate",
@@ -57,6 +60,7 @@ char *commandDescription[] = {
 	"about: prints information about the chess engine",
 	"display: prints the board state along with certain internal information",
 	"load-pgn: loads a .pgn file specified by [FILENAME]\n",
+	"load-fen: loads a .fen file specified by [FILENAME]\n",
 	"debug-board: runs an internal board consistency check. No results are good results.",
 	"debug-notation: generates all moves from the current board position, and runs a check by converting through the notation functions.",
 	"rotate: rotates the board when displaying.",
@@ -134,6 +138,16 @@ bool displayCommand(int tokenCount, char **tokens) {
 
 bool loadpgnCommand(int tokenCount, char **tokens) {
 	if (tokenCount >= 1) loadpgn(tokens[0], pBoard);
+	return true;
+}
+
+bool loadFENCommand(int tokenCount, char **tokens) {
+	if (tokenCount != 1)
+		printf("load-fen usage: accepts one parameter specifying the filename.\n");
+	
+	char *fenString = getFENFromFile(tokens[0]);
+	loadFromFEN(pBoard, fenString);
+	free(fenString);
 	return true;
 }
 
