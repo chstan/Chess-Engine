@@ -67,21 +67,24 @@ U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
 	generateMove(pBoard, &moves);
 	
 	if(depth == 1) {
-		#ifdef DEBUG
+
+		U64 count = 0;
 		for (int i = 0; i < moves.totalMoves; i++) {
 			Move m = moves.moveList[i];
 			makeMove(pBoard, m);
 			if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
+				count++;
+				#ifdef DEBUG
 				if (capturedPiece(m)) pCount->captures++;
 				if (whiteEnPassant(m) || blackEnPassant(m)) pCount->enPassants++;
 				if (promote(m)) pCount->promotions++;
 				if (whiteCastle(m) || blackCastle(m)) pCount->castles++;
 				if (checks(pBoard, pBoard->info.toPlay)) pCount->checks++;
+				#endif
 			}
 			unmakeMove(pBoard, m);
 		}
-		#endif
-		return moves.totalMoves;
+		return count;
 	}
 	
 	for(int i = 0; i < moves.totalMoves; i++) {
