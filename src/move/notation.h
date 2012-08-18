@@ -3,6 +3,12 @@
 
 #include "move.h"
 
+/** Function: getSquare
+ *  -------------------
+ * getSquare converts a string designating a board position into the appropriate
+ * numeric. Since this is used in a few other places, we'll keep the protoype here.
+**/
+int getSquare(char *sq);
 
 /** Function: notationToMove
  *  ------------------------
