@@ -8,7 +8,28 @@
 #include "defines.h"
 #include "extglobals.h"
 
-char *getFENFromFile(char *fileName) {
+static FEN *FENFromLine(char *line) {
+	char boardStringTemp[73];
+	char turnCharTemp;
+	char castleStringTemp[5];
+	char enPassantStringTemp[3];
+	int halfmoveClockTemp;
+	int fullmoveClockTemp;
+	if(sscanf(line, "%72s %c %4s %2s %d %d", boardStringTemp, &turnCharTemp, castleStringTemp,
+						enPassantStringTemp, &halfmoveClockTemp, &fullmoveClockTemp) == 6) {
+		FEN *record = malloc(sizeof(FEN));
+		strncpy(record->boardString, boardStringTemp, 73);
+		strncpy(record->castleString, castleStringTemp, 5);
+		strncpy(record->enPassantString, enPassantStringTemp, 3);
+		record->turnChar = turnCharTemp;
+		record->halfmoveClock = halfmoveClockTemp;
+		record->fullmoveClock = fullmoveClockTemp;
+		return record;
+	}
+	return NULL;
+}
+
+FEN *getFENFromFile(char *fileName) {
 	// should return a valid FEN string
 	FILE *fp = fopen(fileName, "r");
 	if(!fp) {
@@ -16,22 +37,12 @@ char *getFENFromFile(char *fileName) {
 	}
 	
 	char lineBuffer[160];
-	
-	// we don't actually use the stack variables,
-	// only sscanf to check the formatting, eventually we could convert this
-	// by making a FEN record type, which would be more sustainable, and would
-	// make removing the duplicate code easy
-	char boardString[73];
-	char turnChar;
-	char castleString[5];
-	char enPassantString[3];
-	int halfmoveClock;
-	int fullmoveClock;
+	FEN *record;
 	
 	while(fgets(lineBuffer, sizeof(lineBuffer), fp)) {
-		if(sscanf(lineBuffer, "%72s %c %4s %2s %d %d", boardString, &turnChar, castleString, enPassantString, &halfmoveClock, &fullmoveClock) == 6) {
+		if((record = FENFromLine(lineBuffer))) {
 			fclose(fp);
-			return(strdup(lineBuffer));
+			return record;
 		}
 	}
 	
@@ -81,7 +92,7 @@ static int getPieceFromChar(char pieceChar) {
 	return NO_PIECE;
 }
 
-static void castleFromFen(char *castleFen, int *castleWhite, int *castleBlack) {
+static void castleFromFEN(char *castleFen, int *castleWhite, int *castleBlack) {
 	if(strchr(castleFen, 'Q'))
 		*castleWhite |= CAN_CASTLE_OOO;
 	if(strchr(castleFen, 'K'))
@@ -97,24 +108,15 @@ static int getEnPassantSquare(char *epString) {
 	return getSquare(epString);
 }
 
-void loadFromFEN(Board *pBoard, char *fen) {
-	char boardString[73];
-	char turnChar;
-	char castleString[5];
-	char enPassantString[3];
-	int halfmoveClock; // since pawn advance or capture
-	int fullmoveClock;
-	if(sscanf(fen, "%72s %c %4s %2s %d %d", boardString, &turnChar, castleString, enPassantString, &halfmoveClock, &fullmoveClock) != 6) {
-		printf("sscanf failed to read from:\n%s\n", fen);
-		abort();
-	}
-	
+void loadFromFEN(Board *pBoard, FEN *record) {
 	// we first clean everything up, this makes the rest of the setup easier
 	resetBoard(pBoard);
 	
+	if(!record) return;
+	
 	int rank = 7;
 	int idx = A8; // for some reason, FEN records start addressing with rank 8
-	for(char *iter = boardString; *iter != '\0'; iter++) {
+	for(char *iter = record->boardString; *iter != '\0'; iter++) {
 		if(*iter == '/') {
 			rank--;
 			idx = rank * 8;
@@ -131,12 +133,12 @@ void loadFromFEN(Board *pBoard, char *fen) {
 		}
 	}
 	
-	int toPlay = (turnChar == 'w') ? WHITE : BLACK;
+	int toPlay = (record->turnChar == 'w') ? WHITE : BLACK;
 	int castleWhite = 0, castleBlack = 0;
-	castleFromFen(castleString, &castleWhite, &castleBlack);
-	int epSquare = getEnPassantSquare(enPassantString);
+	castleFromFEN(record->castleString, &castleWhite, &castleBlack);
+	int epSquare = getEnPassantSquare(record->enPassantString);
 	
-	initBoardFromSquares(pBoard, toPlay, halfmoveClock, castleWhite, castleBlack, epSquare, fullmoveClock);
+	initBoardFromSquares(pBoard, toPlay, record->halfmoveClock, castleWhite, castleBlack, epSquare, record->fullmoveClock);
 	
 }
 

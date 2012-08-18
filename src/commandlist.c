@@ -146,9 +146,15 @@ bool loadFENCommand(int tokenCount, char **tokens) {
 		printf("load-fen usage: accepts one parameter specifying the filename.\n");
 		return true;
 	}
-	char *fenString = getFENFromFile(tokens[0]);
-	loadFromFEN(pBoard, fenString);
-	free(fenString);
+	FEN *record = getFENFromFile(tokens[0]);
+	
+	if(!record) {
+		printf("The file you specified did not contain a valid FEN record.\n");
+		return true;
+	}
+	
+	loadFromFEN(pBoard, record);
+	free(record);
 	return true;
 }
 
