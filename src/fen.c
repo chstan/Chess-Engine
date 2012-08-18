@@ -8,6 +8,37 @@
 #include "defines.h"
 #include "extglobals.h"
 
+char *getFENFromFile(char *fileName) {
+	// should return a valid FEN string
+	FILE *fp = fopen(fileName, "r");
+	if(!fp) {
+		fprintf(stderr, "getFENFromFile: unable to load from %s\n", fileName);
+	}
+	
+	char lineBuffer[160];
+	
+	// we don't actually use the stack variables,
+	// only sscanf to check the formatting, eventually we could convert this
+	// by making a FEN record type, which would be more sustainable, and would
+	// make removing the duplicate code easy
+	char boardString[73];
+	char turnChar;
+	char castleString[5];
+	char enPassantString[3];
+	int halfmoveClock;
+	int fullmoveClock;
+	
+	while(fgets(lineBuffer, sizeof(lineBuffer), fp)) {
+		if(sscanf(lineBuffer, "%72s %c %4s %2s %d %d", boardString, &turnChar, castleString, enPassantString, &halfmoveClock, &fullmoveClock) == 6) {
+			fclose(fp);
+			return(strdup(lineBuffer));
+		}
+	}
+	
+	fclose(fp);
+	return NULL;
+}
+
 static int getPieceFromChar(char pieceChar) {
 	switch(pieceChar) {
 		case 'P':
