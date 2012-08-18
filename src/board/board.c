@@ -48,12 +48,12 @@ void resetBoard(Board *pBoard) {
 	pBoard->info.displayRotated = false;
 	pBoard->info.currentMove = 0;
 	
-	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE, CAN_CASTLE, INVALID_SQUARE);
+	initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE, CAN_CASTLE, INVALID_SQUARE, 0);
 	return;
 }
 
 void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW, 
-int castleB, int enPassantSquare) {
+int castleB, int enPassantSquare, int turnCount) {
 	
 	resetBB(pBoard);
 	updateBBFromSquares(pBoard);
@@ -62,6 +62,7 @@ int castleB, int enPassantSquare) {
 	updateKingsFromBB(pBoard);
 	updatePieceCountsFromBB(pBoard);
 	
+	pBoard->info.currentMove = turnCount;
 	pBoard->info.toPlay = toPlay;
 	pBoard->info.state[pBoard->info.currentMove].castleWhite = castleW;
 	pBoard->info.state[pBoard->info.currentMove].castleBlack = castleB;

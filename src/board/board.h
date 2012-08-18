@@ -60,8 +60,8 @@ typedef struct {
 
 void resetBoard(Board *pBoard);
 
-void initBoardFromSquares(Board* pBoard, unsigned char nextMove, int staleMoves, int castleW, 
-	int castleB, int enPassantSquare);
+void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW, 
+	int castleB, int enPassantSquare, int turnCount);
 
 void displayBoard(Board *pBoard);
 
