@@ -225,6 +225,7 @@ bool checks(Board *pBoard, int side) {
 	return attacks(pBoard, pBoard->position.kings[side], side) != 0;
 }
 
+
 //===============UNFINISHED===================
 
 void generateCheck(Board *pBoard, MoveSet *pMoves) {
