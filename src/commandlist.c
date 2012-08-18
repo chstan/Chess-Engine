@@ -96,7 +96,7 @@ bool performanceTestCommand(int tokenCount, char **tokens) {
 		return true;
 	}
 	int depth = atoi(tokens[0]);
-	performanceTest(pBoard, depth);
+	performanceTest(pBoard, depth, false);
 	
 	return true;
 }
@@ -185,7 +185,7 @@ bool divideCommand(int tokenCount, char **tokens) {
 		return true;
 	}
 	int depth = atoi(tokens[0]);
-	divide(pBoard, depth);
+	performanceTest(pBoard, depth, true);
 	
 	return true;
 }
