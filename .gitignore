@@ -3,6 +3,7 @@
 *.tmproj
 *.log
 *.pgn
+*.fen
 *.d
 
 doc
