@@ -105,8 +105,6 @@ void loadFromFEN(Board *pBoard, char *fen) {
 	castleFromFen(castleString, &castleWhite, &castleBlack);
 	int epSquare = getEnPassantSquare(enPassantString);
 	
-	void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW, 
-		int castleB, int enPassantSquare, int turnCount);
 	initBoardFromSquares(pBoard, toPlay, halfmoveClock, castleWhite, castleBlack, epSquare, fullmoveClock);
 	
 }
