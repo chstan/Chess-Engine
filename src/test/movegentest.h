@@ -14,6 +14,13 @@ typedef struct {
 	U64 castles;
 } MoveCount;
 
+
+/* (was function divide, now part of performanceTest)
+ *  ----------------
+ * Generates all possible moves at the starting node. For each generated node, divide prints
+ * the move in algebraic notation, and runs performanceTest with depth-1, allowing us to easily
+ * isolate bugs in the move generator.
+**/
 /** Function: performanceTest
  *  -------------------------
  * Times the move generator up to a depth specified
@@ -21,7 +28,7 @@ typedef struct {
  * in this restricted game tree, as well as the time it took the
  * internal move generator to reach and count these possible states
 **/
-void performanceTest(Board *pBoard, int depth);
+void performanceTest(Board *pBoard, int depth, bool divide);
 
 /** Function: recursiveMoveCount
  *  ----------------------------
@@ -32,13 +39,5 @@ void performanceTest(Board *pBoard, int depth);
  * long time anyway.
 **/
 U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount);
-
-/** Function: divide
- *  ----------------
- * Generates all possible moves at the starting node. For each generated node, divide prints
- * the move in algebraic notation, and runs performanceTest with depth-1, allowing us to easily
- * isolate bugs in the move generator.
-**/
-void divide(Board *pBoard, int depth);
 
 #endif

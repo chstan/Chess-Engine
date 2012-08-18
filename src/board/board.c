@@ -6,6 +6,7 @@
 #include "../defines.h"
 #include "../extglobals.h"
 #include "../move/move.h"
+#include "../move/movegen.h"
 
 void resetBoard(Board *pBoard) {
 	for(int i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;

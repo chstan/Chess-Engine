@@ -47,7 +47,7 @@ unsigned int GSB(BitMap bits) {
 	unsigned long long gsb;	
 	#ifdef __clang__
 	#if __SIZEOF_POINTER__ == 8
-	asm("bsrq %0, %1" : "=r" (gsb) : "r" (bits));
+	asm("bsrq %1, %0" : "=r" (gsb) : "r" (bits));
 	#else
 	unsigned int bits32, gsb32;
 	if(bits >= BITSET(32)) {

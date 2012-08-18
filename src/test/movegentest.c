@@ -8,43 +8,52 @@
 #include "../move/movegen.h"
 #include "../defines.h"
 
-void divide(Board *pBoard, int depth) {
-	if(depth < 1) return;
+static void doPerfTest(Board *pBoard, int depth);
+
+void performanceTest(Board *pBoard, int depth, bool divide) {
+	if (depth < 1) return;
 	
-	MoveSet moves;
-	resetMoveSet(&moves);
-	generateMove(pBoard, &moves);
+	if (divide)
+		printf("%-8s ", "Move");
+	printf("%-16s %-8s", "# Moves", "Time (s)");
+	#ifdef DEBUG
+	printf(" %-8s %-8s %-8s %-8s %-8s", "Caps", "EPs", "Castles", "Proms", "Checks");
+	#endif
+	printf("\n");
 	
-	for(int i = 0; i < moves.totalMoves; i++) {
-		Move m = moves.moveList[i];
-		char *notation = moveToNotation(pBoard, m);
-		printf("%s\t", notation);
-		free(notation);
+	if (divide){
+		MoveSet moves;
+		resetMoveSet(&moves);
+		generateMove(pBoard, &moves);
 		
-		makeMove(pBoard, m);
-		performanceTest(pBoard, depth-1);
-		unmakeMove(pBoard, m);
-		//printf("\n");
+		for (int i = 0; i < moves.totalMoves; i++) {
+			Move m = moves.moveList[i];
+			char *notation = moveToNotation(pBoard, m);
+			printf("%-8s ", notation);
+			free(notation);
+			
+			makeMove(pBoard, m);
+			doPerfTest(pBoard, depth-1);
+			unmakeMove(pBoard, m);
+		}
+	} else {
+		doPerfTest(pBoard, depth);
 	}
 }
 
-void performanceTest(Board *pBoard, int depth) {
+static void doPerfTest(Board *pBoard, int depth) {
 	MoveCount count;
 	memset(&count, 0, sizeof(MoveCount));
 	int startTime = clock();
 	U64 totalMoves = recursiveMoveCount(pBoard, depth, &count);
 	int endTime = clock();
 	double seconds = ((double)(endTime - startTime))/CLOCKS_PER_SEC;
+	printf("%-16llu %-8.3f", totalMoves, seconds);
 	#ifdef DEBUG
-	printf("Performance test results:\n%llu move(s) generated in\n%f seconds.\n", totalMoves, seconds);
-	printf("\tCaptures   : %llu\n", count.captures);
-	printf("\tEP         : %llu\n", count.enPassants);
-	printf("\tCastles    : %llu\n", count.castles);
-	printf("\tPromotions : %llu\n", count.promotions);
-	printf("\tChecks     : %llu\n", count.checks);
-	#else
-	printf("%llu\t%f\n", totalMoves, seconds);
+	printf(" %-8llu %-8llu %-8llu %-8llu %-8llu", count.captures,
+		count.enPassants, count.castles, count.promotions, count.checks);
 	#endif
+	printf("\n");
 }
 
 U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
