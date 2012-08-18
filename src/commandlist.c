@@ -142,9 +142,10 @@ bool loadpgnCommand(int tokenCount, char **tokens) {
 }
 
 bool loadFENCommand(int tokenCount, char **tokens) {
-	if (tokenCount != 1)
+	if (tokenCount != 1) {
 		printf("load-fen usage: accepts one parameter specifying the filename.\n");
-	
+		return true;
+	}
 	char *fenString = getFENFromFile(tokens[0]);
 	loadFromFEN(pBoard, fenString);
 	free(fenString);
