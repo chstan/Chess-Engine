@@ -134,10 +134,10 @@ void generatePromotions(Board *pBoard, MoveSet *pMoves) {
 						if(i < 64) generatedMoves >>= i;
 						else generatedMoves = 0;
 						destination += i;
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_QUEEN, 0, WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_ROOK, 0, WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_BISHOP, 0, WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_KNIGHT, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_QUEEN, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_ROOK, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_BISHOP, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_KNIGHT, 0, WHITE_PAWN, origin, destination));
 					}
 				}
 				
@@ -155,10 +155,10 @@ void generatePromotions(Board *pBoard, MoveSet *pMoves) {
 						if(i < 64) generatedMoves >>= i;
 						else generatedMoves = 0;
 						destination += i;
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_QUEEN, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_ROOK, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_BISHOP, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_KNIGHT, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_QUEEN, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_ROOK, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_BISHOP, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, WHITE_KNIGHT, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
 					}
 				}
 			}
@@ -183,10 +183,10 @@ void generatePromotions(Board *pBoard, MoveSet *pMoves) {
 						if(i < 64) generatedMoves >>= i;
 						else generatedMoves = 0;
 						destination += i;
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_QUEEN, 0, BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_ROOK, 0, BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_BISHOP, 0, BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_KNIGHT, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_QUEEN, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_ROOK, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_BISHOP, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_KNIGHT, 0, BLACK_PAWN, origin, destination));
 					}
 				}
 				
@@ -204,10 +204,10 @@ void generatePromotions(Board *pBoard, MoveSet *pMoves) {
 						if(i < 64) generatedMoves >>= i;
 						else generatedMoves = 0;
 						destination += i;
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_QUEEN, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_ROOK, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_BISHOP, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
-						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_KNIGHT, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_QUEEN, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_ROOK, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_BISHOP, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(0, 0, 0, 0, BLACK_KNIGHT, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
 					}
 				}
 			}
