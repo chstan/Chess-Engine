@@ -116,8 +116,13 @@ void displayBoard(Board *pBoard) {
 	if(checks(pBoard, WHITE)) {
 		printf("White is in check.\n");
 	} else if(checks(pBoard, BLACK)) {
-		printf("Black is in check.\n");
+		printf("Black is in check.\n\n");
 	}
+	int epSquare = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
+	if(epSquare == INVALID_SQUARE)
+		printf("EP Square : --\n");
+	else
+		printf("EP Square : %s\n", SQUARENAME[epSquare]);
 }
 
 void rotateBoard(Board *pBoard) {
