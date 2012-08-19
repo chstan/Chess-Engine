@@ -96,7 +96,7 @@ void advanceState(Board *pBoard, Move m) {
 	
 	// en passant
 	if(movedPiece(m) % 8 == WHITE_PAWN) {
-		if((from(m) - to(m) == 16 || to(m) - from(m) == 16)) {
+		if(((from(m) - to(m) == 16) || (to(m) - from(m)) == 16)) {
 			pBoard->info.state[currentMove+1].enPassantSquare = (to(m) + from(m)) / 2;
 		}
 	} else {
@@ -140,6 +140,7 @@ void advanceState(Board *pBoard, Move m) {
 void rewindState(Board *pBoard, Move m) {
 	// we don't need to do anything else, the board simply forgets about what
 	// happened in the future board states and we roll back to the last
+	pBoard->info.state[pBoard->info.currentMove].enPassantSquare = INVALID_SQUARE;
 	pBoard->info.currentMove--;
 	assert(pBoard->info.currentMove >= 0);
 	pBoard->info.toPlay ^= 1;

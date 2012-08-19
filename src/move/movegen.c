@@ -99,7 +99,7 @@ static void extractEnPassant(Board *pBoard, MoveSet *pMoves) {
 		origin += shift;
 		int to = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
 		Move m = moveF((color == BLACK) ? 1 : 0, (color == WHITE) ? 1 : 0, 0, 0, 0, taken, piece, origin, to);
-		printMove(m);
+		//printMove(m);
 		writeMove(pMoves, m);
 	}
 	
