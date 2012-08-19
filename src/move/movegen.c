@@ -83,7 +83,7 @@ static Move extractMove(int piece, int origin, int destination) {
 	if (pBoard->position.occupied & BITSET(destination)) {
 		occupant = pBoard->position.square[destination];
 	}
-	// TODO detect enpassant
+	
 	return move(occupant, piece, origin, destination);
 }
 
@@ -104,6 +104,115 @@ static void extractEnPassant(Board *pBoard, MoveSet *pMoves) {
 	}
 	
 	return;
+}
+
+void generatePromotions(Board *pBoard, MoveSet *pMoves) {
+	static int whitePromotionRank = 6;
+	static int blackPromotionRank = 1;
+	int color = pBoard->info.toPlay;
+	BitBoard timidCandidates;
+	BitBoard captureCandidates;
+	switch(color) {
+		case W:
+			{
+				// by removing all pawns that naturally cannot promote we speed this up greatly
+				timidCandidates = pBoard->position.pieceBB[WHITE_PAWN] & rankBB[whitePromotionRank];
+				captureCandidates = timidCandidates;
+				
+				int origin = -1, shift = 0, destination = 0;
+				BitBoard generatedMoves = 0;
+				while(timidCandidates) {
+					shift = LSB(timidCandidates) + 1;
+					if(shift < 64) timidCandidates >>= shift;
+					else timidCandidates = 0;
+					origin += shift;
+					generatedMoves = pawnPromotionBB(pBoard, origin, color);
+					int i = 0;
+					destination = -1;
+					while(generatedMoves) {
+						i = LSB(generatedMoves) + 1;
+						if(i < 64) generatedMoves >>= i;
+						else generatedMoves = 0;
+						destination += i;
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_QUEEN, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_ROOK, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_BISHOP, 0, WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_KNIGHT, 0, WHITE_PAWN, origin, destination));
+					}
+				}
+				
+				origin = -1;
+				while(captureCandidates) {
+					shift = LSB(captureCandidates) + 1;
+					if(shift < 64) captureCandidates >>= shift;
+					else captureCandidates = 0;
+					origin += shift;
+					generatedMoves = pawnPromotionCaptureBB(pBoard, origin, color);
+					int i = 0;
+					destination = -1;
+					while(generatedMoves) {
+						i = LSB(generatedMoves) + 1;
+						if(i < 64) generatedMoves >>= i;
+						else generatedMoves = 0;
+						destination += i;
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_QUEEN, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_ROOK, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_BISHOP, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, WHITE_KNIGHT, pBoard->position.square[destination], WHITE_PAWN, origin, destination));
+					}
+				}
+			}
+		break;
+		case B:
+			{
+				timidCandidates = pBoard->position.pieceBB[BLACK_PAWN] & rankBB[blackPromotionRank];
+				captureCandidates = timidCandidates;
+				
+				int origin = -1, shift = 0, destination = 0;
+				BitBoard generatedMoves = 0;
+				while(timidCandidates) {
+					shift = LSB(timidCandidates) + 1;
+					if(shift < 64) timidCandidates >>= shift;
+					else timidCandidates = 0;
+					origin += shift;
+					generatedMoves = pawnPromotionBB(pBoard, origin, color);
+					int i = 0;
+					destination = -1;
+					while(generatedMoves) {
+						i = LSB(generatedMoves) + 1;
+						if(i < 64) generatedMoves >>= i;
+						else generatedMoves = 0;
+						destination += i;
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_QUEEN, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_ROOK, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_BISHOP, 0, BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_KNIGHT, 0, BLACK_PAWN, origin, destination));
+					}
+				}
+				
+				origin = -1;
+				while(captureCandidates) {
+					shift = LSB(captureCandidates) + 1;
+					if(shift < 64) captureCandidates >>= shift;
+					else captureCandidates = 0;
+					origin += shift;
+					generatedMoves = pawnPromotionCaptureBB(pBoard, origin, color);
+					int i = 0;
+					destination = -1;
+					while(generatedMoves) {
+						i = LSB(generatedMoves) + 1;
+						if(i < 64) generatedMoves >>= i;
+						else generatedMoves = 0;
+						destination += i;
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_QUEEN, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_ROOK, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_BISHOP, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+						writeMove(pMoves, moveF(1, 0, 0, 0, BLACK_KNIGHT, pBoard->position.square[destination], BLACK_PAWN, origin, destination));
+					}
+				}
+			}
+		break;
+	}
 }
 
 void generateCastle(Board *pBoard, MoveSet *pMoves) {
@@ -251,11 +360,15 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, moveCB[piece]);
 	}
 	
+	// promotions
+	generatePromotions(pBoard, pMoves);
+	
+	// castling
 	generateCastle(pBoard, pMoves);
 
 	// handle enPassant
 	extractEnPassant(pBoard, pMoves);
-	
+
 	debugMoves(pMoves);
 	return;
 }
