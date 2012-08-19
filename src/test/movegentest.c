@@ -29,12 +29,15 @@ void performanceTest(Board *pBoard, int depth, bool divide) {
 		for (int i = 0; i < moves.totalMoves; i++) {
 			Move m = moves.moveList[i];
 			char *notation = moveToNotation(pBoard, m);
-			printf("%-8s ", notation);
-			free(notation);
-			
+
 			makeMove(pBoard, m);
-			doPerfTest(pBoard, depth-1);
+			if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
+				printf("%-8s ", notation);
+				doPerfTest(pBoard, depth-1);	
+			}
 			unmakeMove(pBoard, m);
+
+			free(notation);
 		}
 	} else {
 		doPerfTest(pBoard, depth);
