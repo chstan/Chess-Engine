@@ -91,6 +91,8 @@ void writeMove(MoveSet *pMoves, Move m);
 **/
 void writeKiller(MoveSet *pMoves, Move killer);
 
+BitBoard generateAllAttacks(Board *pBoard, int color);
+
 //===============UNFINISHED===================
 
 void generateCheck(Board *pBoard, MoveSet *pMoves);

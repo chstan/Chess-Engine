@@ -4,6 +4,7 @@
 #include "movegen.h"
 #include "movegenhelpers.h"
 #include "move.h"
+#include "../extglobals.h"
 #include "../bit.h"
 #include "../defines.h"
 
@@ -91,16 +92,68 @@ static void extractEnPassant(Board *pBoard, MoveSet *pMoves) {
 	int color = pBoard->info.toPlay;
 	int piece = (color == WHITE) ? WHITE_PAWN : BLACK_PAWN;
 	int taken = (color == WHITE) ? BLACK_PAWN : WHITE_PAWN;
-	int origin = -1, shift = 0, destination = 0;
+	int origin = -1, shift = 0;
 	while(generated) {
 		shift = LSB(generated)+1;
 		if (shift < 64) generated >>= shift;
 		origin += shift;
 		int to = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
-		writeMove(pMoves, moveF((color == BLACK) ? 1 : 0, (color == WHITE) ? 1 : 0, 0, 0, 0, taken, piece, origin, to));
+		Move m = moveF((color == BLACK) ? 1 : 0, (color == WHITE) ? 1 : 0, 0, 0, 0, taken, piece, origin, to);
+		printMove(m);
+		writeMove(pMoves, m);
 	}
 	
 	return;
+}
+
+void generateCastle(Board *pBoard, MoveSet *pMoves) {
+	U64 WhiteKingsideCheck = BITSET(E1) | BITSET(F1) | BITSET(G1);
+	U64 WhiteKingsideClearance = BITSET(F1) | BITSET(G1);
+	U64 BlackKingsideCheck = BITSET(E8) | BITSET(F8) | BITSET(G8);
+	U64 BlackKingsideClearance = BITSET(F8) | BITSET(G8);
+	
+	U64 WhiteQueensideCheck = BITSET(E1) | BITSET(D1) | BITSET(C1);
+	U64 WhiteQueensideClearance =  BITSET(D1) | BITSET(C1) | BITSET(B1);
+	U64 BlackQueensideCheck = BITSET(E8) | BITSET(D8) | BITSET(C8);
+	U64 BlackQueensideClearance = BITSET(D8) | BITSET(C8) | BITSET(B8);
+	
+	
+	switch(pBoard->info.toPlay) {
+		case W:
+			{
+				// check if white can castle
+				int castleWhite = pBoard->info.state[pBoard->info.currentMove].castleWhite;
+				if(castleWhite) {
+					BitBoard blackAttacks = generateAllAttacks(pBoard, WHITE);
+					if(castleWhite & CAN_CASTLE_OO) {
+						if(!(pBoard->position.occupied & WhiteKingsideClearance) && !(blackAttacks & WhiteKingsideCheck))
+							writeMove(pMoves, moveF(0, 0, 0, 1, 0, 0, WHITE_KING, E1, G1));
+					}
+					if(castleWhite & CAN_CASTLE_OOO) {
+						if(!(pBoard->position.occupied & WhiteQueensideClearance) && !(blackAttacks & WhiteQueensideCheck))
+							writeMove(pMoves, moveF(0, 0, 0, 1, 0, 0, WHITE_KING, E1, C1));
+					}
+				}
+			}
+		break;
+		case B:
+			{
+				// check if black can castle
+				int castleBlack = pBoard->info.state[pBoard->info.currentMove].castleBlack;
+				if(castleBlack) {
+					BitBoard whiteAttacks = generateAllAttacks(pBoard, BLACK);
+					if(castleBlack & CAN_CASTLE_OO) {
+						if(!(pBoard->position.occupied & BlackKingsideClearance) && !(whiteAttacks & BlackKingsideCheck))
+							writeMove(pMoves, moveF(0, 0, 1, 0, 0, 0, BLACK_KING, E8, G8));
+					}
+					if(castleBlack & CAN_CASTLE_OOO) {
+						if(!(pBoard->position.occupied & BlackQueensideClearance) && !(whiteAttacks & BlackQueensideCheck))
+							writeMove(pMoves, moveF(0, 0, 1, 0, 0, 0, BLACK_KING, E8, C8));
+					}
+				}
+			}
+		break;
+	}
 }
 
 void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
@@ -149,6 +202,8 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, timidCB[piece]);
 	}
 	
+	generateCastle(pBoard, pMoves);
+	
 	return;
 }
 
@@ -196,6 +251,8 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 		generateAgnostic(pBoard, color, currentPieces, piece, pMoves, moveCB[piece]);
 	}
 	
+	generateCastle(pBoard, pMoves);
+
 	// handle enPassant
 	extractEnPassant(pBoard, pMoves);
 	
