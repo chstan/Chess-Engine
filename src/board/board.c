@@ -281,7 +281,7 @@ void enPassant(Board *pBoard, int color) {
 
 void unPassant(Board *pBoard, int index, int color) {
 	// a horrible corruption of the French language... mon Dieu!
-	if(color == WHITE) {
+	if(color == BLACK) {
 		setPieceAt(pBoard, index + 8, WHITE_PAWN, NO_PIECE);
 	} else {
 		setPieceAt(pBoard, index - 8, BLACK_PAWN, NO_PIECE);
