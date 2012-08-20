@@ -232,14 +232,14 @@ static BitBoard attackedSquaresByPiece(Board *pBoard, int piece, int side) {
 		// the value of piece cannot be changed
 		switch(piece) {
 			case WP:
-				if(piece & rankBB[whitePromotionRank]) {
+				if(BITSET(origin) & rankBB[whitePromotionRank]) {
 					generatedMoves |= pawnPromotionCaptureWhite[origin];
 				} else {
 					generatedMoves |= pawnCaptureWhite[origin];
 				}
 			break;
 			case BP:
-				if(piece & rankBB[blackPromotionRank]) {
+				if(BITSET(origin) & rankBB[blackPromotionRank]) {
 					generatedMoves |= pawnPromotionCaptureBlack[origin];
 				} else {
 					generatedMoves |= pawnCaptureBlack[origin];
@@ -459,6 +459,9 @@ int piece) {
 		else currentPieces = 0;
 		origin += shift;
 		generatedMoves |= (*captureCB[piece])(pBoard, origin, color);
+		if(piece % 8 == WHITE_PAWN) {
+			generatedMoves |= pawnPromotionCaptureBB(pBoard, origin, color);
+		}
 	}
 	return generatedMoves;
 }
