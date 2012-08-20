@@ -155,11 +155,11 @@ char *disambiguateOriginFromMove(Board *pBoard, UCHAR piece, int destination, Mo
 	// algebraic chess notation requires we disambiguate by file, then rank, then both if needed
 	// try disambiguate from file (a-h)
 	if(sharedFile(originCandidates))
-		return extractFile(originCandidates);
+		return extractRank(BITSET(from(m)));
 	
 	// try disambiguate from rank (1-8)
 	if(sharedRank(originCandidates))
-		return extractRank(originCandidates);
+		return extractFile(BITSET(from(m)));
 		
 	// we have to return both the file and rank, which is simple enough
 	return strdup(SQUARENAME[from(m)]);
