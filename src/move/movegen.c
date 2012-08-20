@@ -215,6 +215,83 @@ void generatePromotions(Board *pBoard, MoveSet *pMoves) {
 	}
 }
 
+static BitBoard attackedSquaresByPiece(Board *pBoard, int piece, int side) {
+	static int whitePromotionRank = 6;
+	static int blackPromotionRank = 1;
+	
+	// I hate repeating this everywhere... makes you wish for a more expressive language
+	BitBoard currentPieces = pBoard->position.pieceBB[piece];
+	int origin = -1, shift = 0;
+	BitBoard generatedMoves = 0;
+	while(currentPieces) {
+		shift = LSB(currentPieces)+1;
+		if(shift < 64) currentPieces >>= shift;
+		else currentPieces = 0;
+		origin += shift;
+		// although slower unoptimized, the optimizer will hoist this out of the white, because
+		// the value of piece cannot be changed
+		switch(piece) {
+			case WP:
+				if(piece & rankBB[whitePromotionRank]) {
+					generatedMoves |= pawnPromotionCaptureWhite[origin];
+				} else {
+					generatedMoves |= pawnCaptureWhite[origin];
+				}
+			break;
+			case BP:
+				if(piece & rankBB[blackPromotionRank]) {
+					generatedMoves |= pawnPromotionCaptureBlack[origin];
+				} else {
+					generatedMoves |= pawnCaptureBlack[origin];
+				}
+			break;
+			case WN:
+			case BN:
+				generatedMoves |= knightMove[origin];
+			break;
+			case WB:
+			case BB:
+				generatedMoves |= bishopMoveBB(pBoard, origin, side);
+			break;
+			case WR:
+			case BR:
+				generatedMoves |= rookMoveBB(pBoard, origin, side);
+			break;
+			case WK:
+			case BK:
+				generatedMoves |= kingMove[origin];
+			break;
+			case WQ:
+			case BQ:
+				generatedMoves |= queenMoveBB(pBoard, origin, side);
+			break;
+			default:
+				continue;
+			break;
+		}
+	}
+	return generatedMoves;
+}
+
+// side is the color *DOING* the attacking
+// though changing this is easy, if you'd like
+BitBoard attackedSquares(Board *pBoard, int side) {
+	BitBoard attacked = 0;
+	int piece, endpiece;
+	if(side == BLACK) {
+		piece = BP;
+		endpiece = BQ;
+	} else {
+		piece = WP;
+		endpiece = WQ;
+	}
+	
+	for(; piece <= endpiece; piece++) {
+		attacked |= attackedSquaresByPiece(pBoard, piece, side);
+	}
+	return attacked;
+}
+
 void generateCastle(Board *pBoard, MoveSet *pMoves) {
 	U64 WhiteKingsideCheck = BITSET(E1) | BITSET(F1) | BITSET(G1);
 	U64 WhiteKingsideClearance = BITSET(F1) | BITSET(G1);
@@ -233,7 +310,7 @@ void generateCastle(Board *pBoard, MoveSet *pMoves) {
 				// check if white can castle
 				int castleWhite = pBoard->info.state[pBoard->info.currentMove].castleWhite;
 				if(castleWhite) {
-					BitBoard blackAttacks = generateAllAttacks(pBoard, WHITE);
+					BitBoard blackAttacks = attackedSquares(pBoard, BLACK);
 					if(castleWhite & CAN_CASTLE_OO) {
 						if(!(pBoard->position.occupied & WhiteKingsideClearance) && !(blackAttacks & WhiteKingsideCheck))
 							writeMove(pMoves, moveF(0, 0, 0, 1, 0, 0, WHITE_KING, E1, G1));
@@ -250,7 +327,7 @@ void generateCastle(Board *pBoard, MoveSet *pMoves) {
 				// check if black can castle
 				int castleBlack = pBoard->info.state[pBoard->info.currentMove].castleBlack;
 				if(castleBlack) {
-					BitBoard whiteAttacks = generateAllAttacks(pBoard, BLACK);
+					BitBoard whiteAttacks = attackedSquares(pBoard, WHITE);
 					if(castleBlack & CAN_CASTLE_OO) {
 						if(!(pBoard->position.occupied & BlackKingsideClearance) && !(whiteAttacks & BlackKingsideCheck))
 							writeMove(pMoves, moveF(0, 0, 1, 0, 0, 0, BLACK_KING, E8, G8));
@@ -369,7 +446,6 @@ void generateMove(Board *pBoard, MoveSet *pMoves) {
 	// handle enPassant
 	extractEnPassant(pBoard, pMoves);
 
-	debugMoves(pMoves);
 	return;
 }
 
