@@ -81,7 +81,7 @@ void printBitMap(BitMap bits) {
 bool sharedFile(BitMap bits) {
 	bits >>= LSB(bits);
 	while(bits && bits != 1) {
-		if(LSB(bits) % 8 == 0)
+		if((LSB(bits) % 8) == 1)
 			bits >>= LSB(bits);
 		else
 			return false;
