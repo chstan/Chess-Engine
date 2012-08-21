@@ -83,9 +83,16 @@ void unmakeMove(Board *pBoard, Move m) {
 	}
 }
 
+void unmakeLastMove(Board *pBoard) {
+	if(pBoard->info.currentMove > 0)
+		unmakeMove(pBoard, pBoard->info.state[pBoard->info.currentMove].move);
+}
+
 void advanceState(Board *pBoard, Move m) {
 	int currentMove = pBoard->info.currentMove;
 	int square;
+	
+	pBoard->info.state[currentMove+1].move = m;
 	
 	// update according to the fifty move rule
 	if(capturedPiece(m) || movedPiece(m) % 8 == WHITE_PAWN) {

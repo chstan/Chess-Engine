@@ -5,7 +5,6 @@
 
 #include "../defines.h"
 
-
 #define MAX_MOVES_PER_GAME 512
 
 
@@ -34,6 +33,10 @@ typedef struct {
 	// where the pawn actually is
 	int enPassantSquare;
 	int staleMoves;
+	
+	// this doesn't make me happy, but it works for the moment
+	int move;
+	
 } MoveInfo;
 
 typedef struct {

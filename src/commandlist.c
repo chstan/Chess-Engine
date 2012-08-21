@@ -129,7 +129,7 @@ bool moveCommand(int tokenCount, char **tokens) {
 }
 
 bool unmoveCommand(int tokenCount, char **tokens) {
-	printf("Does nothing for the moment! Requires a board history.\n");
+	unmakeLastMove(pBoard);
 	return true;
 }
 

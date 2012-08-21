@@ -69,6 +69,8 @@ void makeMove(Board *pBoard, Move m);
 
 void unmakeMove(Board *pBoard, Move m);
 
+void unmakeLastMove(Board *pBoard);
+
 void printMove(Move m);
 
 void advanceState(Board *pBoard, Move m);
