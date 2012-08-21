@@ -20,6 +20,7 @@ CommandCB commandCallbacks[] = {
 	divideCommand,
 	helpCommand,
 	moveCommand,
+	unmoveCommand,
 	aboutCommand,
 	displayCommand,
 	loadpgnCommand,
@@ -38,6 +39,7 @@ char *commandTriggers[] = {
 	"divide",
 	"help",
 	"move",
+	"unmove",
 	"about",
 	"display",
 	"load-pgn",
@@ -55,8 +57,8 @@ char *commandDescription[] = {
 	"performance-test: will print the time to generate and the number of generated positions to a specified depth.",
 	"divide: will print out all moves at depth one in algebraic notation, and run performance-test off each node to depth-1.",
 	"help: prints the list of all commands.",
-	"move: applies a move to the board using the following format:\n"
-		"\t[PIECE] [ORIGIN] [DESTINATION] [CAPT] [PROMO] or [CASTLE]",
+	"move: applies a move in algebraic notation.",
+	"unmove: unapplies the last move.",
 	"about: prints information about the chess engine",
 	"display: prints the board state along with certain internal information",
 	"load-pgn: loads a .pgn file specified by [FILENAME]\n",
@@ -115,7 +117,7 @@ bool helpCommand(int tokenCount, char **tokens) {
 
 bool moveCommand(int tokenCount, char **tokens) {
 	if(tokenCount == 0) {
-		printf("You have to specify a move as an additional parameter in algebraic chess notation\n\n");
+		printf("You have to specify a move as an additional parameter in algebraic chess notation.\n\n");
 		return true;
 	}
 	Move m;
@@ -123,6 +125,11 @@ bool moveCommand(int tokenCount, char **tokens) {
 		printMove(m);
 		makeMove(pBoard, m);
 	}
+	return true;
+}
+
+bool unmoveCommand(int tokenCount, char **tokens) {
+	printf("Does nothing for the moment! Requires a board history.\n");
 	return true;
 }
 
