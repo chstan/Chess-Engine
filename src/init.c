@@ -8,11 +8,14 @@
 #include "board/board.h"
 #include "move/move.h"
 #include "aux/random.h"
+#include "eval/evalhelpers.h"
 
 void init() {
 	dataInit();
 	moveTableInit();
 	boardInit();
+	
+	initEval();
 	
 	initRandom();
 	return;

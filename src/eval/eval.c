@@ -4,7 +4,7 @@
 float evaluate(Board *pBoard) {
 	// for now we just use a naive evaluation, which counts material and does
 	// somewhat primitive checks of mobility and board control
-	return evaluateNaive(Board *pBoard);
+	return evaluateNaive(pBoard);
 }
 
 float evaluateNaive(Board *pBoard) {

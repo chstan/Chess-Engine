@@ -3,18 +3,25 @@
 
 #include "../board/board.h"
 
+void initEval();
+
+
 int doubledPawns(Board *pBoard);
 
 int tripledPawns(Board *pBoard);
 
-float bishopMobility(Board *pBoard);
+int passedPawns(Board *pBoard);
 
-float rookMobility(Board *pBoard);
+int outsidePassedPawns(Board *pBoard);
 
-float kingSafety(Board *pBoard);
+int bishopMobility(Board *pBoard);
+
+int rookMobility(Board *pBoard);
+
+int kingSafety(Board *pBoard);
 
 int control(Board *pBoard, int square);
 
-float controlOfCenter(Board *pBoard);
+int controlOfCenter(Board *pBoard);
 
 #endif
