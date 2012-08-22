@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 
 #include "evalhelpers.h"
@@ -26,6 +27,7 @@
 // we could generalize to x files, and should
 BitBoard passedPawn[2][64];
 BitBoard outsidePassedPawn[2][64];
+
 BitBoard kingSafetyZone[2][64];
 
 
@@ -88,35 +90,35 @@ int tripledPawns(Board *pBoard) {
 }
 
 int passedPawns(Board *pBoard) {
-	int passedPawn = 0;
+	int passedPawnCount = 0;
 	// not as fast as an optimized bitboard method, but this is all still proof of concept
 	for(int square = A1; square <= H8; square++) {
 		int piece = pBoard->position.square[square];
 		if(piece == WHITE_PAWN) {
 			if(!(passedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
-				passedPawn++;
+				passedPawnCount++;
 		} else if(piece == BLACK_PAWN) {
 			if(!(passedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
-				passedPawn--;
+				passedPawnCount--;
 		}
 	}
-	return passedPawn;
+	return passedPawnCount;
 }
 
 int outsidePassedPawns(Board *pBoard) {
-	int outsidePawn = 0;
+	int outsidePawnCount = 0;
 	// not as fast as an optimized bitboard method, but this is all still proof of concept
 	for(int square = A1; square <= H8; square++) {
 		int piece = pBoard->position.square[square];
 		if(piece == WHITE_PAWN) {
 			if(!(outsidePassedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
-				outsidePawn++;
+				outsidePawnCount++;
 		} else if(piece == BLACK_PAWN) {
 			if(!(outsidePassedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
-				outsidePawn--;
+				outsidePawnCount--;
 		}
 	}
-	return outsidePawn;
+	return outsidePawnCount;
 }
 
 int bishopMobility(Board *pBoard);
