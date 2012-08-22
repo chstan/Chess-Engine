@@ -69,11 +69,35 @@ int tripledPawns(Board *pBoard) {
 }
 
 int passedPawns(Board *pBoard) {
-	return 0;
+	int passedPawn = 0;
+	// not as fast as an optimized bitboard method, but this is all still proof of concept
+	for(int square = A1; square <= H8; square++) {
+		int piece = pBoard->position.square[square];
+		if(piece == WHITE_PAWN) {
+			if(!(passedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
+				passedPawn++;
+		} else if(piece == BLACK_PAWN) {
+			if(!(passedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
+				passedPawn--;
+		}
+	}
+	return passedPawn;
 }
 
 int outsidePassedPawns(Board *pBoard) {
-	return 0;
+	int outsidePawn = 0;
+	// not as fast as an optimized bitboard method, but this is all still proof of concept
+	for(int square = A1; square <= H8; square++) {
+		int piece = pBoard->position.square[square];
+		if(piece == WHITE_PAWN) {
+			if(!(outsidePassedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
+				outsidePawn++;
+		} else if(piece == BLACK_PAWN) {
+			if(!(outsidePassedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
+				outsidePawn--;
+		}
+	}
+	return outsidePawn;
 }
 
 int bishopMobility(Board *pBoard);
