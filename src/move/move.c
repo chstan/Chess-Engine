@@ -130,9 +130,9 @@ void advanceState(Board *pBoard, Move m) {
 		if (movedPiece(m) == BLACK_ROOK) square = from(m);
 		else square = to(m);
 		if (square == A8) {
-			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OOO;
+			pBoard->info.state[currentMove+1].castleBlack &= ~CAN_CASTLE_OOO;
 		} else if (square == H8) {
-			pBoard->info.state[currentMove+1].castleBlack = ~CAN_CASTLE_OO;
+			pBoard->info.state[currentMove+1].castleBlack &= ~CAN_CASTLE_OO;
 		}
 	} else if(movedPiece(m) == BLACK_KING && from(m) == E8) {
 		pBoard->info.state[currentMove+1].castleBlack = CANNOT_CASTLE;
