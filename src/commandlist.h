@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define COMMAND_COUNT 16
+#define COMMAND_COUNT 17
 
 typedef bool (*CommandCB)(int tokenCount, char **tokens);
 
@@ -11,6 +11,8 @@ bool listMovesCommand(int tokenCount, char **tokens);
 bool randomMoveCommand(int tokenCount, char **tokens);
 bool moveCommand(int tokenCount, char **tokens);
 bool unmoveCommand(int tokenCount, char **tokens);
+
+bool playCommand(int tokenCount, char **tokens);
 
 bool performanceTestCommand(int tokenCount, char **tokens);
 bool divideCommand(int tokenCount, char **tokens);

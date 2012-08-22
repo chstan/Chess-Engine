@@ -1,8 +1,10 @@
+#include <stdio.h>
+
 #include "search.h"
 #include "../move/movegen.h"
 #include "../eval/eval.h"
 #include "../board/board.h"
-#include "defines.h"
+#include "../defines.h"
 #include "../extglobals.h"
 
 // kind of a hack, would be better if we had
@@ -17,6 +19,8 @@ Move think() {
 	int searchDepth = 5;
 	
 	int score = alphaBeta(0, searchDepth, -INFTY, INFTY);
+	printf("%d\n", score);
+	
 	return bestMoves[0][0];
 }
 
@@ -33,7 +37,9 @@ int alphaBeta(int ply, int depth, int alpha, int beta) {
 	
 	int value;
 	
-	MoveSet moves = initializeMoveSetQuiet(pBoard, &moves);
+	MoveSet moves;
+	initializeMoveSetQuiet(pBoard, &moves);
+	
 	for(int i = 0; i < moves.totalMoves; i++) {
 		makeMove(pBoard, moves.moveList[i]);
 		value = -alphaBeta(ply+1, depth-1, -beta, -alpha);

@@ -12,6 +12,7 @@
 #include "test/movegentest.h"
 #include "pgnfile.h"
 #include "fen.h"
+#include "search/search.h"
 
 CommandCB commandCallbacks[] = {
 	listMovesCommand,
@@ -33,6 +34,7 @@ CommandCB commandCallbacks[] = {
 };
 
 char *commandTriggers[] = {
+	"play",
 	"list-moves",
 	"random-move",
 	"performance-test",
@@ -52,6 +54,7 @@ char *commandTriggers[] = {
 };
 
 char *commandDescription[] = {
+	"play: plays the move that you specify. The computer will respond by playing a move back. Stupidly.",
 	"list-moves: generates all the moves from the current board position and display them.",
 	"random-move: generates all the moves from the current board position and applies one to the board.",
 	"performance-test: will print the time to generate and the number of generated positions to a specified depth.",
@@ -69,6 +72,21 @@ char *commandDescription[] = {
 	"todo: prints a todo list for the developers, largely unnecessary now they project is on Github",
 	"quit: quits from the chess engine back to your ::1ly terminal"
 };
+
+bool playCommand(int tokenCount, char **tokens) {
+	if(tokenCount == 0) {
+		printf("You have to specify a move as an additional parameter in algebraic chess notation.\n\n");
+		return true;
+	}
+	Move m;
+	if((m = notationToMove(pBoard, tokens[0]))) {
+		makeMove(pBoard, m);
+		Move reply = think();
+		makeMove(pBoard, reply);
+	}
+	
+	return true;
+}
 
 bool listMovesCommand(int tokenCount, char **tokens) {
 	MoveSet moves;
