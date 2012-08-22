@@ -517,8 +517,7 @@ void initializeMoveSet(Board *pBoard, MoveSet *pMoves) {
 }
 
 void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves) {
-	generateCapture(pBoard, pMoves);
-	generateTimid(pBoard, pMoves);
+	generateMove(pBoard, pMoves);
 }
 
 void resetMoveSet(MoveSet *pMoves) {

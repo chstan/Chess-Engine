@@ -44,9 +44,9 @@ void makeMove(Board *pBoard, Move m) {
 			removeMaterial(pBoard, capturedPiece(m));
 	}
 	advanceState(pBoard, m);
-	if(!debugBoard(pBoard)) {
-		printMove(m);
-	}
+	// if(!debugBoard(pBoard)) {
+	// 		printMove(m);
+	// }
 }
 
 void unmakeMove(Board *pBoard, Move m) {
@@ -78,9 +78,9 @@ void unmakeMove(Board *pBoard, Move m) {
 			addMaterial(pBoard, capturedPiece(m));
 	}
 	rewindState(pBoard, m);
-	if(!debugBoard(pBoard)) {
-		printMove(m);
-	}
+	// if(!debugBoard(pBoard)) {
+	// 				printMove(m);
+	// }
 }
 
 void unmakeLastMove(Board *pBoard) {

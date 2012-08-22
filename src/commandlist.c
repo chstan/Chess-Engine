@@ -82,7 +82,7 @@ bool playCommand(int tokenCount, char **tokens) {
 	Move m;
 	if((m = notationToMove(pBoard, tokens[0]))) {
 		makeMove(pBoard, m);
-		Move reply = think();
+		Move reply = think(pBoard);
 		makeMove(pBoard, reply);
 	}
 	
