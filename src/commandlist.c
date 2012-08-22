@@ -15,6 +15,7 @@
 #include "search/search.h"
 
 CommandCB commandCallbacks[] = {
+	playCommand,
 	listMovesCommand,
 	randomMoveCommand,
 	performanceTestCommand,
