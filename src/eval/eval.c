@@ -17,6 +17,6 @@ float evaluateNaive(Board *pBoard) {
 	float materialDelta = (float) pBoard->info.whiteMaterial - pBoard->info.blackMaterial;
 	
 	float value = materialDelta + (-0.01 * doubledPawns(pBoard)) + (-0.02 * tripledPawns(pBoard)) + (0.05 * passedPawns(pBoard)) + (0.03 * outsidePassedPawns(pBoard));
-	//return (pBoard->info.toPlay == W) ? value : -value;
-	return value;
+	return (pBoard->info.toPlay == W) ? value : -value;
+	//return value;
 }

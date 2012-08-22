@@ -16,7 +16,7 @@ Move bestMoves[MAX_PLY][MAX_PLY];
 Move think(Board *pBoard) {
 	// a really stupid search for the moment
 	// should manage its time and use an iterative deepening method
-	int searchDepth = 7;
+	int searchDepth = 6;
 	
 	int score = alphaBeta(0, searchDepth, -INFTY, INFTY);
 	printf("%d\n", score);
@@ -42,21 +42,23 @@ int alphaBeta(int ply, int depth, int alpha, int beta) {
 	initializeMoveSetQuiet(pBoard, &moves);
 	
 	for(int i = 0; i < moves.totalMoves; i++) {
-		makeMove(pBoard, moves.moveList[i]);
-		value = -alphaBeta(ply+1, depth-1, -beta, -alpha);
-		unmakeMove(pBoard, moves.moveList[i]);
-		
-		if(value >= beta)
-			return beta;
-		
-		if(value > alpha) {
-			alpha = value;
-			bestMoves[ply][ply] = moves.moveList[i];
+		if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
+			makeMove(pBoard, moves.moveList[i]);
+			value = -alphaBeta(ply+1, depth-1, -beta, -alpha);
+			unmakeMove(pBoard, moves.moveList[i]);
 			
-			for(int j = ply+1; j < bestMoveIndices[ply+1]; j++)
-				bestMoves[ply][j] = bestMoves[ply+1][j];
+			if(value >= beta)
+				return beta;
 			
-			bestMoveIndices[ply] = bestMoveIndices[ply+1];
+			if(value > alpha) {
+				alpha = value;
+				bestMoves[ply][ply] = moves.moveList[i];
+				
+				for(int j = ply+1; j < bestMoveIndices[ply+1]; j++)
+					bestMoves[ply][j] = bestMoves[ply+1][j];
+				
+				bestMoveIndices[ply] = bestMoveIndices[ply+1];
+			}
 		}
 	}
 	return alpha;
