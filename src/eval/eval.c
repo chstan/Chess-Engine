@@ -11,8 +11,8 @@ float evaluate(Board *pBoard) {
 
 float evaluateNaive(Board *pBoard) {
 	// obviously a bad evaluation function, but it's a start to test the search functions and the cohesion of the engine
-	float materialDelta = log((float) pBoard->info.whiteMaterial/pBoard->info.blackMaterial);
+	float materialDelta = (float) log((float) pBoard->info.whiteMaterial/pBoard->info.blackMaterial);
 	
 	float value = materialDelta + (-0.01 * doubledPawns(pBoard)) + (-0.02 * tripledPawns(pBoard)) + (0.05 * passedPawns(pBoard)) + (0.03 * outsidePassedPawns(pBoard));
-	return value;
+	return (pBoard->info.toPlay == WHITE) ? value : -value;
 }
