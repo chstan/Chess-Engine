@@ -6,9 +6,28 @@
 #include "../extglobals.h"
 #include "../bit.h"
 
+// TODO
+/*
+ * Rook, Bishop, Queen, Knight outposts and outpost value tables
+ * Material hash tables
+ * Pawn value hash tables
+ * Endgame hash tables
+ * Tempo Bonus, Lost tempo penalty
+ * Trapped rook no castling penalty
+ * Uncatchable pawns
+ *
+ * Maintain attack tables which should be incrementally updated
+ *
+ * Normalize scores with tunable constants, this will allow machine learning
+ * to tune the evaluators externally
+ */
+
+
 // we could generalize to x files, and should
 BitBoard passedPawn[2][64];
 BitBoard outsidePassedPawn[2][64];
+BitBoard kingSafetyZone[2][64];
+
 
 void initEval() {
 	for(int rank = 0; rank < 8; rank++) {
@@ -110,5 +129,6 @@ int controlOfCenter(Board *pBoard);
 
 int control(Board *pBoard, int square) {
 	// we count the number of white pieces attacking the square, and subtract the number of black pieces.
+	assert(false);
 	return 0;
 }
