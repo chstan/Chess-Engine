@@ -29,6 +29,7 @@ BitBoard passedPawn[2][64];
 BitBoard outsidePassedPawn[2][64];
 
 BitBoard kingSafetyZone[2][64];
+BitBoard pawnShield[2][64];
 
 
 void initEval() {
