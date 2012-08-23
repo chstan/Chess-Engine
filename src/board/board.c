@@ -144,6 +144,15 @@ bool debugBoard(Board *pBoard) {
 		}
 	}
 	
+	// material checks
+	int materialB = pBoard->info.blackMaterial;
+	int materialW = pBoard->info.whiteMaterial;
+	
+	updateMaterialFromBB(pBoard);
+	
+	assert(materialB == pBoard->info.blackMaterial);
+	assert(materialW == pBoard->info.whiteMaterial);
+	
 	// array of kings
 	if(pBoard->position.pieces[WHITE_KING] == 1) {
 		if(!(BITSET(pBoard->position.kings[BLACK]) & pBoard->position.pieceBB[BLACK_KING])) {
@@ -283,8 +292,6 @@ void enPassant(Board *pBoard, int color) {
 	
 	// the piece will either be a white pawn or a black pawn, but
 	// we can get it either way here
-	int piece = pBoard->position.square[index];
-	removeMaterial(pBoard, piece);
 	if(color == WHITE) {
 		setEmptyAt(pBoard, index - 8, BLACK_PAWN);
 	} else {

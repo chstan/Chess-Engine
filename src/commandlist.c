@@ -82,8 +82,15 @@ bool playCommand(int tokenCount, char **tokens) {
 	Move m;
 	if((m = notationToMove(pBoard, tokens[0]))) {
 		makeMove(pBoard, m);
+
 		Move reply = think(pBoard);
+		char *replyString = moveToNotation(pBoard, reply);
+		if(replyString) {
+			printf("%s\n", replyString);
+			free(replyString);
+		}
 		makeMove(pBoard, reply);
+		displayBoard(pBoard);
 	}
 	
 	return true;
