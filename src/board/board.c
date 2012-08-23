@@ -145,13 +145,18 @@ bool debugBoard(Board *pBoard) {
 	}
 	
 	// array of kings
-	if(!(BITSET(pBoard->position.kings[BLACK]) & pBoard->position.pieceBB[BLACK_KING])) {
-		boardConsistent = false;
-		printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
+	if(pBoard->position.pieces[WHITE_KING] == 1) {
+		if(!(BITSET(pBoard->position.kings[BLACK]) & pBoard->position.pieceBB[BLACK_KING])) {
+			boardConsistent = false;
+			printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
+		}
 	}
-	if(!(BITSET(pBoard->position.kings[WHITE]) & pBoard->position.pieceBB[WHITE_KING])) {
-		boardConsistent = false;
-		printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
+	
+	if(pBoard->position.pieces[BLACK_KING] == 1) {
+		if(!(BITSET(pBoard->position.kings[WHITE]) & pBoard->position.pieceBB[WHITE_KING])) {
+			boardConsistent = false;
+			printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
+		}
 	}
 	
 	// array of pieces
