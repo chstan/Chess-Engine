@@ -10,6 +10,6 @@
 
 Move think(Board *pBoard);
 
-int alphaBeta(int ply, int depth, int alpha, int beta);
+float alphaBeta(int ply, int depth, float alpha, float beta, bool white);
 
 #endif
