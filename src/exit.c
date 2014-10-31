@@ -4,6 +4,6 @@
 #include "extglobals.h"
 
 void prepareForExit() {
-	free(pBoard);
-	return;
+    free(pBoard);
+    return;
 }

@@ -7,29 +7,29 @@
 #include "../board/board.h"
 
 typedef struct {
-	Move moveList[MAX_MOVES_PER_PLY];
-	Move killerList[MAX_KILLERS_PER_PLY];
-	int timidIndex;
-	int totalMoves;
-	int moveIter;
-	int currentMoveIndex;
-	
-	int totalKillers;
-	int currentKillerIndex;
-	int killerIter;
+    Move moveList[MAX_MOVES_PER_PLY];
+    Move killerList[MAX_KILLERS_PER_PLY];
+    int timidIndex;
+    int totalMoves;
+    int moveIter;
+    int currentMoveIndex;
+
+    int totalKillers;
+    int currentKillerIndex;
+    int killerIter;
 } MoveSet;
 
 // void generateCheck(Board *pBoard);
- 
+
 // BitBoard attacks(Board *pBoard, int attackeeIndex);
 // BitBoard checks(Board *pBoard, int kingIndex);
 
 // void extractMoves(Board *pBoard);
 
 
-void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces, 
-	int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color));
-	
+void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces,
+    int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color));
+
 void generateTimid(Board *pBoard, MoveSet *pMoves);
 
 void generateCapture(Board *pBoard, MoveSet *pMoves);
@@ -43,7 +43,7 @@ void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves);
 /**
  *\brief resetMoveSet
  *
- *	resetMoveSet is an auxilliary function
+ *  resetMoveSet is an auxilliary function
  *  which effectively clears the state of the
  *  moveSet passed in as the parameter.
  *
@@ -55,7 +55,7 @@ void resetMoveSet(MoveSet *pMoves);
 /**
  *\brief nextMove
  *
- *	nextMove returns the next unread move from the
+ *  nextMove returns the next unread move from the
  *  moveSet and updates the iterator to point to the
  *  next spot in the array. It also asserts that you are not
  *  trying to read an unwritten move from the moveSet.
@@ -68,7 +68,7 @@ Move nextMove(MoveSet *pMoves);
 /**
  *\brief writeMove
  *
- *	writeMove adds a non-killer move to a moveSet
+ *  writeMove adds a non-killer move to a moveSet
  *  and leaves the moveSet in a consistent state, updating
  *  iterators as necessary.
  *
@@ -81,7 +81,7 @@ void writeMove(MoveSet *pMoves, Move m);
 /**
  *\brief writeKiller
  *
- *	writeKiller adds a killer move to a moveSet
+ *  writeKiller adds a killer move to a moveSet
  *  and leaves the moveSet in a consistent state, updating
  *  iterators as necessary.
  *
@@ -103,4 +103,3 @@ bool checks(Board *pBoard, int side);
 
 
 #endif
-

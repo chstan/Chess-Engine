@@ -8,22 +8,22 @@
 #define ACTUALLY_RANDOM
 
 void initRandom() {
-	#ifdef ACTUALLY_RANDOM
-	srand(time(NULL));
-	#else
-	srand(0);
-	#endif
-	randomInitialized = true;
+    #ifdef ACTUALLY_RANDOM
+    srand(time(NULL));
+    #else
+    srand(0);
+    #endif
+    randomInitialized = true;
 }
 
 int randomi(const int lowerLimit, const int upperLimit) {
-	assert(randomInitialized);
-	return lowerLimit + (rand() % upperLimit);
+    assert(randomInitialized);
+    return lowerLimit + (rand() % upperLimit);
 }
 
 float randomf() {
-	assert(randomInitialized);
-	unsigned int bits = rand();
-	float f = *(float *)&bits;
-	return f;
+    assert(randomInitialized);
+    unsigned int bits = rand();
+    float f = *(float *)&bits;
+    return f;
 }

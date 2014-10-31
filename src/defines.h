@@ -55,7 +55,7 @@ typedef unsigned long long BitBoard;
 typedef unsigned char UCHAR;
 
 enum ALERTS {
-	UNKNOWN_COMMAND
+    UNKNOWN_COMMAND
 };
 
 #endif

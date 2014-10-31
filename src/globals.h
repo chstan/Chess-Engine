@@ -32,7 +32,7 @@ const int A8 = 56; const int B8 = 57; const int C8 = 58; const int D8 = 59;
 const int E8 = 60; const int F8 = 61; const int G8 = 62; const int H8 = 63;
 
 const char* SQUARENAME[64] = {
-	"a1","b1","c1","d1","e1","f1","g1","h1",
+    "a1","b1","c1","d1","e1","f1","g1","h1",
   "a2","b2","c2","d2","e2","f2","g2","h2",
   "a3","b3","c3","d3","e3","f3","g3","h3",
   "a4","b4","c4","d4","e4","f4","g4","h4",
@@ -43,25 +43,25 @@ const char* SQUARENAME[64] = {
 };
 
 const int FILES[64] = {
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8,
-	1, 2, 3, 4, 5, 6, 7, 8
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8,
+    1, 2, 3, 4, 5, 6, 7, 8
 };
 
 const int RANKS[64] = {
-	1, 1, 1, 1, 1, 1, 1, 1,
-	2, 2, 2, 2, 2, 2, 2, 2,
-	3, 3, 3, 3, 3, 3, 3, 3,
-	4, 4, 4, 4, 4, 4, 4, 4,
-	5, 5, 5, 5, 5, 5, 5, 5,
-	6, 6, 6, 6, 6, 6, 6, 6,
-	7, 7, 7, 7, 7, 7, 7, 7,
-	8, 8, 8, 8, 8, 8, 8, 8
+    1, 1, 1, 1, 1, 1, 1, 1,
+    2, 2, 2, 2, 2, 2, 2, 2,
+    3, 3, 3, 3, 3, 3, 3, 3,
+    4, 4, 4, 4, 4, 4, 4, 4,
+    5, 5, 5, 5, 5, 5, 5, 5,
+    6, 6, 6, 6, 6, 6, 6, 6,
+    7, 7, 7, 7, 7, 7, 7, 7,
+    8, 8, 8, 8, 8, 8, 8, 8
 };
 
 const BitBoard fullBoard = -1LL;
@@ -104,7 +104,7 @@ const unsigned char QUEEN = 4;
 const unsigned char KING = 5;
 const unsigned char TOTAL = 6;
 
-																							// binary representations
+                                                                                            // binary representations
 const unsigned char EMPTY = 0;                //  0000
 const unsigned char WHITE_PAWN = 1;           //  0001
 const unsigned char WHITE_KING = 2;           //  0010
@@ -120,9 +120,9 @@ const unsigned char BLACK_ROOK = 14;          //  1110
 const unsigned char BLACK_QUEEN = 15;         //  1111
 
 const char *PIECE_NAMES[16] = {"   ", " P ", " K ", " N ", "   ", " B ", " R ", " Q ",
-															 "   ", "*P*", "*K*", "*N*", "   ", "*B*", "*R*", "*Q*"};
+                                                             "   ", "*P*", "*K*", "*N*", "   ", "*B*", "*R*", "*Q*"};
 
-const char *PIECE_NAMES_FULL[16] = {"empty square", "white pawn", "white king", "white knight", "N/A", "white bishop", "white rook", "white queen",																    "empty square", "black pawn", "black king", "black knight", "N/A", "black bishop", "black rook", "black queen"};
+const char *PIECE_NAMES_FULL[16] = {"empty square", "white pawn", "white king", "white knight", "N/A", "white bishop", "white rook", "white queen",                                                                 "empty square", "black pawn", "black king", "black knight", "N/A", "black bishop", "black rook", "black queen"};
 
 const int PAWN_VALUE = 100;
 const int KNIGHT_VALUE = 325;
@@ -133,8 +133,8 @@ const int KING_VALUE = 90000;
 const int CHECK_MATE = 90000;
 
 int const PIECEVALUES[16] =
-	{0, 100, 90000, 325, 0, 325, 500, 1050,
-	 0, 100, 90000, 325, 0, 325, 500, 1050}; 
+    {0, 100, 90000, 325, 0, 325, 500, 1050,
+     0, 100, 90000, 325, 0, 325, 500, 1050};
 
 int GS1B[256];
 

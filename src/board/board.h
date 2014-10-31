@@ -9,62 +9,62 @@
 
 
 typedef struct {
-	BitBoard pieceBB[16];
-	
-	BitBoard whiteOccupied;
-	BitBoard blackOccupied;
-	BitBoard occupied;
-	
-	int square[64];
-	int kings[2];
-	
-	signed char pieces[16];
-	signed char totalWhite;
-	signed char totalBlack;
-	signed char totalPieces;
+    BitBoard pieceBB[16];
+
+    BitBoard whiteOccupied;
+    BitBoard blackOccupied;
+    BitBoard occupied;
+
+    int square[64];
+    int kings[2];
+
+    signed char pieces[16];
+    signed char totalWhite;
+    signed char totalBlack;
+    signed char totalPieces;
 } Position;
 
 typedef struct {
-	unsigned char castleWhite;
-	unsigned char castleBlack;
-	
-	// the en passant index
-	// represents where a pawn can capture to, rather than
-	// where the pawn actually is
-	int enPassantSquare;
-	int staleMoves;
-	
-	// this doesn't make me happy, but it works for the moment
-	int move;
-	
+    unsigned char castleWhite;
+    unsigned char castleBlack;
+
+    // the en passant index
+    // represents where a pawn can capture to, rather than
+    // where the pawn actually is
+    int enPassantSquare;
+    int staleMoves;
+
+    // this doesn't make me happy, but it works for the moment
+    int move;
+
 } MoveInfo;
 
 typedef struct {
-	int material;
-	int whiteMaterial;
-	int blackMaterial;
-	
-	unsigned char toPlay;
-	MoveInfo state[MAX_MOVES_PER_GAME];
+    int material;
+    int whiteMaterial;
+    int blackMaterial;
 
-	// indexs into the array, gives us the number
-	// of moves that have elapsed so far
-	unsigned int currentMove;	
+    unsigned char toPlay;
+    MoveInfo state[MAX_MOVES_PER_GAME];
 
-	bool displayRotated;
+    // indexs into the array, gives us the number
+    // of moves that have elapsed so far
+    unsigned int currentMove;
+
+    bool displayRotated;
 } BoardInfo;
 
 typedef struct {
-	Position position;
-	BoardInfo info;
+    Position position;
+    BoardInfo info;
 } Board;
 
 //--------------------RESET AND DISPLAY----------------------
 
 void resetBoard(Board *pBoard);
 
-void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW, 
-	int castleB, int enPassantSquare, int turnCount);
+void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW,
+    int castleB, int enPassantSquare, int turnCount);
 
 void displayBoard(Board *pBoard);
 

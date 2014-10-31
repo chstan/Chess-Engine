@@ -7,16 +7,16 @@
  *  -----------
  * Wrapper struct for the things required to contain a FEN record.
  * Although we could make the memory footprint smaller, we'd have to dynamically
- * allocate the strings anyway, so we don't save memory, and this way is faster and 
+ * allocate the strings anyway, so we don't save memory, and this way is faster and
  * more convenient.
 **/
 typedef struct {
-	char boardString[73];
-	char turnChar;
-	char castleString[5];
-	char enPassantString[3];
-	int halfmoveClock;
-	int fullmoveClock;
+    char boardString[73];
+    char turnChar;
+    char castleString[5];
+    char enPassantString[3];
+    int halfmoveClock;
+    int fullmoveClock;
 } FEN;
 
 /** Function: loadFromFEN

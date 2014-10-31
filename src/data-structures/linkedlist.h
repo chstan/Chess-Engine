@@ -2,9 +2,9 @@
 #define LINKEDLIST_H
 
 typedef struct {
-	void *next;
-	void *prev;
-	void *payload;
+    void *next;
+    void *prev;
+    void *payload;
 } listNode;
 
 

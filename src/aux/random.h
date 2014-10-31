@@ -14,14 +14,14 @@ void initRandom();
  * returns a random integer.
  *
  * Variants ?:
- * 	- random(int)
- *		- returns and integer between 0 and int (or between int and 0 if negative)
+ *  - random(int)
+ *      - returns and integer between 0 and int (or between int and 0 if negative)
  *
- *	- random(void)
- *		- returns 0 or 1 randomly with equal probability
- * 
- *	- random(int, int)
- *		- returns an integer in the range defined by the parameters
+ *  - random(void)
+ *      - returns 0 or 1 randomly with equal probability
+ *
+ *  - random(int, int)
+ *      - returns an integer in the range defined by the parameters
 **/
 int randomi(const int lowerLimit, const int upperLimit);
 

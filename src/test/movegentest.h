@@ -6,12 +6,12 @@
 #include "../move/movegen.h"
 
 typedef struct {
-	U64 moves;
-	U64 captures;
-	U64 enPassants;
-	U64 promotions;
-	U64 checks;
-	U64 castles;
+    U64 moves;
+    U64 captures;
+    U64 enPassants;
+    U64 promotions;
+    U64 checks;
+    U64 castles;
 } MoveCount;
 
 
