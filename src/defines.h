@@ -22,6 +22,8 @@
 
 #define DEBUG
 
+#define INFTY 999999
+
 #define NO_PIECE 0
 #define E 0
 #define WP 1

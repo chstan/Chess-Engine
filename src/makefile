@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -g -Wall -pedantic -O0
+CFLAGS = -g -Wall -Wextra -fstack-protector -pedantic -O3
 
 vpath %.h board
 vpath %.h move

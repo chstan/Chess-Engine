@@ -9,6 +9,7 @@
 #include "move/move.h"
 #include "aux/random.h"
 #include "eval/evalhelpers.h"
+#include "zobrist.h"
 
 void init() {
     dataInit();
@@ -18,6 +19,9 @@ void init() {
     initEval();
 
     initRandom();
+
+    initHashTable();
+
     return;
 }
 

@@ -379,7 +379,7 @@ void generateTimid(Board *pBoard, MoveSet *pMoves) {
         endpiece = BQ;
     } else {
         piece = WP;
-    endpiece = WQ;
+        endpiece = WQ;
     }
 
     for (; piece <= endpiece; piece++) {

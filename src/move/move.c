@@ -44,7 +44,7 @@ void makeMove(Board *pBoard, Move m) {
             removeMaterial(pBoard, capturedPiece(m));
     }
     advanceState(pBoard, m);
-    if(!debugBoard(pBoard)) {
+    if(false && !debugBoard(pBoard)) {
             printMove(m);
     }
 }
@@ -78,7 +78,7 @@ void unmakeMove(Board *pBoard, Move m) {
             addMaterial(pBoard, capturedPiece(m));
     }
     rewindState(pBoard, m);
-    if(!debugBoard(pBoard)) {
+    if(false && !debugBoard(pBoard)) {
                     printMove(m);
     }
 }
@@ -92,7 +92,71 @@ void advanceState(Board *pBoard, Move m) {
     int currentMove = pBoard->info.currentMove;
     int square;
 
+    U64 old_z_key = pBoard->info.state[currentMove]._zobrist_key;
+    // still need to update the Zobrist key
+
     pBoard->info.state[currentMove+1].move = m;
+
+    // handle piece movement Zobrist modifications
+    if (whiteCastle(m) | blackCastle(m)) {
+        // some castling happened!
+        UCHAR to_idx = to(m);
+        if (to_idx == C1) {
+            // WHITE O-O-O
+            old_z_key ^= piece_keys[WHITE_ROOK][A1];
+            old_z_key ^= piece_keys[WHITE_ROOK][D1];
+            old_z_key ^= piece_keys[WHITE_KING][E1];
+            old_z_key ^= piece_keys[WHITE_ROOK][C1];
+        } else if (to_idx == G1) {
+            // WHITE O-O
+            old_z_key ^= piece_keys[WHITE_ROOK][F1];
+            old_z_key ^= piece_keys[WHITE_ROOK][H1];
+            old_z_key ^= piece_keys[WHITE_KING][E1];
+            old_z_key ^= piece_keys[WHITE_ROOK][G1];
+        } else if (to_idx == C8) {
+            // BLACK O-O-O
+            old_z_key ^= piece_keys[BLACK_ROOK][A1];
+            old_z_key ^= piece_keys[BLACK_ROOK][D1];
+            old_z_key ^= piece_keys[BLACK_KING][E1];
+            old_z_key ^= piece_keys[BLACK_ROOK][C1];
+        } else {
+            // BLACK O-O
+            old_z_key ^= piece_keys[BLACK_ROOK][F1];
+            old_z_key ^= piece_keys[BLACK_ROOK][H1];
+            old_z_key ^= piece_keys[BLACK_KING][E1];
+            old_z_key ^= piece_keys[BLACK_ROOK][G1];
+        }
+    } else {
+        /* CASES:
+         * capture
+         *   en passant
+         * original piece movement
+         * promotion
+         *   with capture?
+         */
+
+        // remove the piece that moved from the key
+        old_z_key ^= piece_keys[movedPiece(m)][from(m)];
+
+        if(!(whiteEnPassant(m) | blackEnPassant(m))) {
+            if (capturedPiece(m)) old_z_key ^= piece_keys[capturedPiece(m)][to(m)];
+            if (promote(m)) {
+                // only add the new piece, remember we removed the
+                // moved piece already
+                old_z_key ^= piece_keys[promote(m)][to(m)];
+            } else {
+                // can just set the moved piece at the movement location
+                old_z_key ^= piece_keys[movedPiece(m)][to(m)];
+            }
+        } else {
+            // en passant
+            // the to field contains the destination of the capturing pawn
+            old_z_key ^= piece_keys[movedPiece(m)][to(m)];
+            // remove the captured pawn
+            int ep_capt_idx = (color(movedPiece(m)) == WHITE) ? to(m) - 8 : to(m) + 8;
+            old_z_key ^= piece_keys[capturedPiece(m)][ep_capt_idx];
+        }
+    }
 
     // update according to the fifty move rule
     if(capturedPiece(m) || movedPiece(m) % 8 == WHITE_PAWN) {
@@ -110,37 +174,67 @@ void advanceState(Board *pBoard, Move m) {
         pBoard->info.state[currentMove+1].enPassantSquare = INVALID_SQUARE;
     }
 
+    // en passant Zobrist modification
+    if (pBoard->info.state[currentMove].enPassantSquare != INVALID_SQUARE) {
+        old_z_key ^= ep_file_keys[FILE(pBoard->info.state[currentMove].enPassantSquare)];
+    }
+    if (pBoard->info.state[currentMove+1].enPassantSquare != INVALID_SQUARE) {
+        old_z_key ^= ep_file_keys[FILE(pBoard->info.state[currentMove+1].enPassantSquare)];
+    }
+
     // castling
     // white
-    pBoard->info.state[currentMove+1].castleWhite = pBoard->info.state[currentMove].castleWhite;
+    UCHAR old_white_castling_rights = pBoard->info.state[currentMove].castleWhite;
+    UCHAR old_black_castling_rights = pBoard->info.state[currentMove].castleBlack;
+    bool invalidated_zobrist = false;
+
+    pBoard->info.state[currentMove+1].castleWhite = old_white_castling_rights;
+
     if (movedPiece(m) == WHITE_ROOK || capturedPiece(m) == WHITE_ROOK) {
         if (movedPiece(m) == WHITE_ROOK) square = from(m);
         else square = to(m);
         if(square == A1) {
             pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OOO;
+            invalidated_zobrist = true;
         } else if (square == H1) {
             pBoard->info.state[currentMove+1].castleWhite &= ~CAN_CASTLE_OO;
+            invalidated_zobrist = true;
         }
     } else if (movedPiece(m) == WHITE_KING && from(m) == E1) {
         pBoard->info.state[currentMove+1].castleWhite = CANNOT_CASTLE;
+        invalidated_zobrist = true;
     }
     // black
-    pBoard->info.state[currentMove+1].castleBlack = pBoard->info.state[currentMove].castleBlack;
+    pBoard->info.state[currentMove+1].castleBlack = old_black_castling_rights;
     if (movedPiece(m) == BLACK_ROOK || capturedPiece(m) == BLACK_ROOK) {
         if (movedPiece(m) == BLACK_ROOK) square = from(m);
         else square = to(m);
         if (square == A8) {
             pBoard->info.state[currentMove+1].castleBlack &= ~CAN_CASTLE_OOO;
+            invalidated_zobrist = true;
         } else if (square == H8) {
             pBoard->info.state[currentMove+1].castleBlack &= ~CAN_CASTLE_OO;
+            invalidated_zobrist = true;
         }
     } else if(movedPiece(m) == BLACK_KING && from(m) == E8) {
         pBoard->info.state[currentMove+1].castleBlack = CANNOT_CASTLE;
+        invalidated_zobrist = true;
     }
+    if (invalidated_zobrist) {
+        old_z_key ^= castling_rights_keys[old_white_castling_rights +
+                                          4 * old_black_castling_rights];
+        UCHAR new_white_castling_rights = pBoard->info.state[currentMove+1].castleWhite;
+        UCHAR new_black_castling_rights = pBoard->info.state[currentMove+1].castleBlack;
+        old_z_key ^= castling_rights_keys[new_white_castling_rights +
+                                          4 * new_black_castling_rights];
+    }
+
 
     // update the move index and switch colors to play
     pBoard->info.currentMove++;
     assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
+
+    old_z_key ^= white_to_move_key;
     pBoard->info.toPlay ^= 1;
 }
 

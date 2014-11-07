@@ -52,6 +52,25 @@ void resetBoard(Board *pBoard) {
     return;
 }
 
+U64 fullZobristKey(Board *pBoard) {
+    U64 key = 0;
+    for (int sq_idx = 0; sq_idx < 64; sq_idx++) {
+        UCHAR at_sq = pBoard->position.square[sq_idx];
+        if(isPiece(at_sq)) {
+            key ^= piece_keys[at_sq][sq_idx];
+        }
+    }
+    MoveInfo m_info = pBoard->info.state[pBoard->info.currentMove];
+    key ^= castling_rights_keys[(m_info.castleWhite + 4*m_info.castleBlack)];
+
+    if (pBoard->info.toPlay == W) key ^= white_to_move_key;
+
+    int ep_square = m_info.enPassantSquare;
+    if (ep_square != INVALID_SQUARE) key ^= ep_file_keys[FILE(ep_square)];
+
+    return key;
+}
+
 void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW,
 int castleB, int enPassantSquare, int turnCount) {
 
@@ -68,6 +87,9 @@ int castleB, int enPassantSquare, int turnCount) {
     pBoard->info.state[pBoard->info.currentMove].castleBlack = castleB;
     pBoard->info.state[pBoard->info.currentMove].enPassantSquare = enPassantSquare;
     pBoard->info.state[pBoard->info.currentMove].staleMoves = staleMoves;
+
+    // rebuild Zobrist key
+    pBoard->info.state[pBoard->info.currentMove]._zobrist_key = fullZobristKey(pBoard);
     return;
 }
 
