@@ -14,7 +14,6 @@
 void init() {
     dataInit();
     moveTableInit();
-    boardInit();
 
     initEval();
 
@@ -22,6 +21,7 @@ void init() {
 
     initHashTable();
 
+    boardInit();
     return;
 }
 
