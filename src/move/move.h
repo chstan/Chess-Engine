@@ -77,4 +77,12 @@ void advanceState(Board *pBoard, Move m);
 
 void rewindState(Board *pBoard, Move m);
 
+/** Function: compMove
+ *  ------------------
+ * compMove is a comparison operator for moves, useful for when moves have to be
+ * sorted according to *approximately* how good they might be at first glance.
+ * Subject to MUCH change.
+ **/
+int compMove (const void* p_move_a, const void* p_move_b);
+
 #endif

@@ -139,7 +139,9 @@ bool debugBoard(Board *pBoard) {
         if(currentPiece != EMPTY) {
             if(!(BITSET(i) & pBoard->position.pieceBB[currentPiece])) {
                 boardConsistent = false;
-                printf("The array of squares reports a %s at %s, but the bitboard is empty.\n", PIECE_NAMES_FULL[currentPiece], SQUARENAME[i]);
+                printf("The array of squares reports a %s at %s,"
+                       " but the bitboard is empty.\n",
+                       PIECE_NAMES_FULL[currentPiece], SQUARENAME[i]);
             }
         }
     }
@@ -150,8 +152,14 @@ bool debugBoard(Board *pBoard) {
 
     updateMaterialFromBB(pBoard);
 
-    assert(materialB == pBoard->info.blackMaterial);
-    assert(materialW == pBoard->info.whiteMaterial);
+    if (materialB != pBoard->info.blackMaterial ||
+        materialW != pBoard->info.whiteMaterial) {
+        printf("Material values are not consistent. WP%d WA%d BP%d BA%d",
+               materialW, pBoard->info.whiteMaterial,
+               materialB, pBoard->info.blackMaterial);
+    }
+    //assert(materialB == pBoard->info.blackMaterial);
+    //assert(materialW == pBoard->info.whiteMaterial);
 
     // array of kings
     if(pBoard->position.pieces[WHITE_KING] == 1) {
@@ -521,20 +529,23 @@ void updateBBFromSquares(Board *pBoard) {
 }
 
 void updateMaterialFromBB(Board *pBoard) {
-    pBoard->info.whiteMaterial = countBits(pBoard->position.pieceBB[WHITE_PAWN]) * PAWN_VALUE
-                                                         + countBits(pBoard->position.pieceBB[WHITE_BISHOP]) * BISHOP_VALUE
-                                                         + countBits(pBoard->position.pieceBB[WHITE_KNIGHT]) * KNIGHT_VALUE
-                                                         + countBits(pBoard->position.pieceBB[WHITE_ROOK]) * ROOK_VALUE
-                                                         + countBits(pBoard->position.pieceBB[WHITE_QUEEN]) * QUEEN_VALUE;
+    pBoard->info.whiteMaterial =
+        countBits(pBoard->position.pieceBB[WHITE_PAWN]) * PAWN_VALUE
+      + countBits(pBoard->position.pieceBB[WHITE_BISHOP]) * BISHOP_VALUE
+      + countBits(pBoard->position.pieceBB[WHITE_KNIGHT]) * KNIGHT_VALUE
+      + countBits(pBoard->position.pieceBB[WHITE_ROOK]) * ROOK_VALUE
+      + countBits(pBoard->position.pieceBB[WHITE_QUEEN]) * QUEEN_VALUE;
 
-    pBoard->info.blackMaterial = countBits(pBoard->position.pieceBB[BLACK_PAWN]) * PAWN_VALUE
-                                                         + countBits(pBoard->position.pieceBB[BLACK_BISHOP]) * BISHOP_VALUE
-                                                         + countBits(pBoard->position.pieceBB[BLACK_KNIGHT]) * KNIGHT_VALUE
-                                                         + countBits(pBoard->position.pieceBB[BLACK_ROOK]) * ROOK_VALUE
-                                                         + countBits(pBoard->position.pieceBB[BLACK_QUEEN]) * QUEEN_VALUE;
+    pBoard->info.blackMaterial =
+        countBits(pBoard->position.pieceBB[BLACK_PAWN]) * PAWN_VALUE
+      + countBits(pBoard->position.pieceBB[BLACK_BISHOP]) * BISHOP_VALUE
+      + countBits(pBoard->position.pieceBB[BLACK_KNIGHT]) * KNIGHT_VALUE
+      + countBits(pBoard->position.pieceBB[BLACK_ROOK]) * ROOK_VALUE
+      + countBits(pBoard->position.pieceBB[BLACK_QUEEN]) * QUEEN_VALUE;
 
-    pBoard->info.material = pBoard->info.whiteMaterial
-                                                - pBoard->info.blackMaterial;
+    pBoard->info.material =
+        pBoard->info.whiteMaterial
+      - pBoard->info.blackMaterial;
 
     return;
 }

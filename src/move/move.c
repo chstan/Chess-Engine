@@ -176,3 +176,17 @@ void printMove(Move m) {
     }
     printf("\n%s", footer);
 }
+
+int compMove (const void* p_move_a, const void* p_move_b) {
+    const Move move_a = *(const Move *)p_move_a;
+    const Move move_b = *(const Move *)p_move_b;
+
+    int cap_val_a = capturedPiece(move_a);
+    cap_val_a = (cap_val_a > 8) ? cap_val_a - 8 : cap_val_a;
+
+    int cap_val_b = capturedPiece(move_b);
+    cap_val_b = (cap_val_b > 8) ? cap_val_b - 8 : cap_val_b;
+
+
+    return -(cap_val_a - cap_val_b);
+}
