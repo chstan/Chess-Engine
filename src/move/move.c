@@ -106,25 +106,25 @@ void advanceState(Board *pBoard, Move m) {
             old_z_key ^= piece_keys[WHITE_ROOK][A1];
             old_z_key ^= piece_keys[WHITE_ROOK][D1];
             old_z_key ^= piece_keys[WHITE_KING][E1];
-            old_z_key ^= piece_keys[WHITE_ROOK][C1];
+            old_z_key ^= piece_keys[WHITE_KING][C1];
         } else if (to_idx == G1) {
             // WHITE O-O
             old_z_key ^= piece_keys[WHITE_ROOK][F1];
             old_z_key ^= piece_keys[WHITE_ROOK][H1];
             old_z_key ^= piece_keys[WHITE_KING][E1];
-            old_z_key ^= piece_keys[WHITE_ROOK][G1];
+            old_z_key ^= piece_keys[WHITE_KING][G1];
         } else if (to_idx == C8) {
             // BLACK O-O-O
             old_z_key ^= piece_keys[BLACK_ROOK][A1];
             old_z_key ^= piece_keys[BLACK_ROOK][D1];
             old_z_key ^= piece_keys[BLACK_KING][E1];
-            old_z_key ^= piece_keys[BLACK_ROOK][C1];
+            old_z_key ^= piece_keys[BLACK_KING][C1];
         } else {
             // BLACK O-O
             old_z_key ^= piece_keys[BLACK_ROOK][F1];
             old_z_key ^= piece_keys[BLACK_ROOK][H1];
             old_z_key ^= piece_keys[BLACK_KING][E1];
-            old_z_key ^= piece_keys[BLACK_ROOK][G1];
+            old_z_key ^= piece_keys[BLACK_KING][G1];
         }
     } else {
         /* CASES:
@@ -237,7 +237,16 @@ void advanceState(Board *pBoard, Move m) {
 
     pBoard->info.currentMove++;
 
+    // some debugging stuff
     assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
+
+    if (old_z_key != fullZobristKey(pBoard)) {
+        printf("\n");
+
+        printMove(m);
+        displayBoard(pBoard);
+    }
+
     assert(old_z_key == fullZobristKey(pBoard));
 }
 
