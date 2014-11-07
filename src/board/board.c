@@ -10,6 +10,9 @@
 
 void resetBoard(Board *pBoard) {
     for(int i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
+    for(int i = 0; i < MAX_MOVES_PER_GAME; i++) {
+        pBoard->info.state[i].enPassantSquare = INVALID_SQUARE;
+    }
 
     pBoard->position.square[A1] = WHITE_ROOK;
     pBoard->position.square[B1] = WHITE_KNIGHT;
@@ -90,6 +93,7 @@ int castleB, int enPassantSquare, int turnCount) {
 
     // rebuild Zobrist key
     pBoard->info.state[pBoard->info.currentMove]._zobrist_key = fullZobristKey(pBoard);
+
     return;
 }
 

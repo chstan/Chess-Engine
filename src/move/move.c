@@ -231,11 +231,14 @@ void advanceState(Board *pBoard, Move m) {
 
 
     // update the move index and switch colors to play
-    pBoard->info.currentMove++;
-    assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
-
-    old_z_key ^= white_to_move_key;
     pBoard->info.toPlay ^= 1;
+    old_z_key ^= white_to_move_key;
+    pBoard->info.state[currentMove+1]._zobrist_key = old_z_key;
+
+    pBoard->info.currentMove++;
+
+    assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
+    assert(old_z_key == fullZobristKey(pBoard));
 }
 
 void rewindState(Board *pBoard, Move m) {
