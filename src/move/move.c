@@ -115,16 +115,16 @@ void advanceState(Board *pBoard, Move m) {
             old_z_key ^= piece_keys[WHITE_KING][G1];
         } else if (to_idx == C8) {
             // BLACK O-O-O
-            old_z_key ^= piece_keys[BLACK_ROOK][A1];
-            old_z_key ^= piece_keys[BLACK_ROOK][D1];
-            old_z_key ^= piece_keys[BLACK_KING][E1];
-            old_z_key ^= piece_keys[BLACK_KING][C1];
+            old_z_key ^= piece_keys[BLACK_ROOK][A8];
+            old_z_key ^= piece_keys[BLACK_ROOK][D8];
+            old_z_key ^= piece_keys[BLACK_KING][E8];
+            old_z_key ^= piece_keys[BLACK_KING][C8];
         } else {
             // BLACK O-O
-            old_z_key ^= piece_keys[BLACK_ROOK][F1];
-            old_z_key ^= piece_keys[BLACK_ROOK][H1];
-            old_z_key ^= piece_keys[BLACK_KING][E1];
-            old_z_key ^= piece_keys[BLACK_KING][G1];
+            old_z_key ^= piece_keys[BLACK_ROOK][F8];
+            old_z_key ^= piece_keys[BLACK_ROOK][H8];
+            old_z_key ^= piece_keys[BLACK_KING][E8];
+            old_z_key ^= piece_keys[BLACK_KING][G8];
         }
     } else {
         /* CASES:
