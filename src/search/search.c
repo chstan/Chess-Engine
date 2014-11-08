@@ -70,7 +70,7 @@ float negaMax(int ply, int depth, float alpha, float beta, int color) {
 
     resetMoveSet(&moves);
     initializeMoveSetQuiet(pBoard, &moves);
-
+    qsort(&moves.moveList, moves.totalMoves, sizeof(Move), compMove);
 
     for (int i = 0; i < moves.totalMoves; i++) {
         if (!checks(pBoard, otherColor(pBoard->info.toPlay))) {
