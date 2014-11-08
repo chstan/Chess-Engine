@@ -120,6 +120,12 @@ void displayBoard(Board *pBoard) {
         printf("|  %d\n", pBoard->info.toPlay ? i+1 : 8-i);
     }
     printf("\t%s\n\n", divider);
+
+    if(pBoard->info.toPlay == W) {
+        printf("White to play.\n");
+    } else {
+        printf("Black to play.\n");
+    }
     printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
     if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CANNOT_CASTLE) printf("White cannot castle.\n");
     else {
