@@ -119,8 +119,8 @@ const unsigned char BLACK_BISHOP = 13;        //  1101
 const unsigned char BLACK_ROOK = 14;          //  1110
 const unsigned char BLACK_QUEEN = 15;         //  1111
 
-const char *PIECE_NAMES[16] = {"   ", " P ", " K ", " N ", "   ", " B ", " R ", " Q ",
-                                                             "   ", "*P*", "*K*", "*N*", "   ", "*B*", "*R*", "*Q*"};
+const char *PIECE_NAMES[16] = {"   ", "*P*", "*K*", "*N*", "   ", "*B*", "*R*", "*Q*",
+                               "   ", " P ", " K ", " N ", "   ", " B ", " R ", " Q "};
 
 const char *PIECE_NAMES_FULL[16] = {"empty square", "white pawn", "white king", "white knight", "N/A", "white bishop", "white rook", "white queen",                                                                 "empty square", "black pawn", "black king", "black knight", "N/A", "black bishop", "black rook", "black queen"};
 
