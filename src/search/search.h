@@ -8,8 +8,6 @@
 
 Move think(Board *pBoard);
 
-float alphaBeta(int ply, int depth, float alpha, float beta, bool white);
-
 float quiescentNegaMax(float alpha, float beta, int color);
 
 float negaMax(int ply, int depth, float alpha, float beta, int color);
