@@ -2,6 +2,14 @@
 
 #include "zobrist.h"
 
+U64 piece_keys[16][64];
+
+U64 castling_rights_keys[16];
+
+U64 white_to_move_key;
+
+U64 ep_file_keys[8];
+
 void initHashTable() {
     U64 temp;
 
@@ -22,3 +30,10 @@ void initHashTable() {
         ep_file_keys[file_idx] = (temp << 32) | rand();
     }
 }
+
+// ================= TRANSPOSITION TABLE ===================
+
+int elems_per_bucket = 1 << 2;
+int num_buckets = 1 << 18;
+
+//TTElem **buckets;
