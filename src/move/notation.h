@@ -27,4 +27,19 @@ Move notationToMove(Board *pBoard, char *notation);
 **/
 char *moveToNotation(Board *pBoard, Move m);
 
+/** Function coord_notation_to_move
+ *  -------------------------------
+ * The same as notationToMove, but instead of using algebraic notation we use
+ * coordinate location, which is always specified as startsquare - endsquare
+ **/
+Move coord_notation_to_move(Board *pBoard, char *notation);
+
+/** Function move_to_coord_notation
+ *  -------------------------------
+ * The same as moveToNotation, but instead of using algebraic notation we use
+ * coordinate location, which is always specified as startsquare - endsquare
+ **/
+char *move_to_coord_notation(Board *pBoard, Move m);
+
+
 #endif

@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <string.h>
 
+#include "uci.h"
 #include "engine.h"
 #include "defines.h"
 #include "globals.h"
@@ -18,12 +20,20 @@
  * to prepare for exit.
  */
 int main (int argc, char const *argv[]) {
-    printf("%s\n",ENGINE_VERSION);
+    if (argc == 1) {
+        init();
 
-    init();
+        printf("%s\n",ENGINE_VERSION);
 
-    readCommands();
+        readCommands();
+        prepareForExit();
+    } else {
+        if (argc == 2 && !strcmp(argv[1], "--uci")) {
+            // check if a UCI board wants to use the engine
+            uci_loop();
+        }
+        // otherwise exit
+    }
 
-    prepareForExit();
     return 0;
 }

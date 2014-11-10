@@ -25,6 +25,12 @@ typedef struct {
 **/
 void loadFromFEN(Board *pBoard, FEN *record);
 
+/** Function: FENFromLine
+ *  ---------------------
+ * parses a string into FEN
+**/
+FEN *FENFromLine(const char *fen_string);
+
 /** Function: getFENFromFile
  *  ------------------------
  * getFENFromFile takes a string containing a filename and returns it as a char *.

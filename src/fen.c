@@ -8,7 +8,7 @@
 #include "defines.h"
 #include "extglobals.h"
 
-static FEN *FENFromLine(char *line) {
+FEN *FENFromLine(const char *line) {
     char boardStringTemp[73];
     char turnCharTemp;
     char castleStringTemp[5];

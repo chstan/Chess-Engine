@@ -279,6 +279,133 @@ unsigned int getPromo(UCHAR piece, char *notation) {
     return NO_PIECE;
 }
 
+Move coord_notation_to_move(Board *pBoard, char *notation) {
+    assert(strlen(notation) >= 4);
+    char from_str[3];
+    char to_str[3];
+    from_str[0] = notation[0];
+    from_str[1] = notation[1];
+    from_str[2] = '\0';
+    to_str[0] = notation[2];
+    to_str[1] = notation[3];
+    to_str[2] = '\0';
+
+    int from_sq_idx = getSquare(from_str);
+    int to_sq_idx = getSquare(to_str);
+    UCHAR moved_piece = pBoard->position.square[from_sq_idx];
+    UCHAR capt_piece = pBoard->position.square[to_sq_idx];
+
+    // could be an en passant
+    if (pBoard->info.state[pBoard->info.currentMove].enPassantSquare == to_sq_idx) {
+        // the piece captured 'like a pawn'
+        if (FILE(to_sq_idx) != FILE(from_sq_idx)) {
+            // the piece is a pawn
+            if (moved_piece == WP || moved_piece == BP) {
+                // actually an en passant capture
+                capt_piece = moved_piece == WP ? BP : WP;
+                int color = color(moved_piece);
+                return moveF(color == WHITE, color == BLACK, 0, 0, 0,
+                             capt_piece, moved_piece, from_sq_idx, to_sq_idx);
+            }
+        }
+    }
+
+    // now we correctly have computed the from square field, the to square
+    // field, and the captured piece field. Only have to worry about captures
+    // and promotions
+    if (strlen(notation) == 5) {
+        // a promotion
+        char promo_char = toupper(notation[4]);
+        UCHAR promo_piece = NO_PIECE;
+        if (color(moved_piece) == W) {
+            switch (promo_char) {
+            case 'Q':
+                promo_piece = BQ;
+                break;
+            case 'R':
+                promo_piece = BR;
+                break;
+            case 'B':
+                promo_piece = BB;
+                break;
+            case 'N':
+                promo_piece = BN;
+                break;
+            }
+        }
+        if (color(moved_piece) == B) {
+            switch (promo_char) {
+            case 'Q':
+                promo_piece = WQ;
+                break;
+            case 'R':
+                promo_piece = WR;
+                break;
+            case 'B':
+                promo_piece = WB;
+                break;
+            case 'N':
+                promo_piece = WN;
+                break;
+            }
+        }
+        return moveF(0, 0, 0, 0, promo_piece, capt_piece,
+                     moved_piece, from_sq_idx, to_sq_idx);
+    }
+    // castling
+    if (from_sq_idx == E1 && moved_piece == WK) {
+        // could be white castling
+        if (to_sq_idx == C1) {
+            return queenSide(W);
+        } else if (to_sq_idx == G1) {
+            return kingSide(W);
+        }
+
+    } else if (from_sq_idx == E8 && moved_piece == BK) {
+        // could be black castling
+        if (to_sq_idx == C8) {
+            return queenSide(B);
+        } else if (to_sq_idx == G8) {
+            return kingSide(B);
+        }
+    }
+
+    // nothing special
+    return moveF(0, 0, 0, 0, 0, capt_piece, moved_piece, from_sq_idx, to_sq_idx);
+}
+
+char *move_to_coord_notation(Board *pBoard, Move m) {
+    // just have to generate the from and to squares and potentially
+    // a promotion delimiter
+    char *from_str = strdup(SQUARENAME[from(m)]);
+    char *to_str = strdup(SQUARENAME[to(m)]);
+    char *notation = NULL;
+    if (promote(m)) {
+        // need to make a five character long string
+        notation = malloc(6);
+        notation[0] = from_str[0];
+        notation[1] = from_str[1];
+        notation[2] = to_str[0];
+        notation[3] = to_str[1];
+        char promo_char = tolower(getPieceName(promote(m)));
+        assert(promo_char != '?');
+
+        notation[4] = promo_char;
+        notation[5] = '\0';
+    } else {
+        notation = malloc(5);
+        notation[0] = from_str[0];
+        notation[1] = from_str[1];
+        notation[2] = to_str[0];
+        notation[3] = to_str[1];
+        notation[4] = '\0';
+    }
+
+    free(from_str);
+    free(to_str);
+    return notation;
+}
+
 Move notationToMove(Board *pBoard, char *notation) {
     unsigned char color = pBoard->info.toPlay;
     if(!strcmp(notation, "O-O-O")) {
