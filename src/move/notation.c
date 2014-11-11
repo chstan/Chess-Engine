@@ -133,7 +133,7 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
     return notation;
 }
 
-char *castleMoveToNotation(Board *pBoard, Move m) {
+char *castleMoveToNotation(Move m) {
     if(from(m) == E1) {
         // white
         if(to(m) == C1)
@@ -167,7 +167,7 @@ char *disambiguateOriginFromMove(Board *pBoard, UCHAR piece, int destination, Mo
 
 char *moveToNotation(Board *pBoard, Move m) {
     if(whiteCastle(m) || blackCastle(m))
-        return castleMoveToNotation(pBoard, m);
+        return castleMoveToNotation(m);
 
     UCHAR piece = movedPiece(m);
     int color = color(piece);
@@ -203,7 +203,7 @@ bool isCapture(char *notation) {
     return strchr(notation, 'x') != NULL;
 }
 
-unsigned int getDestination(Board *pBoard, UCHAR piece, char *notation) {
+unsigned int getDestination(char *notation) {
     char *end = notation + strlen(notation) - 1;
     while(end != notation && !isalpha(*end)) end--;
     //if((end == notation && strlen(end) != 2) || strlen(end) < 2) return INVALID_SQUARE;
@@ -374,7 +374,7 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
     return moveF(0, 0, 0, 0, 0, capt_piece, moved_piece, from_sq_idx, to_sq_idx);
 }
 
-char *move_to_coord_notation(Board *pBoard, Move m) {
+char *move_to_coord_notation(Move m) {
     // just have to generate the from and to squares and potentially
     // a promotion delimiter
     char *from_str = strdup(SQUARENAME[from(m)]);
@@ -419,31 +419,31 @@ Move notationToMove(Board *pBoard, char *notation) {
     if(controlChar == 'K') {
         piece = (color == WHITE) ? WHITE_KING : BLACK_KING;
         orig = pBoard->position.kings[color];
-        dest = getDestination(pBoard, piece, notation+1);
+        dest = getDestination(notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'Q') {
         piece = (color == WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
-        dest = getDestination(pBoard, piece, notation+1);
+        dest = getDestination(notation+1);
         orig = getOrigin(pBoard, piece, dest, notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'B') {
         piece = (color == WHITE) ? WHITE_BISHOP : BLACK_BISHOP;
-        dest = getDestination(pBoard, piece, notation+1);
+        dest = getDestination(notation+1);
         orig = getOrigin(pBoard, piece, dest, notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'R') {
         piece = (color == WHITE) ? WHITE_ROOK : BLACK_ROOK;
-        dest = getDestination(pBoard, piece, notation+1);
+        dest = getDestination(notation+1);
         orig = getOrigin(pBoard, piece, dest, notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'N') {
         piece = (color == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
-        dest = getDestination(pBoard, piece, notation+1);
+        dest = getDestination(notation+1);
         orig = getOrigin(pBoard, piece, dest, notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else {
         piece = (color == WHITE) ? WHITE_PAWN : BLACK_PAWN;
-        dest = getDestination(pBoard, piece, notation);
+        dest = getDestination(notation);
         orig = getPawnOrigin(pBoard, piece, dest, notation);
         unsigned int promo = 0;
         unsigned int capture = 0;

@@ -136,7 +136,7 @@ void uci_position(const char *position_str) {
     }
 }
 
-void uci_go(char *go_options) {
+void uci_go(__attribute__((unused)) char *go_options) {
     // seachmoves -- restrict search
     // ponder
     // wtime in msec
@@ -150,7 +150,7 @@ void uci_go(char *go_options) {
     // movetime -- search for x msec
     // infinite -- search until the stop command
     Move m = think(pBoard);
-    char *notation = move_to_coord_notation(pBoard, m);
+    char *notation = move_to_coord_notation(m);
     printf("bestmove %s\n", notation);
     free(notation);
 }

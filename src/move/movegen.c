@@ -73,7 +73,7 @@ bool moveset_contains(MoveSet *moves, Move m) {
     return false;
 }
 
-static void debugMoves(MoveSet *pMoves) {
+__attribute__((unused)) static void debugMoves(MoveSet *pMoves) {
     for(int currentMoveIndex = 0; currentMoveIndex < pMoves->totalMoves; currentMoveIndex++) {
         Move toCheck = pMoves->moveList[currentMoveIndex];
         for(int checkIndex = currentMoveIndex+1; checkIndex < pMoves->totalMoves; checkIndex++) {
@@ -509,7 +509,8 @@ bool checks(Board *pBoard, int side) {
 
 //===============UNFINISHED===================
 
-void generateCheck(Board *pBoard, MoveSet *pMoves) {
+void generateCheck(__attribute__((unused)) Board *pBoard,
+                   __attribute__((unused)) MoveSet *pMoves) {
 
     return;
 }

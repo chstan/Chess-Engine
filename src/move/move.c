@@ -77,7 +77,7 @@ void unmakeMove(Board *pBoard, Move m) {
         if (capturedPiece(m))
             addMaterial(pBoard, capturedPiece(m));
     }
-    rewindState(pBoard, m);
+    rewindState(pBoard);
     if(false && !debugBoard(pBoard)) {
                     printMove(m);
     }
@@ -255,7 +255,7 @@ void advanceState(Board *pBoard, Move m) {
     assert(old_z_key == fullZobristKey(pBoard));
 }
 
-void rewindState(Board *pBoard, Move m) {
+void rewindState(Board *pBoard) {
     // we don't need to do anything else, the board simply forgets about what
     // happened in the future board states and we roll back to the last
     pBoard->info.state[pBoard->info.currentMove].enPassantSquare = INVALID_SQUARE;

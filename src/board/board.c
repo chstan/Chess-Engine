@@ -279,7 +279,7 @@ bool debugBoard(Board *pBoard) {
         // other info would be nice too, but this is fine for the moment
         // leave a breakpoint for debugging, not that much can be found here...
         #ifdef __clang__
-        asm("int3");
+        __asm__("int3");
         #elif (__GNUC__ || __cplusplus)
         __asm__("int3");
         #endif

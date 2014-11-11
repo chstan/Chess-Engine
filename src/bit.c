@@ -22,7 +22,7 @@ unsigned int LSB(BitMap bits) {
     #ifdef __clang__
     #if __SIZEOF_POINTER__ == 8
     // we're in a 64 bit world and can just use the 64 bit instruction
-    asm("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
+    __asm__("bsfq %1, %0" : "=r" (lsb) : "r" (bits));
     #else
     // we have to be careful and use the 32 bit version.
     unsigned int bits32, lsb32;
@@ -47,7 +47,7 @@ unsigned int GSB(BitMap bits) {
     unsigned long long gsb;
     #ifdef __clang__
     #if __SIZEOF_POINTER__ == 8
-    asm("bsrq %1, %0" : "=r" (gsb) : "r" (bits));
+    __asm__("bsrq %1, %0" : "=r" (gsb) : "r" (bits));
     #else
     unsigned int bits32, gsb32;
     if(bits >= BITSET(32)) {

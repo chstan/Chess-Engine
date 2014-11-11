@@ -30,7 +30,7 @@ void print_pv(Board *pBoard) {
     Move moves[64];
     int iter = 0;
     char *notation = NULL;
-    U64 orig_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
+    //U64 orig_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
     for(Move best_move = singleBestMove; best_move;
         best_move = get_next_pv(pBoard)) {
         moves[iter] = best_move;
@@ -67,7 +67,7 @@ Move think(Board *pBoard) {
     }
 
     assert(singleBestMove);
-    printf("info score cp 0 depth 6 move: %s\n", move_to_coord_notation(pBoard, singleBestMove));
+    printf("info score cp 0 depth 6 move: %s\n", move_to_coord_notation(singleBestMove));
     return singleBestMove;
 }
 

@@ -39,7 +39,7 @@ Move coord_notation_to_move(Board *pBoard, char *notation);
  * The same as moveToNotation, but instead of using algebraic notation we use
  * coordinate location, which is always specified as startsquare - endsquare
  **/
-char *move_to_coord_notation(Board *pBoard, Move m);
+char *move_to_coord_notation(Move m);
 
 
 #endif

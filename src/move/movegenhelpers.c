@@ -16,7 +16,8 @@
 
 //----------------ROOK-----------------
 
-BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side) {
+BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex,
+                     __attribute__((unused)) int side) {
     BitBoard validMoves = 0;
     // UP
     BitBoard currentIndex = UP(BITSET(rookIndex));
@@ -90,7 +91,8 @@ BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
 
 //---------------BISHOP----------------
 
-BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side) {
+BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex,
+                       __attribute__((unused)) int side) {
     BitBoard validMoves = 0;
     // UL
     BitBoard currentIndex = UP_LEFT(BITSET(bishopIndex));
@@ -179,7 +181,8 @@ BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
 }
 
 //---------------KNIGHT----------------
-BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side) {
+BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex,
+                       __attribute__((unused)) int side) {
     return knightMove[knightIndex] & ~pBoard->position.occupied;
 }
 
@@ -208,7 +211,8 @@ BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
 }
 
 //----------------KING-----------------
-BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex, int side) {
+BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex,
+                     __attribute__((unused)) int side) {
     return kingMove[kingIndex] & ~pBoard->position.occupied;
 }
 

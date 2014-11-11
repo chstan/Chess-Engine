@@ -75,7 +75,7 @@ void printMove(Move m);
 
 void advanceState(Board *pBoard, Move m);
 
-void rewindState(Board *pBoard, Move m);
+void rewindState(Board *pBoard);
 
 /** Function: compMove
  *  ------------------

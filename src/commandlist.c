@@ -99,7 +99,8 @@ bool playCommand(int tokenCount, char **tokens) {
     return true;
 }
 
-bool listMovesCommand(int tokenCount, char **tokens) {
+bool listMovesCommand(__attribute__((unused)) int tokenCount,
+                      __attribute__((unused)) char **tokens) {
     MoveSet moves;
     resetMoveSet(&moves);
     initializeMoveSetQuiet(pBoard, &moves);
@@ -113,7 +114,8 @@ bool listMovesCommand(int tokenCount, char **tokens) {
     return true;
 }
 
-bool randomMoveCommand(int tokenCount, char **tokens) {
+bool randomMoveCommand(__attribute__((unused)) int tokenCount,
+                       __attribute__((unused)) char **tokens) {
     MoveSet moves;
     resetMoveSet(&moves);
     initializeMoveSetQuiet(pBoard, &moves);
@@ -136,7 +138,8 @@ bool performanceTestCommand(int tokenCount, char **tokens) {
     return true;
 }
 
-bool helpCommand(int tokenCount, char **tokens) {
+bool helpCommand(__attribute__((unused)) int tokenCount,
+                 __attribute__((unused)) char **tokens) {
     printf("Command list:\n\n\n");
     for(int commandIndex = 0; commandIndex < COMMAND_COUNT; commandIndex++) {
         printf(" %s\n\n", commandDescription[commandIndex]);
@@ -157,17 +160,20 @@ bool moveCommand(int tokenCount, char **tokens) {
     return true;
 }
 
-bool unmoveCommand(int tokenCount, char **tokens) {
+bool unmoveCommand(__attribute__((unused)) int tokenCount,
+                   __attribute__((unused)) char **tokens) {
     unmakeLastMove(pBoard);
     return true;
 }
 
-bool aboutCommand(int tokenCount, char **tokens) {
+bool aboutCommand(__attribute__((unused)) int tokenCount,
+                  __attribute__((unused)) char **tokens) {
     printf("\nThis is a computer chess engine being developed by Conrad and Tom (and Marc).\n%s\n\n", ENGINE_VERSION);
     return true;
 }
 
-bool displayCommand(int tokenCount, char **tokens) {
+bool displayCommand(__attribute__((unused)) int tokenCount,
+                    __attribute__((unused)) char **tokens) {
     displayBoard(pBoard);
     return true;
 }
@@ -194,26 +200,31 @@ bool loadFENCommand(int tokenCount, char **tokens) {
     return true;
 }
 
-bool debugCommand(int tokenCount, char **tokens) {
+bool debugCommand(__attribute__((unused)) int tokenCount,
+                  __attribute__((unused)) char **tokens) {
     debugBoard(pBoard);
     return true;
 }
 
-bool rotateCommand(int tokenCount, char **tokens) {
+bool rotateCommand(__attribute__((unused)) int tokenCount,
+                   __attribute__((unused)) char **tokens) {
     rotateBoard(pBoard);
     return true;
 }
 
-bool todoCommand(int tokenCount, char **tokens) {
+bool todoCommand(__attribute__((unused)) int tokenCount,
+                 __attribute__((unused)) char **tokens) {
     printf("This is for the developers so they can check what there is to implement.\n");
     return true;
 }
 
-bool quitCommand(int tokenCount, char **tokens) {
+bool quitCommand(__attribute__((unused)) int tokenCount,
+                 __attribute__((unused)) char **tokens) {
     return false;
 }
 
-bool debugNotationCommand(int tokenCount, char **tokens) {
+bool debugNotationCommand(__attribute__((unused)) int tokenCount,
+                          __attribute__((unused)) char **tokens) {
     MoveSet moves;
     resetMoveSet(&moves);
     initializeMoveSetQuiet(pBoard, &moves);

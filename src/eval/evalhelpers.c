@@ -130,7 +130,8 @@ int kingSafety(Board *pBoard);
 
 int controlOfCenter(Board *pBoard);
 
-int control(Board *pBoard, int square) {
+int control(__attribute__((unused)) Board *pBoard,
+            __attribute__((unused)) int square) {
     // we count the number of white pieces attacking the square, and subtract the number of black pieces.
     assert(false);
     return 0;
