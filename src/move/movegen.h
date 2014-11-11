@@ -19,6 +19,9 @@ typedef struct {
     int killerIter;
 } MoveSet;
 
+bool moveset_contains(MoveSet *moves, Move m);
+
+
 // void generateCheck(Board *pBoard);
 
 // BitBoard attacks(Board *pBoard, int attackeeIndex);

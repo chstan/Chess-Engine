@@ -65,6 +65,14 @@ const MoveGenCB captureCB[] = {
     queenCaptureBB
 };
 
+bool moveset_contains(MoveSet *moves, Move m) {
+    for (int iter = 0; iter < moves->totalMoves; iter++) {
+        if (moves->moveList[iter] == m)
+            return true;
+    }
+    return false;
+}
+
 static void debugMoves(MoveSet *pMoves) {
     for(int currentMoveIndex = 0; currentMoveIndex < pMoves->totalMoves; currentMoveIndex++) {
         Move toCheck = pMoves->moveList[currentMoveIndex];

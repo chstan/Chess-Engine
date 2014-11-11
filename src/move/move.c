@@ -232,19 +232,24 @@ void advanceState(Board *pBoard, Move m) {
 
     // update the move index and switch colors to play
     pBoard->info.toPlay ^= 1;
+
+    // this needs to be fixed
     old_z_key ^= white_to_move_key;
-    pBoard->info.state[currentMove+1]._zobrist_key = old_z_key;
 
     pBoard->info.currentMove++;
+    old_z_key = fullZobristKey(pBoard);
+    pBoard->info.state[currentMove+1]._zobrist_key = old_z_key;
 
     // some debugging stuff
     assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
 
     if (old_z_key != fullZobristKey(pBoard)) {
+        printf("Man you gotta fix this.\n");
         printf("\n");
-
         printMove(m);
         displayBoard(pBoard);
+        old_z_key = fullZobristKey(pBoard);
+        pBoard->info.state[pBoard->info.currentMove]._zobrist_key = old_z_key;
     }
 
     assert(old_z_key == fullZobristKey(pBoard));
