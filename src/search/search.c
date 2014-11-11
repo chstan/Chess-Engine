@@ -17,13 +17,21 @@
 // C++!
 const int search_depth = 60;
 
-Move singleBestMove;
+Move singleBestMove = 0;
 
 Move get_next_pv(Board *pBoard) {
+    MoveSet moves;
+    resetMoveSet(&moves);
+    initializeMoveSetQuiet(pBoard, &moves);
+
     U64 key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
-    TTElem *lookup = search_hash(key);
-    if (!lookup) return 0;
-    return lookup->_m;
+    TTElem *table_entry = search_hash(key);
+    if (!table_entry) return 0;
+    if (!moveset_contains(&moves, table_entry->_m)) {
+        // Statistically this doesn't happen, but just to be safe
+        return 0;
+    }
+    return table_entry->_m;
 }
 
 void print_pv(Board *pBoard) {
@@ -33,6 +41,9 @@ void print_pv(Board *pBoard) {
     //U64 orig_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
     for(Move best_move = singleBestMove; best_move;
         best_move = get_next_pv(pBoard)) {
+        if(!best_move) {
+            break;
+        }
         moves[iter] = best_move;
         iter++;
         notation = moveToNotation(pBoard, best_move);
@@ -52,6 +63,8 @@ void print_pv(Board *pBoard) {
 Move think(Board *pBoard) {
     // a really stupid search for the moment
     // should manage its time and use an iterative deepening method
+    singleBestMove = 0;
+
     clock_t end_time = clock() + (10 * CLOCKS_PER_SEC);
     int color = pBoard->info.toPlay == W ? 1 : -1;
     float score = -INFTY;
@@ -59,11 +72,10 @@ Move think(Board *pBoard) {
         if (clock() > end_time) break;
         inc_hash_time();
         printf("Depth: %d\n", c_depth);
-        //print_pv(pBoard);
-
         score = negaMax(0, c_depth,
                         (float) -INFTY,
                         (float) INFTY, color, &singleBestMove);
+        print_pv(pBoard);
     }
 
     assert(singleBestMove);
