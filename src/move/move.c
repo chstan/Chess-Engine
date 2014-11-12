@@ -77,6 +77,7 @@ bool coherentMove(Board *pBoard, Move m) {
  */
 
 void makeMove(Board *pBoard, Move m) {
+#ifdef DEBUG
     if (pBoard->info.state[pBoard->info.currentMove]._zobrist_key
         != fullZobristKey(pBoard)) {
         printMove(pBoard->info.state[pBoard->info.currentMove].move);
@@ -92,6 +93,7 @@ void makeMove(Board *pBoard, Move m) {
         printMove(second_last_unmade);
         assert(0 && "Incoherent.\n");
     }
+#endif
     if(whiteCastle(m) | blackCastle(m)) {
         // CASTLING
         if(whiteCastle(m)) {
@@ -120,18 +122,22 @@ void makeMove(Board *pBoard, Move m) {
             removeMaterial(pBoard, capturedPiece(m));
     }
     advanceState(pBoard, m);
-    if(false && !debugBoard(pBoard)) {
+#ifdef DEBUG
+    if(!debugBoard(pBoard)) {
             printMove(m);
     }
+#endif
 }
 
 void unmakeMove(Board *pBoard, Move m) {
+#ifdef DEBUG
     assert(m == pBoard->info.state[pBoard->info.currentMove].move);
     if (!debugBoard(pBoard)) printf("WTH?\n");
     second_last_unmade = last_unmade;
     last_unmade = m;
     assert(pBoard->info.state[pBoard->info.currentMove]._zobrist_key
            == fullZobristKey(pBoard) && "Right at start of rewind.");
+#endif
     bool patha = false;
     bool pathb = false;
     bool pathc = false;
@@ -169,6 +175,7 @@ void unmakeMove(Board *pBoard, Move m) {
         }
     }
     rewindState(pBoard);
+#ifdef DEBUG
     initBoardFromSquares(pBoard, pBoard->info.toPlay,
                          pBoard->info.state[pBoard->info.currentMove].staleMoves,
                          pBoard->info.state[pBoard->info.currentMove].castleWhite,
@@ -186,6 +193,7 @@ void unmakeMove(Board *pBoard, Move m) {
         printf("%d %d %d %d\n", patha, pathb, pathc, pathd);
         assert(0 && "Rewind correctly.");
     }
+#endif
 }
 
 void unmakeLastMove(Board *pBoard) {
@@ -344,6 +352,7 @@ void advanceState(Board *pBoard, Move m) {
     pBoard->info.currentMove++;
 
     // some debugging stuff
+    #ifdef DEBUG
     assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME + 1);
     if (old_z_key != fullZobristKey(pBoard)) {
         printf("Man you gotta fix this.\n");
@@ -351,6 +360,7 @@ void advanceState(Board *pBoard, Move m) {
         displayBoard(pBoard);
         assert(0 && "BAD ZOBRIST");
     }
+    #endif
 }
 
 void rewindState(Board *pBoard) {

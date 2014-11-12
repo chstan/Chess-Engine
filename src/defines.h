@@ -20,7 +20,7 @@
 
 #define SQ(RANK, FILE) (8*((RANK)-1)+((FILE)-1))
 
-#define DEBUG
+//#define DEBUG
 
 #define INFTY 999999
 
