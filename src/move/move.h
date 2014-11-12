@@ -34,6 +34,7 @@ typedef unsigned int Move;
 #define bC      B32(00000010,00000000,00000000,00000000)
 #define wP      B32(00000100,00000000,00000000,00000000)
 #define bP      B32(00001000,00000000,00000000,00000000)
+#define hB      B32(10000000,00000000,00000000,00000000)
 
 //------------INITIALIZER-------------
 #define moveF(bP, wP, bC, wC, promo, capt, mov, fr, to) (((((((((((((((((bP) << 1) | (wP)) << 1) | (bC)) << 1) | (wC)) << 4) | (promo)) << 4) | (capt)) << 4) | (mov)) << 6) | (fr)) << 6) | (to))
@@ -49,6 +50,8 @@ typedef unsigned int Move;
 #define blackCastle(move)                       (((move) >> 25) & 1)
 #define whiteEnPassant(move)                    (((move) >> 26) & 1)
 #define blackEnPassant(move)                    (((move) >> 27) & 1)
+#define hashMove(move)                          ((move) & (hB))
+#define zeroHash(move)                          ((move) & (~hB))
 
 //--------------SETTERS---------------
 #define setTo(move, to)                             ((move) &= (((tM) | (to)))
@@ -64,6 +67,8 @@ typedef unsigned int Move;
 #define unsetWhiteEnPassant(move)       ((move) &= ~(wP))
 #define setBlackEnPassant(move)             ((move) |= (bP))
 #define unsetBlackEnPassant(move)       ((move) &= ~(bP))
+#define setHashBit(move)                ((move) |= hB)
+#define unsetHashBit(move)              ((move) &= ~(hB))
 
 void makeMove(Board *pBoard, Move m);
 

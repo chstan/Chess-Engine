@@ -17,7 +17,6 @@ typedef struct {
     BitBoard occupied;
 
     int square[64];
-    int kings[2];
 
     signed char pieces[16];
     signed char totalWhite;
@@ -38,7 +37,7 @@ typedef struct {
     U64 _zobrist_key;
 
     // this doesn't make me happy, but it works for the moment
-    int move;
+    Move move;
 
 } MoveInfo;
 
@@ -101,8 +100,6 @@ void removeMaterial(Board *pBoard, UCHAR piece);
 
 //---------------------AUX FUNCTIONS-------------------------
 void updatePieceCountsFromBB(Board *pBoard);
-
-void updateKingsFromBB(Board *pBoard);
 
 void resetBB(Board *pBoard);
 

@@ -33,7 +33,7 @@ extern unsigned char FAIL_HIGH_NODE;
 
 typedef struct {
     U64 _key;
-    float _score;
+    int _score;
     Move _m;
     unsigned char _depth;
     // | two bits node type | 6 bits insert_time |
@@ -51,7 +51,7 @@ void set_current_hash_time(unsigned int time);
 unsigned char insert_time(unsigned char flags);
 unsigned char node_type(unsigned char flags);
 TTElem *search_hash(U64 key);
-void write_hash(U64 key, float score, Move m, unsigned char depth,
+void write_hash(U64 key, int score, Move m, unsigned char depth,
                    unsigned char node_type);
 
 

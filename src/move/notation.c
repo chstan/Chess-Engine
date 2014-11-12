@@ -418,7 +418,7 @@ Move notationToMove(Board *pBoard, char *notation) {
     char controlChar = notation[0];
     if(controlChar == 'K') {
         piece = (color == WHITE) ? WHITE_KING : BLACK_KING;
-        orig = pBoard->position.kings[color];
+        orig = LSB(pBoard->position.pieceBB[piece]);
         dest = getDestination(notation+1);
         return move(pBoard->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'Q') {

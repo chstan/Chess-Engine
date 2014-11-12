@@ -81,7 +81,6 @@ int castleB, int enPassantSquare, int turnCount) {
     updateBBFromSquares(pBoard);
     updateAggregateBB(pBoard);
     updateMaterialFromBB(pBoard);
-    updateKingsFromBB(pBoard);
     updatePieceCountsFromBB(pBoard);
 
     pBoard->info.currentMove = turnCount;
@@ -193,21 +192,6 @@ bool debugBoard(Board *pBoard) {
     //assert(materialB == pBoard->info.blackMaterial);
     //assert(materialW == pBoard->info.whiteMaterial);
 
-    // array of kings
-    if(pBoard->position.pieces[WHITE_KING] == 1) {
-        if(!(BITSET(pBoard->position.kings[BLACK]) & pBoard->position.pieceBB[BLACK_KING])) {
-            boardConsistent = false;
-            printf("The array of kings reports a black king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[BLACK]]);
-        }
-    }
-
-    if(pBoard->position.pieces[BLACK_KING] == 1) {
-        if(!(BITSET(pBoard->position.kings[WHITE]) & pBoard->position.pieceBB[WHITE_KING])) {
-            boardConsistent = false;
-            printf("The array of kings reports a white king at %s, but the bitboard does not.\n", SQUARENAME[pBoard->position.kings[WHITE]]);
-        }
-    }
-
     // array of pieces
     // no real check needed here at the moment, though one could be added for material consistency
 
@@ -293,9 +277,6 @@ void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
     pBoard->position.pieceBB[lastOccupant] &= ~BITSET(index);
     pBoard->position.occupied &= ~BITSET(index);
     pBoard->position.square[index] = EMPTY;
-    if(lastOccupant == WHITE_KING || lastOccupant == BLACK_KING) {
-        pBoard->position.kings[color(lastOccupant)] = INVALID_SQUARE;
-    }
     if(color(lastOccupant) == B) {
         pBoard->position.blackOccupied &= ~BITSET(index);
     } else {
@@ -310,9 +291,6 @@ void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiec
     pBoard->position.pieceBB[movedPiece] |= BITSET(index);
     pBoard->position.occupied |= BITSET(index);
     pBoard->position.square[index] = movedPiece;
-    if(movedPiece == WHITE_KING || movedPiece == BLACK_KING) {
-        pBoard->position.kings[color(movedPiece)] = index;
-    }
     if(color(movedPiece) == B) {
         pBoard->position.blackOccupied |= BITSET(index);
     } else {
@@ -504,14 +482,6 @@ void updatePieceCountsFromBB(Board *pBoard) {
     }
 
     pBoard->position.totalPieces = pBoard->position.totalWhite + pBoard->position.totalBlack;
-    return;
-}
-
-void updateKingsFromBB(Board *pBoard) {
-    assert(countBits(pBoard->position.pieceBB[WHITE_KING]) == 1
-            && countBits(pBoard->position.pieceBB[BLACK_KING]) == 1);
-    pBoard->position.kings[WHITE] = LSB(pBoard->position.pieceBB[WHITE_KING]);
-    pBoard->position.kings[BLACK] = LSB(pBoard->position.pieceBB[BLACK_KING]);
     return;
 }
 

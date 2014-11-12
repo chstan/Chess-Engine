@@ -8,8 +8,8 @@
 
 Move think(Board *pBoard);
 
-float quiescentNegaMax(float alpha, float beta, int color, Move *pm);
+int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm);
 
-float negaMax(int ply, int depth, float alpha, float beta, int color, Move *pm);
+int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm);
 
 #endif

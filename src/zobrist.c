@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "zobrist.h"
+#include "move/move.h"
 
 U64 piece_keys[16][64];
 
@@ -91,8 +92,9 @@ TTElem *lookup_bucket_by_key(U64 key) {
     return hash_mem + which_bucket;
 }
 
-void write_hash(U64 key, float score, Move m, unsigned char depth,
+void write_hash(U64 key, int score, Move m, unsigned char depth,
                 unsigned char n_type) {
+    //setHashBit(m);
     TTElem *first_in_bucket = lookup_bucket_by_key(key);
     TTElem *b_iter = first_in_bucket;
     for (size_t elem_iter = 0; elem_iter < elems_per_bucket;

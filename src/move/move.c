@@ -6,6 +6,67 @@
 #include "../defines.h"
 #include "../extglobals.h"
 
+Move last_unmade = 0;
+Move second_last_unmade = 0;
+
+// checks that the move is legal and coherent
+bool coherentMove(Board *pBoard, Move m) {
+    assert(m && "Nonzero move.");
+    if (color(movedPiece(m)) != pBoard->info.toPlay) {
+        printf("COHERENTMOVE Color does not match\n");
+        return false;
+    }
+
+    int mn = pBoard->info.currentMove;
+    MoveInfo st = pBoard->info.state[mn];
+    if (pBoard->position.square[from(m)] != movedPiece(m)) {
+        printf("COHERENTMOVE Moved piece not on board at from.\n");
+        return false;
+    }
+    if (pBoard->position.square[to(m)] != capturedPiece(m)
+        && st.enPassantSquare != to(m)) {
+        printf("COHERENTMOVE Captured piece (or empty) not on board at to.\n");
+        return false;
+    }
+    if (whiteCastle(m)) {
+        if (pBoard->info.toPlay != WHITE) {
+            printf("COHERENTMOVE Castling wrong color.\n");
+            return false;
+        }
+        if (FILE(to(m)) == 2 /* C file */) {
+            if(!(st.castleWhite & CAN_CASTLE_OOO)) {
+                printf("COHERENTMOVE Cannot castle queenside.\n");
+                return false;
+            }
+        }
+        if (FILE(to(m)) == 6 /* C file */) {
+            if(!(st.castleWhite & CAN_CASTLE_OO)) {
+                printf("COHERENTMOVE Cannot castle kingside.\n");
+                return false;
+            }
+        }
+    }
+    if (blackCastle(m)) {
+        if (pBoard->info.toPlay != BLACK) {
+            printf("COHERENTMOVE Castling wrong color.\n");
+            return false;
+        }
+        if (FILE(to(m)) == 2 /* C file */) {
+            if(!(st.castleBlack & CAN_CASTLE_OOO)) {
+                printf("COHERENTMOVE Cannot castle queenside.\n");
+                return false;
+            }
+        }
+        if (FILE(to(m)) == 6 /* C file */) {
+            if(!(st.castleBlack & CAN_CASTLE_OO)) {
+                printf("COHERENTMOVE Cannot castle kingside.\n");
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 /* As a word of note:
  *   These functions assume that the move
  * is valid for the board and that the movement
@@ -16,6 +77,21 @@
  */
 
 void makeMove(Board *pBoard, Move m) {
+    if (pBoard->info.state[pBoard->info.currentMove]._zobrist_key
+        != fullZobristKey(pBoard)) {
+        printMove(pBoard->info.state[pBoard->info.currentMove].move);
+        displayBoard(pBoard);
+        assert(pBoard->info.state[pBoard->info.currentMove]._zobrist_key
+               == fullZobristKey(pBoard));
+    }
+
+    if (!coherentMove(pBoard, m)) {
+        displayBoard(pBoard);
+        printMove(m);
+        printMove(last_unmade);
+        printMove(second_last_unmade);
+        assert(0 && "Incoherent.\n");
+    }
     if(whiteCastle(m) | blackCastle(m)) {
         // CASTLING
         if(whiteCastle(m)) {
@@ -50,6 +126,16 @@ void makeMove(Board *pBoard, Move m) {
 }
 
 void unmakeMove(Board *pBoard, Move m) {
+    assert(m == pBoard->info.state[pBoard->info.currentMove].move);
+    if (!debugBoard(pBoard)) printf("WTH?\n");
+    second_last_unmade = last_unmade;
+    last_unmade = m;
+    assert(pBoard->info.state[pBoard->info.currentMove]._zobrist_key
+           == fullZobristKey(pBoard) && "Right at start of rewind.");
+    bool patha = false;
+    bool pathb = false;
+    bool pathc = false;
+    bool pathd = false;
     if(whiteCastle(m) | blackCastle(m)) {
         // CASTLING
         if(whiteCastle(m)) {
@@ -66,20 +152,39 @@ void unmakeMove(Board *pBoard, Move m) {
 
         setEmptyAt(pBoard, to(m), movedPiece(m));
         if(!(whiteEnPassant(m) | blackEnPassant(m))) {
+            patha = true;
             if(capturedPiece(m)) {
+                pathb = true;
                 setPieceAt(pBoard, to(m), capturedPiece(m), 0);
             }
             setPieceAt(pBoard, from(m), movedPiece(m), 0);
         } else {
+            pathc = true;
             setPieceAt(pBoard, from(m), movedPiece(m), 0);
             unPassant(pBoard, to(m), color(movedPiece(m)));
         }
-        if (capturedPiece(m))
+        if (capturedPiece(m)) {
+            pathd = true;
             addMaterial(pBoard, capturedPiece(m));
+        }
     }
     rewindState(pBoard);
+    initBoardFromSquares(pBoard, pBoard->info.toPlay,
+                         pBoard->info.state[pBoard->info.currentMove].staleMoves,
+                         pBoard->info.state[pBoard->info.currentMove].castleWhite,
+                         pBoard->info.state[pBoard->info.currentMove].castleBlack,
+                         pBoard->info.state[pBoard->info.currentMove].enPassantSquare,
+                         pBoard->info.currentMove);
+
     if(false && !debugBoard(pBoard)) {
                     printMove(m);
+    }
+    if (pBoard->info.state[pBoard->info.currentMove]._zobrist_key
+        != fullZobristKey(pBoard)) {
+        printMove(m);
+        displayBoard(pBoard);
+        printf("%d %d %d %d\n", patha, pathb, pathc, pathd);
+        assert(0 && "Rewind correctly.");
     }
 }
 
@@ -239,7 +344,7 @@ void advanceState(Board *pBoard, Move m) {
     pBoard->info.currentMove++;
 
     // some debugging stuff
-    assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME);
+    assert(pBoard->info.currentMove < MAX_MOVES_PER_GAME + 1);
     if (old_z_key != fullZobristKey(pBoard)) {
         printf("Man you gotta fix this.\n");
         printMove(m);
@@ -279,18 +384,27 @@ void printMove(Move m) {
         printf("%d ", (m & BITSET(i)) ? 1 : 0);
     }
     printf("\n%s", footer);
+    printf("From: %s\n", SQUARENAME[from(m)]);
+    printf("To: %s\n", SQUARENAME[to(m)]);
+    printf("Moved: %s\n", PIECE_NAMES_FULL[movedPiece(m)]);
+    printf("Capt: %s\n", PIECE_NAMES_FULL[capturedPiece(m)]);
+    if (hashMove(m)) {
+        printf("Move is from the hash table.\n");
+    }
+}
+
+const int MVV_LVA_SCORES[16] =
+    // NP, P, K, N,       B,    R,    Q
+    {0, 1000, 0, 2000, 0, 3000, 4000, 5000,
+     0, 1000, 0, 2000, 0, 3000, 4000, 5000};
+
+int mvv_lva_score (Move m) {
+    // returns its most valuable victim - least valuable attacker score
+    return MVV_LVA_SCORES[capturedPiece(m)] - (MVV_LVA_SCORES[movedPiece(m)]/1000);
 }
 
 int compMove (const void* p_move_a, const void* p_move_b) {
     const Move move_a = *(const Move *)p_move_a;
     const Move move_b = *(const Move *)p_move_b;
-
-    int cap_val_a = capturedPiece(move_a);
-    cap_val_a = (cap_val_a > 8) ? cap_val_a - 8 : cap_val_a;
-
-    int cap_val_b = capturedPiece(move_b);
-    cap_val_b = (cap_val_b > 8) ? cap_val_b - 8 : cap_val_b;
-
-
-    return -(cap_val_a - cap_val_b);
+    return -(mvv_lva_score(move_a) - mvv_lva_score(move_b));
 }

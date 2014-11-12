@@ -66,6 +66,7 @@ const MoveGenCB captureCB[] = {
 };
 
 bool moveset_contains(MoveSet *moves, Move m) {
+    unsetHashBit(m);
     for (int iter = 0; iter < moves->totalMoves; iter++) {
         if (moves->moveList[iter] == m)
             return true;
@@ -503,7 +504,13 @@ BitBoard attacks(Board *pBoard, int attackeeIndex, int side) {
 }
 
 bool checks(Board *pBoard, int side) {
-    return attacks(pBoard, pBoard->position.kings[side], side) != 0;
+    int kingIndex;
+    if (side == W) {
+        kingIndex = LSB(pBoard->position.pieceBB[WHITE_KING]);
+    } else {
+        kingIndex = LSB(pBoard->position.pieceBB[BLACK_KING]);
+    }
+    return attacks(pBoard, kingIndex, side) != 0;
 }
 
 
@@ -530,6 +537,10 @@ void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves) {
 }
 
 void resetMoveSet(MoveSet *pMoves) {
+    // memset for debugging
+    for (unsigned int i = 0; i < MAX_MOVES_PER_PLY; i++) {
+        pMoves->moveList[i] = 0;
+    }
     pMoves->moveIter = 0;
     pMoves->currentMoveIndex = 0;
     pMoves->timidIndex = 0;
@@ -548,7 +559,8 @@ Move nextMove(MoveSet *pMoves) {
 void writeMove(MoveSet *pMoves, Move m) {
     assert(pMoves->currentMoveIndex + 1 < MAX_MOVES_PER_PLY);
     pMoves->totalMoves++;
-    pMoves->moveList[pMoves->currentMoveIndex++] = m;
+    pMoves->moveList[pMoves->currentMoveIndex] = m;
+    pMoves->currentMoveIndex++;
     if(capturedPiece(m)) pMoves->timidIndex++;
 }
 

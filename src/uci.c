@@ -48,6 +48,7 @@ void uci_init() {
         init();
     }
     printf("readyok\n");
+    fflush(stdout);
 }
 
 void uci_quit() {
@@ -152,6 +153,7 @@ void uci_go(__attribute__((unused)) char *go_options) {
     Move m = think(pBoard);
     char *notation = move_to_coord_notation(m);
     printf("bestmove %s\n", notation);
+    fflush(stdout);
     free(notation);
 }
 
@@ -159,6 +161,7 @@ void uci_greet() {
     printf("id name Dev\n");
     printf("id author Conrad Stansbury, Tom Mullins\n");
     printf("uciok\n");
+    fflush(stdout);
 }
 
 bool uci_process_command(char *line) {
@@ -197,6 +200,7 @@ bool uci_process_command(char *line) {
 
 void uci_loop() {
     printf("info Dev Engine 0.0.1\n");
+    fflush(stdout);
 
     char *buffer = NULL;
     size_t read_bytes = 0;

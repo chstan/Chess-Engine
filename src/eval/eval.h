@@ -8,8 +8,11 @@
 
 #include "../board/board.h"
 
-float evaluate(Board *pBoard);
+extern const int EVAL_INFTY;
+extern const int EVAL_MATE;
 
-float evaluateNaive(Board *pBoard);
+int evaluate(Board *pBoard);
+
+int evaluateNaive(Board *pBoard);
 
 #endif
