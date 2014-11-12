@@ -151,6 +151,10 @@ TTElem *search_hash(U64 key) {
     return NULL;
 }
 
+void free_hash() {
+    if (hash_mem) free(hash_mem);
+}
+
 void reset_hash() {
     memset(hash_mem, 0, elems_per_bucket * num_buckets * sizeof(TTElem));
 }

@@ -91,8 +91,11 @@ Move think(Board *pBoard) {
         }
         print_pv(pBoard);
     }
-    if (singleBestMove)
-        printf("info score cp 0 depth 6 move: %s\n", move_to_coord_notation(singleBestMove));
+    if (singleBestMove) {
+        char *move_not = move_to_coord_notation(singleBestMove);
+        printf("info score cp 0 depth 6 move: %s\n", move_not);
+        free(move_not);
+    }
     return singleBestMove;
 }
 

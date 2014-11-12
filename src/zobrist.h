@@ -11,6 +11,7 @@ typedef unsigned int Move;
  * as well as the hash table itself used to store move positions
  * and evaluations
  */
+void free_hash();
 void initHashTable();
 
 // keys for each piece at each board position
