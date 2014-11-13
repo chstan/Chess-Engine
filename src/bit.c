@@ -17,7 +17,7 @@ unsigned int countBits(BitMap bits) {
 }
 
 unsigned int LSB(BitMap bits) {
-    if(!bits) return 0;
+    //if(!bits) return 0;
     unsigned long long lsb;
     #ifdef __clang__
     #if __SIZEOF_POINTER__ == 8
@@ -43,7 +43,7 @@ unsigned int LSB(BitMap bits) {
 }
 
 unsigned int GSB(BitMap bits) {
-    if(!bits) return 0;
+    //if(!bits) return 0;
     unsigned long long gsb;
     #ifdef __clang__
     #if __SIZEOF_POINTER__ == 8
