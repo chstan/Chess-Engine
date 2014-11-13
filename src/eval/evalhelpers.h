@@ -5,6 +5,7 @@
 
 void initEval();
 
+int all_piece_square_scores (Board *pBoard);
 
 int doubledPawns(Board *pBoard);
 

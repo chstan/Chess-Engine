@@ -27,5 +27,6 @@ int evaluateNaive(Board *pBoard) {
     pawn_structure_score += 5*passedPawns(pBoard);
     pawn_structure_score += 3*outsidePassedPawns(pBoard);
     value += pawn_structure_score;
+    value += all_piece_square_scores(pBoard);
     return (pBoard->info.toPlay == W) ? value : -value;
 }
