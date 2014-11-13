@@ -11,6 +11,11 @@
 #include "eval/evalhelpers.h"
 #include "zobrist.h"
 
+U64 safe_bitset (int idx) {
+    if (idx < 0 || idx > 63) return 0;
+    return BITSET(idx);
+}
+
 void init() {
     dataInit();
     moveTableInit();
@@ -36,73 +41,86 @@ void moveTableInit() {
 
             //--------PAWN ONE SQUARE----------
             if(rank < 7) {
-                pawnMoveWhite[index] = BITSET(index + 8);
+                pawnMoveWhite[index] = safe_bitset(index + 8);
             } else {
                 pawnMoveWhite[index] = emptyBoard;
             }
 
             if(rank > 2) {
-                pawnMoveBlack[index] = BITSET(index - 8);
+                pawnMoveBlack[index] = safe_bitset(index - 8);
             } else {
                 pawnMoveBlack[index] = emptyBoard;
             }
 
             //--------PAWN TWO SQUARES---------
             if(rank == 2) {
-                pawnDoubleWhite[index] = BITSET(index + 16);
+                pawnDoubleWhite[index] = safe_bitset(index + 16);
             } else {
                 pawnDoubleWhite[index] = emptyBoard;
             }
             if(rank == 7) {
-                pawnDoubleBlack[index] = BITSET(index - 16);
+                pawnDoubleBlack[index] = safe_bitset(index - 16);
             } else {
                 pawnDoubleBlack[index] = emptyBoard;
             }
 
             //----------PAWN CAPTURES----------
             if(8 > file && file > 1) {
-                if (rank <= 6) pawnCaptureWhite[index] = BITSET(index + 9) | BITSET(index + 7);
-                if (rank >= 3) pawnCaptureBlack[index] = BITSET(index - 9) | BITSET(index - 7);
+                if (rank <= 6) pawnCaptureWhite[index] = safe_bitset(index + 9) | safe_bitset(index + 7);
+                if (rank >= 3) pawnCaptureBlack[index] = safe_bitset(index - 9) | safe_bitset(index - 7);
             } else {
                 if(file == 1) {
                     pawnCaptureWhite[index] = emptyBoard;
                     pawnCaptureBlack[index] = emptyBoard;
-                    if (rank <= 6) pawnCaptureWhite[index] = BITSET(index + 9);
-                    if (rank >= 3) pawnCaptureBlack[index] = BITSET(index - 7);
+                    if (rank <= 6) pawnCaptureWhite[index] = safe_bitset(index + 9);
+                    if (rank >= 3) pawnCaptureBlack[index] = safe_bitset(index - 7);
                 } else {
                     pawnCaptureWhite[index] = emptyBoard;
                     pawnCaptureBlack[index] = emptyBoard;
-                    if (rank <= 6) pawnCaptureWhite[index] = BITSET(index + 7);
-                    if (rank >= 3) pawnCaptureBlack[index] = BITSET(index - 9);
+                    if (rank <= 6) pawnCaptureWhite[index] = safe_bitset(index + 7);
+                    if (rank >= 3) pawnCaptureBlack[index] = safe_bitset(index - 9);
                 }
             }
 
+            //--------PAWN ALL CAPTURES--------
+            if(8 > file && file > 1) {
+                pawnAllCaptureWhite[index] = safe_bitset(index + 9) | safe_bitset(index + 7);
+                pawnAllCaptureBlack[index] = safe_bitset(index - 9) | safe_bitset(index - 7);
+            } else {
+                if(file == 1) {
+                    pawnAllCaptureWhite[index] = safe_bitset(index + 9);
+                    pawnAllCaptureWhite[index] = safe_bitset(index - 7);
+                } else {
+                    pawnAllCaptureWhite[index] = safe_bitset(index + 7);
+                    pawnAllCaptureWhite[index] = safe_bitset(index - 9);
+                }
+            }
             //-----PAWN CAPTURE PROMOTIONS-----
             if(8 > file && file > 1) {
-                if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET(index + 9) | BITSET(index + 7);
-                if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET(index - 9) | BITSET(index - 7);
+                if (rank == 7) pawnPromotionCaptureWhite[index] = safe_bitset(index + 9) | safe_bitset(index + 7);
+                if (rank == 2) pawnPromotionCaptureBlack[index] = safe_bitset(index - 9) | safe_bitset(index - 7);
             } else {
                 if(file == 1) {
                     pawnPromotionCaptureWhite[index] = emptyBoard;
                     pawnPromotionCaptureBlack[index] = emptyBoard;
-                    if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET(index + 9);
-                    if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET(index - 7);
+                    if (rank == 7) pawnPromotionCaptureWhite[index] = safe_bitset(index + 9);
+                    if (rank == 2) pawnPromotionCaptureBlack[index] = safe_bitset(index - 7);
                 } else {
                     pawnPromotionCaptureWhite[index] = emptyBoard;
                     pawnPromotionCaptureBlack[index] = emptyBoard;
-                    if (rank == 7) pawnPromotionCaptureWhite[index] = BITSET(index + 7);
-                    if (rank == 2) pawnPromotionCaptureBlack[index] = BITSET(index - 9);
+                    if (rank == 7) pawnPromotionCaptureWhite[index] = safe_bitset(index + 7);
+                    if (rank == 2) pawnPromotionCaptureBlack[index] = safe_bitset(index - 9);
                 }
             }
 
             //---------PAWN PROMOTIONS---------
             if(rank == 7) {
-                pawnPromotionWhite[index] = BITSET(index + 8);
+                pawnPromotionWhite[index] = safe_bitset(index + 8);
             } else {
                 pawnPromotionWhite[index] = emptyBoard;
             }
             if(rank == 2) {
-                pawnPromotionBlack[index] = BITSET(index - 8);
+                pawnPromotionBlack[index] = safe_bitset(index - 8);
             } else {
                 pawnPromotionBlack[index] = emptyBoard;
             }
@@ -117,78 +135,78 @@ void moveTableInit() {
             int iR;
             for(iR = lRank; iR <= hRank; iR++) {
                 for(iF = lFile; iF <= hFile; iF++) {
-                    bits |= BITSET(SQ(iR, iF));
+                    bits |= safe_bitset(SQ(iR, iF));
                 }
             }
-            kingMove[index] = bits & ~BITSET(index);
+            kingMove[index] = bits & ~safe_bitset(index);
 
             //--------KNIGHT  MOVEMENTS--------
             bits = 0;
             if(rank + 2 <= 8 && file + 1 <= 8) {
-                bits |= BITSET(SQ(rank+2, file+1));
+                bits |= safe_bitset(SQ(rank+2, file+1));
             }
             if(rank + 2 <= 8 && file - 1 >= 1) {
-                bits |= BITSET(SQ(rank+2, file-1));
+                bits |= safe_bitset(SQ(rank+2, file-1));
             }
             if(rank + 1 <= 8 && file + 2 <= 8) {
-                bits |= BITSET(SQ(rank+1, file+2));
+                bits |= safe_bitset(SQ(rank+1, file+2));
             }
             if(rank + 1 <= 8 && file - 2 >= 1) {
-                bits |= BITSET(SQ(rank+1, file-2));
+                bits |= safe_bitset(SQ(rank+1, file-2));
             }
             if(rank - 1 >= 1 && file + 2 <= 8) {
-                bits |= BITSET(SQ(rank-1, file+2));
+                bits |= safe_bitset(SQ(rank-1, file+2));
             }
             if(rank - 1 >= 1 && file - 2 >= 1) {
-                bits |= BITSET(SQ(rank-1, file-2));
+                bits |= safe_bitset(SQ(rank-1, file-2));
             }
             if(rank - 2 >= 1 && file + 1 <= 8) {
-                bits |= BITSET(SQ(rank-2, file+1));
+                bits |= safe_bitset(SQ(rank-2, file+1));
             }
             if(rank - 2 >= 1 && file - 1 >= 1) {
-                bits |= BITSET(SQ(rank-2, file-1));
+                bits |= safe_bitset(SQ(rank-2, file-1));
             }
             knightMove[index] = bits;
 
             //--------DIAGON  MOVEMENTS--------
             for(lFile = file+1, lRank = rank+1, bits = 0; lFile <= 8 && lRank <= 8; lFile++, lRank++) {
-                bits |= BITSET(SQ(lFile, lRank));
+                bits |= safe_bitset(SQ(lFile, lRank));
             }
             rightUpMove[index] = bits;
 
             for(lFile = file+1, lRank = rank-1, bits = 0; lFile <= 8 && lRank >= 1; lFile++, lRank--) {
-                bits |= BITSET(SQ(lFile, lRank));
+                bits |= safe_bitset(SQ(lFile, lRank));
             }
             leftUpMove[index] = bits;
 
             for(lFile = file-1, lRank = rank+1, bits = 0; lFile >= 1 && lRank <= 8; lFile--, lRank++) {
-                bits |= BITSET(SQ(lFile, lRank));
+                bits |= safe_bitset(SQ(lFile, lRank));
             }
             rightDownMove[index] = bits;
 
             for(lFile = file-1, lRank = rank-1, bits = 0; lFile >= 1 && lRank >= 1; lFile--, lRank--) {
-                bits |= BITSET(SQ(lFile, lRank));
+                bits |= safe_bitset(SQ(lFile, lRank));
             }
             leftDownMove[index] = bits;
 
             //--------ORTHOG  MOVEMENTS--------
             for(lFile = file+1, bits = 0; lFile <= 8; lFile++) {
-                bits |= BITSET(SQ(lFile, rank));
+                bits |= safe_bitset(SQ(lFile, rank));
             }
             upMove[index] = bits;
 
             for(lFile = file-1, bits = 0; lFile >= 1; lFile--) {
-                bits |= BITSET(SQ(lFile, rank));
+                bits |= safe_bitset(SQ(lFile, rank));
             }
             downMove[index] = bits;
 
             for(lRank = rank+1, bits = 0; lRank <= 8; lRank++) {
-                bits |= BITSET(SQ(file, lRank));
+                bits |= safe_bitset(SQ(file, lRank));
             }
             rightMove[index] = bits;
 
             for(lRank = rank-1, bits = 0; lRank >= 1; lRank--) {
-                bits |= BITSET(SQ(file, lRank));
+                bits |= safe_bitset(SQ(file, lRank));
             }
             leftMove[index] = bits;
         }
@@ -208,8 +226,8 @@ void dataInit() {
     // SQuares on the board.
     for(rank = 0; rank < 8; rank++) {
         for(file = 0; file < 8; file++) {
-            rankBB[rank] |= BITSET(SQ(rank+1, file+1));
-            fileBB[file] |= BITSET(SQ(rank+1, file+1));
+            rankBB[rank] |= safe_bitset(SQ(rank+1, file+1));
+            fileBB[file] |= safe_bitset(SQ(rank+1, file+1));
         }
     }
 
