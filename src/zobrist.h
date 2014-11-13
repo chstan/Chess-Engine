@@ -47,6 +47,8 @@ bool is_pv_node(TTElem *e);
 bool is_fail_high(TTElem *e);
 bool is_fail_low(TTElem *e);
 
+unsigned long long hash_per_million_full();
+
 void inc_hash_time();
 void set_current_hash_time(unsigned int time);
 unsigned char insert_time(unsigned char flags);

@@ -41,6 +41,7 @@ void initHashTable() {
 
 // ================= TRANSPOSITION TABLE ===================
 
+unsigned long long filled_hash_elems = 0;
 unsigned int hash_time = 0;
 
 unsigned char PV_NODE = 0;
@@ -89,7 +90,7 @@ TTElem *lookup_bucket_by_key(U64 key) {
     // because there are num_buckets number of buckets
     // we can get a bitmask for the bucket number by
     unsigned int which_bucket = key & (num_buckets - 1);
-    return hash_mem + which_bucket;
+    return hash_mem + 4*(which_bucket);
 }
 
 void write_hash(U64 key, int score, Move m, unsigned char depth,
@@ -100,6 +101,9 @@ void write_hash(U64 key, int score, Move m, unsigned char depth,
     for (size_t elem_iter = 0; elem_iter < elems_per_bucket;
          elem_iter++, b_iter++) {
         if (!b_iter->_key || b_iter->_key == key) {
+            if (!b_iter->_key) {
+                filled_hash_elems++;
+            }
             b_iter->_key = key;
             b_iter->_score = score;
             b_iter->_m = m;
@@ -156,7 +160,13 @@ void free_hash() {
 }
 
 void reset_hash() {
+    filled_hash_elems = 0;
     memset(hash_mem, 0, elems_per_bucket * num_buckets * sizeof(TTElem));
+}
+
+unsigned long long hash_per_million_full() {
+    return (filled_hash_elems * 1000000) /
+        ((unsigned long long) (elems_per_bucket * num_buckets));
 }
 
 void realloc_hash_mem() {
