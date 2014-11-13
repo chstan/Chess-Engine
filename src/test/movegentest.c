@@ -68,7 +68,6 @@ U64 recursiveMoveCount(Board *pBoard, int depth, MoveCount *pCount) {
 
     // now find all the nodes immediately off the current board state
     generateMove(pBoard, &moves);
-    qsort(&moves.moveList, moves.totalMoves, sizeof(Move), compMove);
     if(depth == 1) {
 
         U64 count = 0;
