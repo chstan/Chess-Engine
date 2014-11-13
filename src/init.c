@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 #include "init.h"
+#include "manage_time.h"
+#include "log.h"
 #include "bit.h"
 #include "defines.h"
 #include "extglobals.h"
@@ -16,6 +18,10 @@ U64 safe_bitset (int idx) {
     return BITSET(idx);
 }
 
+void pre_init() {
+    init_logging();
+}
+
 void init() {
     dataInit();
     moveTableInit();
@@ -27,6 +33,8 @@ void init() {
     initHashTable();
 
     boardInit();
+
+    init_manage_time();
     return;
 }
 

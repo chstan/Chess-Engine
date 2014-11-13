@@ -2,18 +2,57 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
+#include <pthread.h>
 
+#include "uci.h"
+#include "manage_time.h"
+#include "log.h"
 #include "search/search.h"
 #include "fen.h"
 #include "move/move.h"
 #include "move/notation.h"
 #include "board/board.h"
-#include "uci.h"
 #include "init.h"
 #include "extglobals.h"
+#include "zobrist.h"
 #include "exit.h"
+#include "eval/eval.h"
 
 bool is_init = false;
+
+void uci_info(int depth, int selective_depth, int score,
+              __attribute__((unused)) unsigned char node_type,
+              Move *pv_moves, size_t pv_move_count) {
+    printf("info depth %d ", depth);
+    if (selective_depth) {
+        printf("seldepth %d ", selective_depth);
+    }
+    if (abs(score) > EVAL_MATE - 200) {
+        if (score > 0) {
+            // computer winning
+            printf("score mate %d ", (EVAL_MATE - score + 1)/2);
+        } else {
+            // computer losing
+            printf("score mate %d ", -(EVAL_MATE + score + 1)/2);
+        }
+    } else {
+        printf("score cp %d ", score);
+    }
+    if (pv_move_count) {
+        // print the principal variation
+        printf("pv");
+        for (size_t move_iter = 0; move_iter < pv_move_count && !should_stop(); move_iter++) {
+            char *notation = move_to_coord_notation(pv_moves[move_iter]);
+            assert(notation);
+            printf(" %s", notation);
+            free(notation);
+        }
+    }
+    printf(" hashfull %llu", hash_per_million_full());
+    printf("\n");
+    fflush(stdout);
+}
 
 void apply_moves_from_str(char *moves_str) {
     char *move_token;
@@ -31,6 +70,10 @@ bool strpref(const char *pre, const char *str) {
     size_t pre_len = strlen(pre);
     size_t str_len = strlen(str);
     return str_len < pre_len ? false : strncmp(pre, str, pre_len) == 0;
+}
+
+void uci_stop() {
+    set_to_stop(true);
 }
 
 void uci_prep_newgame() {
@@ -52,6 +95,8 @@ void uci_init() {
 }
 
 void uci_quit() {
+    uci_stop();
+    sleep(1); // bad, should wait for think thread exit
     if (is_init)
         prepareForExit();
 }
@@ -137,20 +182,101 @@ void uci_position(const char *position_str) {
     }
 }
 
-void uci_go(__attribute__((unused)) char *go_options) {
+void uci_go_test() {
+    set_infinite_think(false);
+    set_black_time_left(4000);
+    set_white_time_left(4000);
+    set_black_time_inc(0);
+    set_white_time_inc(0);
+    assert(is_init);
+    set_to_stop(false);
+    pthread_t search_thread;
+    pthread_create(&search_thread, NULL, &threadable_think, pBoard);
+}
+
+void uci_go(char *go_options) {
+    // Weirdness in Scid vs Mac. Something to look into...
+    // Multiple go commands being sent.
+    if (is_thinking()) {
+        log_string("Woah there!");
+        return;
+    }
+
     // seachmoves -- restrict search
     // ponder
     // wtime in msec
     // btime in msec
     // winc in msec per move if positive
     // binc in msec per move if positive
-    // movestogo -- until next time control
+    // overstock -- until next time control
     // depth -- restriction
     // nodes -- node count restriction
     // mate -- search for a mate in x
     // movetime -- search for x msec
     // infinite -- search until the stop command
-    Move m = think(pBoard);
+    while (go_options[0] == ' ' || go_options[0] == '\t') {
+        go_options++;
+    }
+    if(go_options[0] != '\n') {
+        // some tokens still to parse
+        char *tokens_buffer = strdup(go_options);
+        assert(tokens_buffer[strlen(tokens_buffer) - 1] == '\n');
+        tokens_buffer[strlen(tokens_buffer) - 1] = '\0';
+
+        const char *sep = " ";
+        char *next_token = strtok(tokens_buffer, sep);
+        set_infinite_think(false);
+        while (next_token) {
+            if (!strcmp(next_token, "infinite")) {
+                set_infinite_think(true);
+                break;
+            }
+            if (!strcmp(next_token, "wtime")) {
+                char *time_left_token = strtok(NULL, sep);
+                assert(time_left_token);
+                unsigned int w_time_left = (unsigned) atoi(time_left_token);
+                set_white_time_left(w_time_left);
+            }
+            if (!strcmp(next_token, "btime")) {
+                char *time_left_token = strtok(NULL, sep);
+                assert(time_left_token);
+                unsigned int b_time_left = (unsigned) atoi(time_left_token);
+
+                set_black_time_left(b_time_left);
+            }
+            if (!strcmp(next_token, "winc")) {
+                char *time_inc_token = strtok(NULL, sep);
+                assert(time_inc_token);
+                int w_time_inc = atoi(time_inc_token);
+                if (w_time_inc > 0) {
+                    set_white_time_inc(w_time_inc);
+                } else {
+                    set_white_time_inc(0);
+                }
+            }
+            if (!strcmp(next_token, "binc")) {
+                char *time_inc_token = strtok(NULL, sep);
+                assert(time_inc_token);
+                int b_time_inc = atoi(time_inc_token);
+                if (b_time_inc > 0) {
+                    set_black_time_inc(b_time_inc);
+                } else {
+                    set_black_time_inc(0);
+                }
+            }
+            next_token = strtok(NULL, sep);
+        }
+        free(tokens_buffer);
+    }
+
+    assert(is_init);
+    set_to_stop(false);
+
+    pthread_t search_thread;
+    pthread_create(&search_thread, NULL, &threadable_think, pBoard);
+}
+
+void uci_best_move(Move m) {
     char *notation = move_to_coord_notation(m);
     printf("bestmove %s\n", notation);
     fflush(stdout);
@@ -177,6 +303,10 @@ bool uci_process_command(char *line) {
         uci_init();
         return false;
     }
+    if (strpref("stop", line)) {
+        uci_stop();
+        return false;
+    }
     if (strpref("quit", line)) {
         uci_quit();
         return true;
@@ -199,25 +329,17 @@ bool uci_process_command(char *line) {
 }
 
 void uci_loop() {
-    printf("info Dev Engine 0.0.1\n");
-    fflush(stdout);
-
+    pre_init();
     char *buffer = NULL;
     size_t read_bytes = 0;
     bool should_exit = false;
-    FILE *f = fopen("/Users/chstansbury/src/Chess-Engine/engine.log", "w+");
-    if (!f) {
-        return;
-    }
     while ((read_bytes = getline(&buffer, &read_bytes, stdin)) > 0) {
-        fprintf(f, "%s", buffer);
+        log_string(buffer);
         should_exit = uci_process_command(buffer);
         free(buffer);
         buffer = NULL;
         if (should_exit) {
-            fclose(f);
             return;
         }
     }
-    fclose(f);
 }

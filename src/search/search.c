@@ -4,6 +4,8 @@
 #include <time.h>
 
 #include "search.h"
+#include "../log.h"
+#include "../manage_time.h"
 #include "../zobrist.h"
 #include "../move/movegen.h"
 #include "../move/notation.h"
@@ -11,13 +13,12 @@
 #include "../board/board.h"
 #include "../defines.h"
 #include "../extglobals.h"
+#include "../uci.h"
 
 // kind of a hack, would be better if we had
 // proper data structures, vectors or stacks would be nice
 // C++!
 const int search_depth = 60;
-
-Move singleBestMove = 0;
 
 Move get_next_pv(Board *pBoard) {
     MoveSet moves;
@@ -34,13 +35,12 @@ Move get_next_pv(Board *pBoard) {
     return table_entry->_m;
 }
 
-void print_pv(Board *pBoard) {
+void print_pv(Board *pBoard, int depth, int score, Move root_best_move) {
     Move moves[MAX_MOVES_PER_GAME];
     U64 keys[MAX_MOVES_PER_GAME];
     int iter = 0;
-    char *notation = NULL;
     //U64 orig_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
-    for(Move best_move = singleBestMove; best_move;
+    for(Move best_move = root_best_move; best_move;
         best_move = get_next_pv(pBoard)) {
         if(!best_move) {
             break;
@@ -57,46 +57,60 @@ void print_pv(Board *pBoard) {
         moves[iter] = best_move;
         keys[iter] = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
         iter++;
-        notation = moveToNotation(pBoard, best_move);
-        assert(notation);
-        printf("%s ", notation);
-        free(notation);
-        notation = NULL;
         makeMove(pBoard, best_move);
     }
+    int n_moves = iter;
     iter--;
-    printf("\b\n");
     for (; iter >= 0; iter--) {
         unmakeMove(pBoard, moves[iter]);
     }
+    uci_info(depth, 0, score, 0, moves, n_moves);
+    log_string("Sent position info to gui.");
+}
+
+void *threadable_think(void *arg) {
+    log_string("Starting to think.");
+    set_is_thinking(true);
+    Board *pBoard = (Board *) arg;
+    Move m = think(pBoard);
+    uci_best_move(m);
+    set_is_thinking(false);
+    log_string("Ending think.");
+    return NULL;
 }
 
 Move think(Board *pBoard) {
     // a really stupid search for the moment
     // should manage its time and use an iterative deepening method
-    singleBestMove = 0;
 
-    clock_t end_time = clock() + (5 * CLOCKS_PER_SEC);
+    Move best_move_last = 0;
+    Move best_move = 0;
+
+    //clock_t end_time = clock() + (5 * CLOCKS_PER_SEC);
     int color = pBoard->info.toPlay == W ? 1 : -1;
-    __attribute__((unused)) int score;
-    for (int c_depth = 2; c_depth <= search_depth; c_depth++) {
-        if (clock() > end_time) break;
+    int score;
+    start_search_clock(pBoard->info.toPlay == W);
+    for (int c_depth = 1; c_depth <= search_depth &&
+             should_continue_greater_depth(0); c_depth++) {
         inc_hash_time();
-        printf("Depth: %d\n", c_depth);
         score = negaMax(0, c_depth, -EVAL_INFTY,
-                        EVAL_INFTY, color, &singleBestMove);
-        if (!singleBestMove) {
+                        EVAL_INFTY, color, &best_move);
+        if (should_stop()) {
+            best_move = best_move_last;
+        } else {
+            best_move_last = best_move;
+            if (!best_move) {
+                printf("Game over!");
+                break;
+            }
+            print_pv(pBoard, c_depth, score, best_move);
+        }
+        if (!best_move) {
             printf("Game over!");
             break;
         }
-        print_pv(pBoard);
     }
-    if (singleBestMove) {
-        char *move_not = move_to_coord_notation(singleBestMove);
-        printf("info score cp 0 depth 6 move: %s\n", move_not);
-        free(move_not);
-    }
-    return singleBestMove;
+    return best_move;
 }
 
 int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm) {
@@ -167,6 +181,8 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
 
     // need to be more careful about whether the stored move is legal
     (*pm) = 0;
+
+    if (should_stop()) return bestValue;
     U64 zob_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
     TTElem *table_entry = search_hash(zob_key);
     if (table_entry && table_entry->_depth >= depth) {
@@ -256,9 +272,6 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
         if (value > alpha) {
             best_found_move = moves.moveList[i];
             (*pm) = best_found_move;
-            if (ply == 0) {
-                singleBestMove = moves.moveList[i];
-            }
             alpha = value;
         }
         if (alpha >= beta)
@@ -266,10 +279,12 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
     }
     if (!legal_moves) {
         if (checks(pBoard, pBoard->info.toPlay)) {
-            return -EVAL_MATE + ply;
+            bestValue = -EVAL_MATE + ply;
         } else {
-            return 0;
+            bestValue = 0;
         }
+        write_hash(zob_key, bestValue, 0, depth, PV_NODE);
+        return bestValue;
     }
     // synchronize to TT
     if (bestValue <= alpha) {

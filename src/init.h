@@ -3,6 +3,13 @@
 
 #include "move/movegen.h"
 
+/* Function: pre_init
+ * ------------------
+ * Initializes some things that should be available before
+ * the GUI gives the isready command like logging capabilities.
+ */
+void pre_init();
+
 /* Function: init
  * --------------
  * init is called by main to fill

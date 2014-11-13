@@ -21,6 +21,7 @@
  */
 int main (int argc, char const *argv[]) {
     if (argc == 1) {
+        pre_init();
         init();
 
         printf("%s\n",ENGINE_VERSION);

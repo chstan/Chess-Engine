@@ -6,6 +6,7 @@
 
 #define MAX_PLY 20
 
+void *threadable_think(void *arg);
 Move think(Board *pBoard);
 
 int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm);
