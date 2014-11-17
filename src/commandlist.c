@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "commandlist.h"
+#include "manage_time.h"
 #include "defines.h"
 #include "extglobals.h"
 #include "alert.h"
@@ -85,8 +86,16 @@ bool playCommand(int tokenCount, char **tokens) {
         printMove(m);
 #endif
         makeMove(pBoard, m);
+        // have to set some time controls
+        set_infinite_think(false);
+        set_black_time_left(20000);
+        set_white_time_left(20000);
+        set_black_time_inc(0);
+        set_white_time_inc(0);
+        set_to_stop(false);
 
         Move reply = think(pBoard);
+        printMove(reply);
         char *replyString = moveToNotation(pBoard, reply);
         if(replyString) {
             printf("%s\n", replyString);

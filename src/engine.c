@@ -28,6 +28,7 @@ void usage_message() {
  */
 int main (int argc, char const *argv[]) {
     if (argc == 1) {
+        set_logging_location("engine.log");
         pre_init();
         init();
 
