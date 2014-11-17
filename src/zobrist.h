@@ -49,6 +49,7 @@ bool is_fail_low(TTElem *e);
 
 unsigned long long hash_per_million_full();
 
+void reset_hash();
 void inc_hash_time();
 void set_current_hash_time(unsigned int time);
 unsigned char insert_time(unsigned char flags);
@@ -56,7 +57,5 @@ unsigned char node_type(unsigned char flags);
 TTElem *search_hash(U64 key);
 void write_hash(U64 key, int score, Move m, unsigned char depth,
                    unsigned char node_type);
-
-
 
 #endif

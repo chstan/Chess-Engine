@@ -81,7 +81,7 @@ void uci_prep_newgame() {
         init();
     }
     resetBoard(pBoard);
-    // also reset transposition tables when they are written
+    reset_hash();
 }
 
 void uci_init() {
