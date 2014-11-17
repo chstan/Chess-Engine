@@ -65,17 +65,15 @@ void print_pv(Board *pBoard, int depth, int score, Move root_best_move) {
         unmakeMove(pBoard, moves[iter]);
     }
     uci_info(depth, 0, score, 0, moves, n_moves);
-    log_string("Sent position info to gui.");
 }
 
 void *threadable_think(void *arg) {
-    log_string("Starting to think.");
-    set_is_thinking(true);
+    log_string("Starting to think.\n");
     Board *pBoard = (Board *) arg;
     Move m = think(pBoard);
     uci_best_move(m);
     set_is_thinking(false);
-    log_string("Ending think.");
+    log_string("Ending think.\n");
     return NULL;
 }
 
@@ -100,13 +98,13 @@ Move think(Board *pBoard) {
         } else {
             best_move_last = best_move;
             if (!best_move) {
-                printf("Game over!");
+                log_printf("Game over!");
                 break;
             }
             print_pv(pBoard, c_depth, score, best_move);
         }
         if (!best_move) {
-            printf("Game over!");
+            log_printf("Game over!");
             break;
         }
     }

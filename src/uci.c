@@ -24,34 +24,33 @@ bool is_init = false;
 void uci_info(int depth, int selective_depth, int score,
               __attribute__((unused)) unsigned char node_type,
               Move *pv_moves, size_t pv_move_count) {
-    printf("info depth %d ", depth);
+    log_printf("info depth %d ", depth);
     if (selective_depth) {
-        printf("seldepth %d ", selective_depth);
+        log_printf("seldepth %d ", selective_depth);
     }
     if (abs(score) > EVAL_MATE - 200) {
         if (score > 0) {
             // computer winning
-            printf("score mate %d ", (EVAL_MATE - score + 1)/2);
+            log_printf("score mate %d ", (EVAL_MATE - score + 1)/2);
         } else {
             // computer losing
-            printf("score mate %d ", -(EVAL_MATE + score + 1)/2);
+            log_printf("score mate %d ", -(EVAL_MATE + score + 1)/2);
         }
     } else {
-        printf("score cp %d ", score);
+        log_printf("score cp %d ", score);
     }
     if (pv_move_count) {
         // print the principal variation
-        printf("pv");
+        log_printf("pv");
         for (size_t move_iter = 0; move_iter < pv_move_count && !should_stop(); move_iter++) {
             char *notation = move_to_coord_notation(pv_moves[move_iter]);
             assert(notation);
-            printf(" %s", notation);
+            log_printf(" %s", notation);
             free(notation);
         }
     }
-    printf(" hashfull %llu", hash_per_million_full());
-    printf("\n");
-    fflush(stdout);
+    log_printf(" hashfull %llu", hash_per_million_full());
+    log_printf("\n");
 }
 
 void apply_moves_from_str(char *moves_str) {
@@ -90,18 +89,24 @@ void uci_init() {
         is_init = true;
         init();
     }
-    printf("readyok\n");
-    fflush(stdout);
+    uci_stop();
+    log_printf("readyok\n");
 }
 
 void uci_quit() {
     uci_stop();
-    sleep(1); // bad, should wait for think thread exit
+
+    // wait for search thread to exit safely
+    while (is_thinking() && !sleep(1));
+
     if (is_init)
         prepareForExit();
 }
 
 void uci_position(const char *position_str) {
+    // get outta here Scid
+    if (is_thinking()) return;
+
     const char *startpos_str = "startpos";
     // note the spaces in moves_str!
     const char *moves_str = " moves ";
@@ -196,7 +201,7 @@ void uci_go_test() {
 
 void uci_go(char *go_options) {
     // Weirdness in Scid vs Mac. Something to look into...
-    // Multiple go commands being sent.
+    // Multiple go commands being sent. Multiple positions too.
     if (is_thinking()) {
         log_string("Woah there!");
         return;
@@ -273,21 +278,22 @@ void uci_go(char *go_options) {
     set_to_stop(false);
 
     pthread_t search_thread;
+    // set thinking here, to prevent the ui from thinking the search
+    // hasn't been started
+    set_is_thinking(true);
     pthread_create(&search_thread, NULL, &threadable_think, pBoard);
 }
 
 void uci_best_move(Move m) {
     char *notation = move_to_coord_notation(m);
-    printf("bestmove %s\n", notation);
-    fflush(stdout);
+    log_printf("bestmove %s\n", notation);
     free(notation);
 }
 
 void uci_greet() {
-    printf("id name Dev\n");
-    printf("id author Conrad Stansbury, Tom Mullins\n");
-    printf("uciok\n");
-    fflush(stdout);
+    log_printf("id name Dev\n");
+    log_printf("id author Conrad Stansbury, Tom Mullins\n");
+    log_printf("uciok\n");
 }
 
 bool uci_process_command(char *line) {

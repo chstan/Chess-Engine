@@ -1,13 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "uci.h"
 #include "engine.h"
+#include "uci.h"
+#include "log.h"
 #include "defines.h"
 #include "globals.h"
 #include "init.h"
 #include "exit.h"
 #include "command.h"
+
+void usage_message() {
+    printf("If called with parameters two are required.\n");
+    printf("The first should be --uci to signal use with a GUI\n");
+    printf("And the second should be the path to a file to use for logging");
+}
 
 /* Function: main
  * --------------
@@ -29,11 +36,15 @@ int main (int argc, char const *argv[]) {
         readCommands();
         prepareForExit();
     } else {
-        if (argc == 2 && !strcmp(argv[1], "--uci")) {
+        if (argc == 3 && !strcmp(argv[1], "--uci")) {
+            // need a logging location as the second argument
             // check if a UCI board wants to use the engine
+            set_logging_location(argv[2]);
             uci_loop();
+        } else {
+            // otherwise exit
+            usage_message();
         }
-        // otherwise exit
     }
 
     return 0;

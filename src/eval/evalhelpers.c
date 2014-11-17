@@ -122,9 +122,9 @@ int all_piece_square_scores (Board *pBoard) {
     score += piece_square_difference(pBoard->position.pieceBB[WHITE_QUEEN],
                                      pBoard->position.pieceBB[BLACK_QUEEN],
                                      queen_squares);
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
-                                     pBoard->position.pieceBB[BLACK_KING],
-                                     king_squares);
+    //score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
+    //                                     pBoard->position.pieceBB[BLACK_KING],
+    //king_squares);
     return score;
 }
 
