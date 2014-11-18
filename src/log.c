@@ -7,7 +7,7 @@
 
 #include "log.h"
 
-#define LOGGING
+//#define LOGGING
 
 char *logging_location = NULL;
 
@@ -41,30 +41,24 @@ void log_string(__attribute__((unused)) char *s) {
 }
 
 void log_printf(const char *fmt, ...) {
-    pthread_mutex_lock(&log_lock);
-
-    va_list arg_f, arg_o;
+    va_list arg_o;
+    va_start(arg_o, fmt);
 
     #ifdef LOGGING
+    va_list arg_f;
+    va_copy(arg_f, arg_o);
+    pthread_mutex_lock(&log_lock);
     FILE *log_file = fopen(logging_location, "a+");
     assert(log_file);
-    #endif
-
-    va_start(arg_f, fmt);
-    va_copy(arg_o, arg_f);
-
-    vfprintf(stdout, fmt, arg_o);
-    #ifdef LOGGING
     vfprintf(log_file, fmt, arg_f);
-    #endif
-    va_end(arg_o);
-    va_end(arg_f);
-
-    #ifdef LOGGING
     fflush(log_file);
     fclose(log_file);
+    pthread_mutex_unlock(&log_lock);
+    va_end(arg_f);
     #endif
+
+    vfprintf(stdout, fmt, arg_o);
     fflush(stdout);
 
-    pthread_mutex_unlock(&log_lock);
+    va_end(arg_o);
 }
