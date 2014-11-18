@@ -13,7 +13,7 @@
 void usage_message() {
     printf("If called with parameters two are required.\n");
     printf("The first should be --uci to signal use with a GUI\n");
-    printf("And the second should be the path to a file to use for logging");
+    printf("And the second should be the path to a file to use for logging.\n");
 }
 
 /* Function: main
