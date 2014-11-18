@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,8 +8,6 @@
 #include "log.h"
 
 #define LOGGING
-
-//#define log_printf(fmt, ...) _log_printf_internal(fmt"\n", ##__VA_ARGS__)
 
 char *logging_location = NULL;
 
@@ -33,6 +32,7 @@ void log_string(__attribute__((unused)) char *s) {
     #ifdef LOGGING
     pthread_mutex_lock(&log_lock);
     FILE *f = fopen(logging_location, "a+");
+    assert(f);
     fprintf(f, "%s", s);
     fflush(f);
     fclose(f);
@@ -47,6 +47,7 @@ void log_printf(const char *fmt, ...) {
 
     #ifdef LOGGING
     FILE *log_file = fopen(logging_location, "a+");
+    assert(log_file);
     #endif
 
     va_start(arg_f, fmt);
@@ -61,6 +62,7 @@ void log_printf(const char *fmt, ...) {
 
     #ifdef LOGGING
     fflush(log_file);
+    fclose(log_file);
     #endif
     fflush(stdout);
 
