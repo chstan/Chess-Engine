@@ -88,23 +88,26 @@ Move think(Board *pBoard) {
     int color = pBoard->info.toPlay == W ? 1 : -1;
     int score;
     start_search_clock(pBoard->info.toPlay == W);
-    for (int c_depth = 1; c_depth <= search_depth &&
+    score = negaMax(0, 1, -EVAL_INFTY, EVAL_INFTY, color, &best_move, false);
+    best_move_last = best_move;
+    inc_hash_time();
+    for (int c_depth = 2; c_depth <= search_depth &&
              should_continue_greater_depth(0); c_depth++) {
         inc_hash_time();
         score = negaMax(0, c_depth, -EVAL_INFTY,
-                        EVAL_INFTY, color, &best_move);
+                        EVAL_INFTY, color, &best_move, true);
         if (should_stop()) {
             best_move = best_move_last;
         } else {
             best_move_last = best_move;
             if (!best_move) {
-                log_printf("Game over!");
+                log_printf("Game over!\n");
                 break;
             }
             print_pv(pBoard, c_depth, score, best_move);
         }
         if (!best_move) {
-            log_printf("Game over!");
+            log_printf("Game over!\n");
             break;
         }
     }
@@ -172,7 +175,8 @@ int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm) {
 // color is +1 for white and -1 for black, reflecting the consistency that
 // for the purposes of board evaluation positive scores favor the person
 // to play
-int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
+int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
+            bool check_for_stop) {
     int value = -EVAL_INFTY;
     int bestValue = -EVAL_INFTY;
     MoveSet moves;
@@ -180,7 +184,7 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
     // need to be more careful about whether the stored move is legal
     (*pm) = 0;
 
-    if (should_stop()) return bestValue;
+    if (check_for_stop && should_stop()) return bestValue;
     U64 zob_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
     TTElem *table_entry = search_hash(zob_key);
     if (table_entry && table_entry->_depth >= depth) {
@@ -226,7 +230,8 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
         // checks? if (checks(pBoard, otherColor(pBoard->info.toPlay))) {...}
         // not needed since is in the transposition table
         Move t = 0;
-        value = -negaMax(ply + 1, depth - 1, -beta, -alpha, -1 * color, &t);
+        value = -negaMax(ply + 1, depth - 1, -beta, -alpha, -1 * color, &t,
+                         check_for_stop);
         unmakeLastMove(pBoard);
         if (value > bestValue) {
             bestValue = value;
@@ -263,7 +268,8 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm) {
             (*pm) = best_found_move;
         }
         Move t = 0;
-        value = -negaMax(ply+1, depth-1, -beta, -alpha, -1 * color, &t);
+        value = -negaMax(ply+1, depth-1, -beta, -alpha, -1 * color, &t,
+                         check_for_stop);
         unmakeMove(pBoard, moves.moveList[i]);
 
         if (value > bestValue) bestValue = value;

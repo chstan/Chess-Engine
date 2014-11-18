@@ -11,6 +11,7 @@ Move think(Board *pBoard);
 
 int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm);
 
-int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm);
+int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
+            bool check_for_stop);
 
 #endif
