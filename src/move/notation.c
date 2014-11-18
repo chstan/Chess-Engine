@@ -320,22 +320,6 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
         if (color(moved_piece) == W) {
             switch (promo_char) {
             case 'Q':
-                promo_piece = BQ;
-                break;
-            case 'R':
-                promo_piece = BR;
-                break;
-            case 'B':
-                promo_piece = BB;
-                break;
-            case 'N':
-                promo_piece = BN;
-                break;
-            }
-        }
-        if (color(moved_piece) == B) {
-            switch (promo_char) {
-            case 'Q':
                 promo_piece = WQ;
                 break;
             case 'R':
@@ -346,6 +330,22 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
                 break;
             case 'N':
                 promo_piece = WN;
+                break;
+            }
+        }
+        if (color(moved_piece) == B) {
+            switch (promo_char) {
+            case 'Q':
+                promo_piece = BQ;
+                break;
+            case 'R':
+                promo_piece = BR;
+                break;
+            case 'B':
+                promo_piece = BB;
+                break;
+            case 'N':
+                promo_piece = BN;
                 break;
             }
         }
