@@ -1,13 +1,13 @@
 [
     { "name": "Dev",
-      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/engine --uci Dev.log",
+      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/nologging --uci DevNoKingEval.log",
       "protocol": "uci",
       "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
     }
 ,
-    { "name": "DevNoKingEval",
-      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/engine --uci DevNoKingEval.log",
-      "protocol": "uci",
-      "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
-     }
+    { "name": "TSCP",
+      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/tscp",
+      "protocol": "xboard",
+      "initStrings": ["xboard"]
+    }
 ]
