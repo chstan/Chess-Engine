@@ -91,11 +91,15 @@ Move think(Board *pBoard) {
     score = negaMax(0, 1, -EVAL_INFTY, EVAL_INFTY, color, &best_move, false);
     best_move_last = best_move;
     inc_hash_time();
+    clock_t ticks_start = clock();
+    clock_t ticks_end = clock();
     for (int c_depth = 2; c_depth <= search_depth &&
-             should_continue_greater_depth(0); c_depth++) {
+             should_continue_greater_depth(ticks_end - ticks_start); c_depth++) {
         inc_hash_time();
+        ticks_start = ticks_end;
         score = negaMax(0, c_depth, -EVAL_INFTY,
                         EVAL_INFTY, color, &best_move, true);
+        ticks_end = clock(); // time how long the last search took
         if (should_stop()) {
             best_move = best_move_last;
         } else {

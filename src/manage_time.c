@@ -51,10 +51,34 @@ void start_search_clock(bool is_white) {
     search_target_end.tv_usec = target_usec;
 }
 
-bool should_continue_greater_depth(__attribute__((unused)) unsigned int last_search_time) {
+bool should_continue_greater_depth(clock_t last_search_ticks) {
+    // this seems to be harmful for the moment, but it is possible that when
+    // the effective branching factor is smaller that this will be a useful
+    // thing to do
+    #ifdef CONSERVATIVE_SEARCH_TIMING
+    if (think_infinite) return true;
+
+    // this is a guess
+    clock_t effective_branching_factor = 8;
+
+    // this is a little ugly because we are conflating
+    // wall time with the processor time
+    struct timeval current_time;
+    gettimeofday(&current_time, NULL);
+    long long int d_sec = search_target_end.tv_sec - current_time.tv_sec;
+    long long int d_usec = search_target_end.tv_usec - current_time.tv_usec;
+
+    // convert to ticks
+    d_usec += d_sec * 1000000;
+    d_usec = (d_usec * CLOCKS_PER_SEC) / (1000000);
+
+    if (d_usec < (long long int) (last_search_ticks * effective_branching_factor)) {
+        // not enough time remaining to complete an additional search
+        return false;
+    }
+    #endif
 
     return !should_stop();
-    // UNFINISHED, should try to determine whether next search will complete
 }
 
 bool should_stop_on_time() {

@@ -1,6 +1,7 @@
 #ifndef MANAGE_TIME_H
 #define MANAGE_TIME_H
 
+#include <time.h>
 #include <stdbool.h>
 
 void set_is_thinking(bool s);
@@ -16,7 +17,7 @@ void set_black_time_left(unsigned int b_time_left);
 void set_white_time_inc(unsigned int w_time_inc);
 void set_black_time_inc(unsigned int b_time_inc);
 
-bool should_continue_greater_depth(unsigned int last_search_time);
+bool should_continue_greater_depth(clock_t last_search_ticks);
 bool should_stop_on_time();
 
 void init_manage_time();
