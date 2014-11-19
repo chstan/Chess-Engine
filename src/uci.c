@@ -23,6 +23,7 @@ bool is_init = false;
 
 void uci_info(int depth, int selective_depth, int score,
               __attribute__((unused)) unsigned char node_type,
+              size_t searched_nodes, size_t searched_ms,
               Move *pv_moves, size_t pv_move_count) {
     log_printf("info depth %d ", depth);
     if (selective_depth) {
@@ -39,6 +40,8 @@ void uci_info(int depth, int selective_depth, int score,
     } else {
         log_printf("score cp %d ", score);
     }
+    log_printf("nodes %lu ", searched_nodes);
+    log_printf("time %lu ", searched_ms);
     if (pv_move_count) {
         // print the principal variation
         log_printf("pv");

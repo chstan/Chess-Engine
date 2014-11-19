@@ -51,7 +51,7 @@ void start_search_clock(bool is_white) {
     search_target_end.tv_usec = target_usec;
 }
 
-bool should_continue_greater_depth(clock_t last_search_ticks) {
+bool should_continue_greater_depth(__attribute__((unused)) clock_t last_search_ticks) {
     // this seems to be harmful for the moment, but it is possible that when
     // the effective branching factor is smaller that this will be a useful
     // thing to do

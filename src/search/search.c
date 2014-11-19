@@ -35,7 +35,8 @@ Move get_next_pv(Board *pBoard) {
     return table_entry->_m;
 }
 
-void print_pv(Board *pBoard, int depth, int score, Move root_best_move) {
+void print_pv(Board *pBoard, int depth, int score, Move root_best_move,
+              size_t searched_nodes, clock_t searched_ticks) {
     Move moves[MAX_MOVES_PER_GAME];
     U64 keys[MAX_MOVES_PER_GAME];
     int iter = 0;
@@ -64,7 +65,9 @@ void print_pv(Board *pBoard, int depth, int score, Move root_best_move) {
     for (; iter >= 0; iter--) {
         unmakeMove(pBoard, moves[iter]);
     }
-    uci_info(depth, 0, score, 0, moves, n_moves);
+
+    size_t searched_ms = (((unsigned long long int) searched_ticks) * 1000) / CLOCKS_PER_SEC;
+    uci_info(depth, 0, score, 0, searched_nodes, searched_ms, moves, n_moves);
 }
 
 void *threadable_think(void *arg) {
@@ -84,22 +87,33 @@ Move think(Board *pBoard) {
     Move best_move_last = 0;
     Move best_move = 0;
 
-    //clock_t end_time = clock() + (5 * CLOCKS_PER_SEC);
+    size_t searched_nodes = 0;
+    clock_t total_search_ticks = 0;
+
     int color = pBoard->info.toPlay == W ? 1 : -1;
     int score;
+
     start_search_clock(pBoard->info.toPlay == W);
-    score = negaMax(0, 1, -EVAL_INFTY, EVAL_INFTY, color, &best_move, false);
-    best_move_last = best_move;
-    inc_hash_time();
+
     clock_t ticks_start = clock();
+    score = negaMax(0, 1, -EVAL_INFTY, EVAL_INFTY, color, &best_move,
+                    &searched_nodes, false);
+    inc_hash_time();
     clock_t ticks_end = clock();
+
+    total_search_ticks += (ticks_end - ticks_start);
+
+    best_move_last = best_move;
+
     for (int c_depth = 2; c_depth <= search_depth &&
              should_continue_greater_depth(ticks_end - ticks_start); c_depth++) {
-        inc_hash_time();
         ticks_start = ticks_end;
-        score = negaMax(0, c_depth, -EVAL_INFTY,
-                        EVAL_INFTY, color, &best_move, true);
-        ticks_end = clock(); // time how long the last search took
+        score = negaMax(0, c_depth, -EVAL_INFTY, EVAL_INFTY,
+                        color, &best_move, &searched_nodes, true);
+        inc_hash_time();
+        ticks_end = clock();
+        total_search_ticks += (ticks_end - ticks_start);
+
         if (should_stop()) {
             best_move = best_move_last;
         } else {
@@ -108,7 +122,7 @@ Move think(Board *pBoard) {
                 log_printf("Game over!\n");
                 break;
             }
-            print_pv(pBoard, c_depth, score, best_move);
+            print_pv(pBoard, c_depth, score, best_move, searched_nodes, total_search_ticks);
         }
         if (!best_move) {
             log_printf("Game over!\n");
@@ -118,7 +132,9 @@ Move think(Board *pBoard) {
     return best_move;
 }
 
-int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm) {
+int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm,
+                     size_t *searched_nodes) {
+    (*searched_nodes)++;
     int base_value = evaluate(pBoard);
 
     MoveSet moves;
@@ -157,7 +173,8 @@ int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm) {
 
         legal_moves++;
         Move best_quiesce = 0; // unused
-        value = -quiescentNegaMax(ply + 1, -beta, -alpha, -1*color, &best_quiesce);
+        value = -quiescentNegaMax(ply + 1, -beta, -alpha, -1*color, &best_quiesce,
+                                  searched_nodes);
         unmakeMove(pBoard, moves.moveList[i]);
 
         if (value >= beta) return beta;
@@ -180,7 +197,8 @@ int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm) {
 // for the purposes of board evaluation positive scores favor the person
 // to play
 int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
-            bool check_for_stop) {
+            size_t *searched_nodes, bool check_for_stop) {
+    (*searched_nodes)++;
     int value = -EVAL_INFTY;
     int bestValue = -EVAL_INFTY;
     MoveSet moves;
@@ -207,7 +225,8 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
 
     if (depth == 0) {
         Move best_quiesce_move = 0;
-        value = quiescentNegaMax(ply, alpha, beta, color, &best_quiesce_move);
+        value = quiescentNegaMax(ply, alpha, beta, color, &best_quiesce_move,
+                                 searched_nodes);
         if (!best_quiesce_move)
             return value;
         if (value <= alpha) {
@@ -235,7 +254,7 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         // not needed since is in the transposition table
         Move t = 0;
         value = -negaMax(ply + 1, depth - 1, -beta, -alpha, -1 * color, &t,
-                         check_for_stop);
+                         searched_nodes, check_for_stop);
         unmakeLastMove(pBoard);
         if (value > bestValue) {
             bestValue = value;
@@ -273,7 +292,7 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         }
         Move t = 0;
         value = -negaMax(ply+1, depth-1, -beta, -alpha, -1 * color, &t,
-                         check_for_stop);
+                         searched_nodes, check_for_stop);
         unmakeMove(pBoard, moves.moveList[i]);
 
         if (value > bestValue) bestValue = value;
