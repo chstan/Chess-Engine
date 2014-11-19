@@ -5,6 +5,12 @@
       "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
     }
 ,
+    { "name": "DevTTFix",
+      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/tt_fix --uci DevNoKingEval.log",
+      "protocol": "uci",
+      "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
+    }
+,
     { "name": "TSCP",
       "command": "/Users/chstansbury/src/Chess-Engine/test/engines/tscp",
       "protocol": "xboard",

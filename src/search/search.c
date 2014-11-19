@@ -223,18 +223,23 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         }
     }
 
+    int write_depth = table_entry
+        ? (table_entry->_depth > depth ? table_entry->_depth : depth)
+        : depth;
+
     if (depth == 0) {
         Move best_quiesce_move = 0;
         value = quiescentNegaMax(ply, alpha, beta, color, &best_quiesce_move,
                                  searched_nodes);
-        if (!best_quiesce_move)
+        if (!best_quiesce_move) {
             return value;
+        }
         if (value <= alpha) {
-            write_hash(zob_key, value, best_quiesce_move, depth, FAIL_LOW_NODE);
+            write_hash(zob_key, value, best_quiesce_move, write_depth, FAIL_LOW_NODE);
         } else if (value >= beta) {
-            write_hash(zob_key, value, best_quiesce_move, depth, FAIL_HIGH_NODE);
+            write_hash(zob_key, value, best_quiesce_move, write_depth, FAIL_HIGH_NODE);
         } else {
-            write_hash(zob_key, value, best_quiesce_move, depth, PV_NODE);
+            write_hash(zob_key, value, best_quiesce_move, write_depth, PV_NODE);
         }
         (*pm) = best_quiesce_move;
         return value;
@@ -253,12 +258,10 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         // checks? if (checks(pBoard, otherColor(pBoard->info.toPlay))) {...}
         // not needed since is in the transposition table
         Move t = 0;
-        value = -negaMax(ply + 1, depth - 1, -beta, -alpha, -1 * color, &t,
+        value = -negaMax(ply + 1, depth - 1, -beta, -alpha, -color, &t,
                          searched_nodes, check_for_stop);
         unmakeLastMove(pBoard);
-        if (value > bestValue) {
-            bestValue = value;
-        }
+        bestValue = value;
         if (value > alpha) {
             // this is already set
             // best_found_move = table_entry->_m;
@@ -310,16 +313,16 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         } else {
             bestValue = 0;
         }
-        write_hash(zob_key, bestValue, 0, depth, PV_NODE);
+        write_hash(zob_key, bestValue, 0, write_depth, PV_NODE);
         return bestValue;
     }
     // synchronize to TT
     if (bestValue <= alpha) {
-        write_hash(zob_key, bestValue, best_found_move, depth, FAIL_LOW_NODE);
+        write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_LOW_NODE);
     } else if (bestValue >= beta) {
-        write_hash(zob_key, bestValue, best_found_move, depth, FAIL_HIGH_NODE);
+        write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_HIGH_NODE);
     } else {
-        write_hash(zob_key, bestValue, best_found_move, depth, PV_NODE);
+        write_hash(zob_key, bestValue, best_found_move, write_depth, PV_NODE);
     }
     return bestValue;
 }

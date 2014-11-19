@@ -124,8 +124,6 @@ void write_hash(U64 key, int score, Move m, unsigned char depth,
         if (insert_time(b_iter->_flags) == hash_time ||
             node_type(b_iter->_flags) == PV_NODE) elem_score++;
 
-        if (insert_time(to_replace->_flags) == hash_time) elem_score--;
-
         if (b_iter->_depth < to_replace->_depth) elem_score--;
 
         if (elem_score < worst_score) {
