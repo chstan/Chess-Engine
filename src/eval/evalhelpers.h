@@ -5,15 +5,21 @@
 
 void initEval();
 
+void build_pawn_ranges(Board *pBoard,
+                       BitBoard *wpfr, BitBoard *wpbr,BitBoard *bpfr, BitBoard *bpbr,
+                       BitBoard *wpwfr, BitBoard *bpwfr);
+
 int all_piece_square_scores (Board *pBoard);
 
 int doubledPawns(Board *pBoard);
 
 int tripledPawns(Board *pBoard);
 
-int passedPawns(Board *pBoard);
+int passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
+                 BitBoard black_pawn_forward_range);
 
-int outsidePassedPawns(Board *pBoard);
+int outside_passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
+                         BitBoard black_pawn_forward_range);
 
 int bishopMobility(Board *pBoard);
 

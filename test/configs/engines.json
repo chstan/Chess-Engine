@@ -11,6 +11,18 @@
       "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
     }
 ,
+    { "name": "DevEvalFix",
+      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/eval_fix --uci DevNoKingEval.log",
+      "protocol": "uci",
+      "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
+    }
+,
+    { "name": "DevKingEval",
+      "command": "/Users/chstansbury/src/Chess-Engine/test/engines/with_king_eval --uci DevNoKingEval.log",
+      "protocol": "uci",
+      "workingDirectory": "/Users/chstansbury/src/Chess-Engine/test"
+    }
+,
     { "name": "TSCP",
       "command": "/Users/chstansbury/src/Chess-Engine/test/engines/tscp",
       "protocol": "xboard",

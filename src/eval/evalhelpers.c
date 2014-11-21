@@ -25,12 +25,84 @@
  * tournaments
  */
 
+// we could generalize to x files, and should
+BitBoard forward_range[2][64];
+BitBoard backward_range[2][64];
+
+BitBoard outsidePassedPawn[2][64];
+
+BitBoard kingSafetyZone[2][64];
+BitBoard pawnShield[2][64];
+
+void build_pawn_ranges(Board *pBoard,
+                       BitBoard *wpfr, BitBoard *wpbr,BitBoard *bpfr, BitBoard *bpbr,
+                       BitBoard *wpwfr, BitBoard *bpwfr) {
+    // white pawn forward range
+    *wpfr = pBoard->position.pieceBB[WHITE_PAWN];
+    BitBoard pawns = *wpfr;
+    int origin = -1, shift = 0;
+    while (pawns) {
+        shift = LSB(pawns) + 1;
+        if (shift < 64) pawns >>= shift;
+        origin += shift;
+        *wpfr |= forward_range[WHITE][origin];
+    }
+    // ...
+    *wpbr = pBoard->position.pieceBB[WHITE_PAWN];
+    pawns = *wpbr;
+    origin = -1;
+    shift = 0;
+    while (pawns) {
+        shift = LSB(pawns) + 1;
+        if (shift < 64) pawns >>= shift;
+        origin += shift;
+        *wpbr |= forward_range[BLACK][origin];
+    }
+
+    *bpfr = pBoard->position.pieceBB[BLACK_PAWN];
+    pawns = *bpfr;
+    origin = -1;
+    shift = 0;
+    while (pawns) {
+        shift = LSB(pawns) + 1;
+        if (shift < 64) pawns >>= shift;
+        origin += shift;
+        *bpfr |= forward_range[BLACK][origin];
+    }
+
+    *bpbr = pBoard->position.pieceBB[BLACK_PAWN];
+    pawns = *bpbr;
+    origin = -1;
+    shift = 0;
+    while (pawns) {
+        shift = LSB(pawns) + 1;
+        if (shift < 64) pawns >>= shift;
+        origin += shift;
+        *bpbr |= forward_range[WHITE][origin];
+    }
+    // build wide forward ranges from forward ranges
+    // basic process: mask off A and H files and smear them
+    // unfinished. Not sure what will be effective for outside passed
+    // pawn detection.
+    // *wpwfr = *wpfr & (~fileBB[0] & ~fileBB[7]);
+    *wpwfr = 0;
+    *bpwfr = 0;
+}
+
 // flips a square vertically
 int vflip_square(int sq) {
     return sq ^ 56;
 }
 
 // Preliminary piece square tables
+// ordering A1->A2->...->B8
+//           |
+//          B1->B2->...->B8
+//           |
+//           -
+//           |
+//          H1->H2->...->H8
+// so be sure to flip!
 const int pawn_squares[64] = {0,  0,  0,  0,  0,  0,  0,  0,
                               50, 50, 50, 50, 50, 50, 50, 50,
                               10, 10, 20, 30, 30, 20, 10, 10,
@@ -73,14 +145,24 @@ const int queen_squares[64] = {-20,-10,-10, -5, -5,-10,-10,-20,
                                -20,-10,-10, -5, -5,-10,-10,-20};
 
 // should use different piece square table for late in the game
-const int king_squares[64] = {-30,-40,-40,-50,-50,-40,-40,-30,
-                              -30,-40,-40,-50,-50,-40,-40,-30,
-                              -30,-40,-40,-50,-50,-40,-40,-30,
-                              -30,-40,-40,-50,-50,-40,-40,-30,
-                              -20,-30,-30,-40,-40,-30,-30,-20,
-                              -10,-20,-20,-20,-20,-20,-20,-10,
-                              20, 20,  0,  0,  0,  0, 20, 20,
-                              20, 30, 10,  0,  0, 10, 30, 20};
+const int king_squares_early[64] = {-30,-40,-40,-50,-50,-40,-40,-30,
+                                    -30,-40,-40,-50,-50,-40,-40,-30,
+                                    -30,-40,-40,-50,-50,-40,-40,-30,
+                                    -30,-40,-40,-50,-50,-40,-40,-30,
+                                    -20,-30,-30,-40,-40,-30,-30,-20,
+                                    -10,-20,-20,-20,-20,-20,-20,-10,
+                                    20, 20,  0,  0,  0,  0, 20, 20,
+                                    20, 30, 10,  0,  0, 10, 30, 20};
+
+const int king_squares_late[64] = {0, 0, 0, 0, 0, 0, 0, 0,
+                                   0, 0, 5, 5, 5, 5, 0, 0,
+                                   0, 5, 7, 8, 8, 7, 5, 0,
+                                   0, 5, 8, 15, 15, 8, 5, 0,
+                                   0, 5, 8, 15, 15, 8, 5, 0,
+                                   0, 5, 7, 8, 8, 7, 5, 0,
+                                   0, 0, 5, 5, 5, 5, 0, 0,
+                                   0, 0, 0, 0, 0, 0, 0, 0};
+
 
 int piece_square_difference(U64 white_pieces, U64 black_pieces,
                       const int *piece_squares) {
@@ -91,7 +173,7 @@ int piece_square_difference(U64 white_pieces, U64 black_pieces,
         if (shift < 64) white_pieces >>= shift;
         else white_pieces = 0;
         origin += shift;
-        score += piece_squares[origin];
+        score += piece_squares[vflip_square(origin)];
     }
     origin = -1;
     shift = 0;
@@ -100,14 +182,14 @@ int piece_square_difference(U64 white_pieces, U64 black_pieces,
         if (shift < 64) black_pieces >>= shift;
         else black_pieces = 0;
         origin += shift;
-        score -= piece_squares[vflip_square(origin)];
+        score -= piece_squares[origin];
     }
     return score;
 }
 
 int all_piece_square_scores (Board *pBoard) {
-    int score = 0;
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_PAWN],
+    int score;
+    score = piece_square_difference(pBoard->position.pieceBB[WHITE_PAWN],
                                      pBoard->position.pieceBB[BLACK_PAWN],
                                      pawn_squares);
     score += piece_square_difference(pBoard->position.pieceBB[WHITE_KNIGHT],
@@ -122,44 +204,45 @@ int all_piece_square_scores (Board *pBoard) {
     score += piece_square_difference(pBoard->position.pieceBB[WHITE_QUEEN],
                                      pBoard->position.pieceBB[BLACK_QUEEN],
                                      queen_squares);
-    //score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
-    //                                     pBoard->position.pieceBB[BLACK_KING],
-    //king_squares);
+    if (pBoard->info.currentMove > 50 || pBoard->info.material < 2000) {
+        // better would be to do checks on remaining minor pieces, I think
+        score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
+                                         pBoard->position.pieceBB[BLACK_KING],
+                                         king_squares_early);
+    } else {
+        score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
+                                         pBoard->position.pieceBB[BLACK_KING],
+                                         king_squares_late);
+    }
+
     return score;
 }
-
-// we could generalize to x files, and should
-BitBoard passedPawn[2][64];
-BitBoard outsidePassedPawn[2][64];
-
-BitBoard kingSafetyZone[2][64];
-BitBoard pawnShield[2][64];
-
 
 void initEval() {
     for(int rank = 0; rank < 8; rank++) {
         for(int file = 0; file < 8; file++) {
             int square = SQ(rank+1, file+1);
 
-            BitBoard passedMask = 0;
+            BitBoard forward_mask = 0;
+
             BitBoard outsideMask = 0;
             for(int fileIndex = 0; fileIndex < 8; fileIndex++) {
-                if(abs(fileIndex - file) < 2)
-                    passedMask |= fileBB[fileIndex];
+                if(abs(fileIndex - file) < 2) {
+                    forward_mask |= fileBB[fileIndex];
+                }
                 if(abs(fileIndex - file) < 3)
                     outsideMask |= fileBB[fileIndex];
             }
 
-            if(square < A8)
-                passedPawn[WHITE][square] = passedMask & ~(BITSET(square + 2) - 1);
+            if (square < A8)
+                forward_range[WHITE][square] = forward_mask & ~(BITSET(square + 2) - 1);
             else
-                passedPawn[WHITE][square] = 0;
+                forward_range[WHITE][square] = 0;
 
-            if(square >= A2)
-                passedPawn[BLACK][square] = passedMask & (BITSET(square - 6) - 1);
+            if (square >= A2)
+                forward_range[BLACK][square] = forward_mask & (BITSET(square - 6) - 1);
             else
-                passedPawn[BLACK][square] = 0;
-
+                forward_range[BLACK][square] = 0;
 
             if(square < A8)
                 outsidePassedPawn[WHITE][square] = outsideMask & ~(BITSET(square + 3) - 1);
@@ -194,23 +277,18 @@ int tripledPawns(Board *pBoard) {
     return tripledPawns;
 }
 
-int passedPawns(Board *pBoard) {
-    int passedPawnCount = 0;
-    // not as fast as an optimized bitboard method, but this is all still proof of concept
-    for(int square = A1; square <= H8; square++) {
-        int piece = pBoard->position.square[square];
-        if(piece == WHITE_PAWN) {
-            if(!(passedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
-                passedPawnCount++;
-        } else if(piece == BLACK_PAWN) {
-            if(!(passedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
-                passedPawnCount--;
-        }
-    }
-    return passedPawnCount;
+int passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
+                 BitBoard black_pawn_forward_range) {
+    // returns the passed pawn delta (+ for white)
+    int passed_pawn_count =
+        ((int) countBits(pBoard->position.pieceBB[WHITE_PAWN] & ~black_pawn_forward_range))-
+        ((int) countBits(pBoard->position.pieceBB[BLACK_PAWN] & ~white_pawn_forward_range));
+    return passed_pawn_count;
 }
 
-int outsidePassedPawns(Board *pBoard) {
+int outside_passed_pawns(Board *pBoard,
+                         __attribute__((unused)) BitBoard white_pawn_wide_forward_range,
+                         __attribute__((unused)) BitBoard black_pawn_wide_forward_range) {
     int outsidePawnCount = 0;
     // not as fast as an optimized bitboard method, but this is all still proof of concept
     for(int square = A1; square <= H8; square++) {
