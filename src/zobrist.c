@@ -15,6 +15,7 @@ U64 white_to_move_key;
 U64 ep_file_keys[8];
 
 void realloc_hash_mem();
+void realloc_eval_hash_mem();
 
 void initHashTable() {
     U64 temp;
@@ -37,6 +38,7 @@ void initHashTable() {
     }
 
     realloc_hash_mem();
+    realloc_eval_hash_mem();
 }
 
 // ================= TRANSPOSITION TABLE ===================
@@ -90,7 +92,7 @@ TTElem *lookup_bucket_by_key(U64 key) {
     // because there are num_buckets number of buckets
     // we can get a bitmask for the bucket number by
     unsigned int which_bucket = key & (num_buckets - 1);
-    return hash_mem + 4*(which_bucket);
+    return hash_mem + (elems_per_bucket)*(which_bucket);
 }
 
 void write_hash(U64 key, int score, Move m, unsigned char depth,
@@ -113,7 +115,7 @@ void write_hash(U64 key, int score, Move m, unsigned char depth,
         }
     }
 
-    // didn't find an easy to replace node, instead go ahead
+    // didn't find an easy to write node, instead go ahead
     // and replace
     b_iter = first_in_bucket;
     char worst_score = 0;
@@ -177,4 +179,70 @@ void realloc_hash_mem() {
     hash_mem = malloc(elems_per_bucket * num_buckets * sizeof(TTElem));
     assert(hash_mem != NULL);
     reset_hash();
+}
+
+// ================== EVAL HASH STUFF ===================
+unsigned int log_total_eval_elems = 21;
+unsigned int log_num_eval_buckets = 20;
+unsigned int elems_per_eval_bucket;
+unsigned int num_eval_buckets;
+
+EvalTElem *eval_hash_mem = NULL;
+
+EvalTElem *lookup_eval_bucket_by_key(U64 key) {
+    unsigned int which_bucket = key & (num_eval_buckets - 1);
+    return eval_hash_mem + (elems_per_eval_bucket)*(which_bucket);
+}
+
+void write_eval_hash(U64 key, int score) {
+    EvalTElem *first_in_bucket = lookup_eval_bucket_by_key(key);
+    EvalTElem *b_iter = first_in_bucket;
+    for (size_t elem_iter = 0; elem_iter < elems_per_eval_bucket;
+         elem_iter++, b_iter++) {
+        if (!b_iter->_key) {
+            b_iter->_key = key;
+            b_iter->_score = score;
+            return;
+        }
+    }
+
+    // didn't find an easy to write node, instead go ahead
+    // and replace a randomish one
+    // not sure if gcc will optimize out the %, meh
+    // we can also get maybe slightly better results by storing the hash_time?
+    // also not really necessary to store full score as int, they will always
+    // be smallish because mate detection happens in negaMax, could use short?
+    EvalTElem *to_replace = first_in_bucket + (key % elems_per_eval_bucket);
+    to_replace->_key = key;
+    to_replace->_score = score;
+}
+
+EvalTElem *search_eval_hash(U64 key) {
+    EvalTElem *bucket = lookup_eval_bucket_by_key(key);
+    for (size_t elem_iter = 0; elem_iter < elems_per_eval_bucket; ++elem_iter, ++bucket) {
+        if (bucket->_key == key) {
+            return bucket;
+        }
+    }
+    return NULL;
+}
+
+void free_eval_hash() {
+    if (eval_hash_mem) free(eval_hash_mem);
+}
+
+void reset_eval_hash() {
+     memset(eval_hash_mem, 0, elems_per_eval_bucket * num_eval_buckets * sizeof(EvalTElem));
+}
+
+void realloc_eval_hash_mem() {
+    num_eval_buckets = 1 << log_num_eval_buckets;
+    elems_per_eval_bucket = 1 << (log_total_elems - log_num_eval_buckets);
+    if (eval_hash_mem) {
+        free(eval_hash_mem);
+        eval_hash_mem = NULL;
+    }
+    eval_hash_mem = malloc(elems_per_eval_bucket * num_eval_buckets * sizeof(EvalTElem));
+    assert(eval_hash_mem != NULL);
+    reset_eval_hash();
 }

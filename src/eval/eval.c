@@ -3,8 +3,9 @@
 #include <math.h>
 #include <assert.h>
 
-#include "../move/movegen.h"
 #include "eval.h"
+#include "../zobrist.h"
+#include "../move/movegen.h"
 #include "evalhelpers.h"
 #include "../defines.h"
 
@@ -14,7 +15,17 @@ const int EVAL_MATE = EVAL_INFTY - 10000;
 int evaluate(Board *pBoard) {
     // for now we just use a naive evaluation, which counts material and does
     // somewhat primitive checks of mobility and board control
-    return evaluateNaive(pBoard);
+
+    // check for position in the eval hash table, write new entry if necessary
+    U64 key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
+    EvalTElem *eval_table_elem = search_eval_hash(key);
+    if (eval_table_elem)
+        return eval_table_elem->_score;
+
+    int evaluation = evaluateNaive(pBoard);
+
+    write_eval_hash(key, evaluation);
+    return evaluation;
 }
 
 int evaluateNaive(Board *pBoard) {

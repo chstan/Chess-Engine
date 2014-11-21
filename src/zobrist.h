@@ -5,13 +5,15 @@
 
 typedef unsigned int Move;
 
+void free_hash();
+void free_eval_hash();
+
 /* Function initHashTable
  * ----------------------
  * allocates random strings for board position hashing
  * as well as the hash table itself used to store move positions
  * and evaluations
  */
-void free_hash();
 void initHashTable();
 
 // keys for each piece at each board position
@@ -41,6 +43,11 @@ typedef struct {
     unsigned char _flags;
 } TTElem;
 
+typedef struct {
+    U64 _key;
+    int _score; // static evaluation score
+} EvalTElem;
+
 // other transposition table stuff
 
 bool is_pv_node(TTElem *e);
@@ -56,6 +63,10 @@ unsigned char insert_time(unsigned char flags);
 unsigned char node_type(unsigned char flags);
 TTElem *search_hash(U64 key);
 void write_hash(U64 key, int score, Move m, unsigned char depth,
-                   unsigned char node_type);
+                unsigned char node_type);
+
+void reset_eval_hash();
+EvalTElem *search_eval_hash(U64 key);
+void write_eval_hash(U64 key, int score);
 
 #endif
