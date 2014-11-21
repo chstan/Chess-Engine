@@ -202,24 +202,36 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
     int value = -EVAL_INFTY;
     int bestValue = -EVAL_INFTY;
     MoveSet moves;
+    int alpha_original = alpha;
+
+    if (check_for_stop && should_stop()) {
+        return bestValue;
+    }
+
+    if (depth == 0) {
+        Move best_quiesce_move = 0;
+        value = quiescentNegaMax(ply, alpha, beta, color, &best_quiesce_move,
+                                 searched_nodes);
+        (*pm) = best_quiesce_move;
+        return value;
+    }
 
     // need to be more careful about whether the stored move is legal
     (*pm) = 0;
 
-    if (check_for_stop && should_stop()) return bestValue;
     U64 zob_key = pBoard->info.state[pBoard->info.currentMove]._zobrist_key;
     TTElem *table_entry = search_hash(zob_key);
     if (table_entry && table_entry->_depth >= depth) {
+        (*pm) = table_entry->_m;
         if (is_pv_node(table_entry)) {
-            (*pm) = table_entry->_m;
             return table_entry->_score;
-        } else if (is_fail_high(table_entry) && table_entry->_score > beta) {
-            beta = table_entry->_score;
-        } else if (is_fail_low(table_entry) && table_entry->_score < alpha) {
+        } else if (is_fail_high(table_entry) && table_entry->_score > alpha) {
             alpha = table_entry->_score;
+        } else if (is_fail_low(table_entry) && table_entry->_score < beta) {
+            beta = table_entry->_score;
         }
         if (alpha >= beta) {
-            return value;
+            return table_entry->_score;
         }
     }
 
@@ -227,25 +239,7 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         ? (table_entry->_depth > depth ? table_entry->_depth : depth)
         : depth;
 
-    if (depth == 0) {
-        Move best_quiesce_move = 0;
-        value = quiescentNegaMax(ply, alpha, beta, color, &best_quiesce_move,
-                                 searched_nodes);
-        if (!best_quiesce_move) {
-            return value;
-        }
-        if (value <= alpha) {
-            write_hash(zob_key, value, best_quiesce_move, write_depth, FAIL_LOW_NODE);
-        } else if (value >= beta) {
-            write_hash(zob_key, value, best_quiesce_move, write_depth, FAIL_HIGH_NODE);
-        } else {
-            write_hash(zob_key, value, best_quiesce_move, write_depth, PV_NODE);
-        }
-        (*pm) = best_quiesce_move;
-        return value;
-    }
-
-    Move best_found_move = table_entry ? table_entry->_m : 0; // principal variation
+    Move best_found_move = table_entry ? table_entry->_m : 0;
     (*pm) = best_found_move;
 
     resetMoveSet(&moves);
@@ -269,10 +263,10 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         }
         if (alpha >= beta) {
             // fail
-            moves.totalMoves = 0;
-            legal_moves = 1;
+            return value;
         }
     } else {
+        // actually referred to a different position
         table_entry = NULL;
     }
 
@@ -307,17 +301,18 @@ int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
         if (alpha >= beta)
             break;
     }
-    if (!legal_moves) {
+    if (legal_moves == 0) {
         if (checks(pBoard, pBoard->info.toPlay)) {
             bestValue = -EVAL_MATE + ply;
         } else {
             bestValue = 0;
         }
-        write_hash(zob_key, bestValue, 0, write_depth, PV_NODE);
-        return bestValue;
     }
     // synchronize to TT
-    if (bestValue <= alpha) {
+    if (check_for_stop && should_stop()) {
+        return bestValue; // BAD DON'T WRITE
+    }
+    if (bestValue <= alpha_original) {
         write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_LOW_NODE);
     } else if (bestValue >= beta) {
         write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_HIGH_NODE);
