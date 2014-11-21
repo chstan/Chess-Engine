@@ -537,10 +537,6 @@ void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves) {
 }
 
 void resetMoveSet(MoveSet *pMoves) {
-    // memset for debugging
-    for (unsigned int i = 0; i < MAX_MOVES_PER_PLY; i++) {
-        pMoves->moveList[i] = 0;
-    }
     pMoves->moveIter = 0;
     pMoves->currentMoveIndex = 0;
     pMoves->timidIndex = 0;
