@@ -142,6 +142,7 @@ int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm,
 
     resetMoveSet(&moves);
     generateCapture(pBoard, &moves);
+    qsort(&(moves.moveList[0]), moves.totalMoves, sizeof(Move), compMove);
 
     if (base_value >= beta) {
         //for (int i = 0; i < moves.totalMoves; i++) {
