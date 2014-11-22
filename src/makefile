@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS = -g -Wall -Wextra -Werror -fstack-protector -Wno-typedef-redefinition -Wno-empty-translation-unit -pedantic -O3
+CFLAGS = -g -Wall -Wextra -Werror -fstack-protector -Wno-typedef-redefinition -pedantic -O3
 
 vpath %.h board
 vpath %.h move
