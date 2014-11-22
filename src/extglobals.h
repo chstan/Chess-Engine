@@ -10,7 +10,7 @@ extern int CMD_BUFFER_COUNT;
 extern char *TOKENS[];
 extern int TOKEN_COUNT;
 
-extern Board *pBoard;
+extern Board *p_board;
 
 extern const int INVALID_SQUARE;
 extern const int A8;  extern const int B8;  extern const int C8;  extern const int D8;
@@ -35,36 +35,36 @@ extern const char* SQUARENAME[];
 extern const int FILES[];
 extern const int RANKS[];
 
-extern const BitBoard fullBoard;
-extern const BitBoard emptyBoard;
+extern const U64 fullBoard;
+extern const U64 emptyBoard;
 
-extern BitBoard rankBB[];
-extern BitBoard fileBB[];
+extern U64 rankBB[];
+extern U64 fileBB[];
 
-extern BitBoard rightMove[];
-extern BitBoard upMove[];
-extern BitBoard leftMove[];
-extern BitBoard downMove[];
+extern U64 rightMove[];
+extern U64 upMove[];
+extern U64 leftMove[];
+extern U64 downMove[];
 
-extern BitBoard rightUpMove[];
-extern BitBoard leftUpMove[];
-extern BitBoard leftDownMove[];
-extern BitBoard rightDownMove[];
+extern U64 rightUpMove[];
+extern U64 leftUpMove[];
+extern U64 leftDownMove[];
+extern U64 rightDownMove[];
 
-extern BitBoard knightMove[];
-extern BitBoard pawnMoveWhite[];
-extern BitBoard pawnDoubleWhite[];
-extern BitBoard pawnCaptureWhite[];
-extern BitBoard pawnAllCaptureWhite[];
-extern BitBoard pawnPromotionWhite[];
-extern BitBoard pawnPromotionCaptureWhite[];
-extern BitBoard pawnMoveBlack[];
-extern BitBoard pawnDoubleBlack[];
-extern BitBoard pawnCaptureBlack[];
-extern BitBoard pawnAllCaptureBlack[];
-extern BitBoard pawnPromotionBlack[];
-extern BitBoard pawnPromotionCaptureBlack[];
-extern BitBoard kingMove[];
+extern U64 knightMove[];
+extern U64 pawnMoveWhite[];
+extern U64 pawnDoubleWhite[];
+extern U64 pawnCaptureWhite[];
+extern U64 pawnAllCaptureWhite[];
+extern U64 pawnPromotionWhite[];
+extern U64 pawnPromotionCaptureWhite[];
+extern U64 pawnMoveBlack[];
+extern U64 pawnDoubleBlack[];
+extern U64 pawnCaptureBlack[];
+extern U64 pawnAllCaptureBlack[];
+extern U64 pawnPromotionBlack[];
+extern U64 pawnPromotionCaptureBlack[];
+extern U64 kingMove[];
 
 extern const unsigned char WHITE;
 extern const unsigned char BLACK;

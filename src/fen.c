@@ -8,39 +8,39 @@
 #include "defines.h"
 #include "extglobals.h"
 
-FEN *FENFromLine(const char *line) {
-    char boardStringTemp[73];
-    char turnCharTemp;
-    char castleStringTemp[5];
-    char enPassantStringTemp[3];
-    int halfmoveClockTemp;
-    int fullmoveClockTemp;
-    if(sscanf(line, "%72s %c %4s %2s %d %d", boardStringTemp, &turnCharTemp, castleStringTemp,
-                        enPassantStringTemp, &halfmoveClockTemp, &fullmoveClockTemp) == 6) {
+FEN *FEN_from_line(const char *line) {
+    char board_string_temp[73];
+    char turn_char_temp;
+    char castle_string_temp[5];
+    char en_passant_string_temp[3];
+    int halfmove_clock_temp;
+    int fullmove_clock_temp;
+    if(sscanf(line, "%72s %c %4s %2s %d %d", board_string_temp, &turn_char_temp, castle_string_temp,
+                        en_passant_string_temp, &halfmove_clock_temp, &fullmove_clock_temp) == 6) {
         FEN *record = malloc(sizeof(FEN));
-        strncpy(record->boardString, boardStringTemp, 73);
-        strncpy(record->castleString, castleStringTemp, 5);
-        strncpy(record->enPassantString, enPassantStringTemp, 3);
-        record->turnChar = turnCharTemp;
-        record->halfmoveClock = halfmoveClockTemp;
-        record->fullmoveClock = fullmoveClockTemp;
+        strncpy(record->board_string, board_string_temp, 73);
+        strncpy(record->castle_string, castle_string_temp, 5);
+        strncpy(record->en_passant_string, en_passant_string_temp, 3);
+        record->turn_char = turn_char_temp;
+        record->halfmove_clock = halfmove_clock_temp;
+        record->fullmove_clock = fullmove_clock_temp;
         return record;
     }
     return NULL;
 }
 
-FEN *getFENFromFile(char *fileName) {
+FEN *get_FEN_from_file(char *fileName) {
     // should return a valid FEN string
     FILE *fp = fopen(fileName, "r");
     if(!fp) {
-        fprintf(stderr, "getFENFromFile: unable to load from %s\n", fileName);
+        fprintf(stderr, "get_FEN_from_file: unable to load from %s\n", fileName);
     }
 
     char lineBuffer[160];
     FEN *record;
 
     while(fgets(lineBuffer, sizeof(lineBuffer), fp)) {
-        if((record = FENFromLine(lineBuffer))) {
+        if((record = FEN_from_line(lineBuffer))) {
             fclose(fp);
             return record;
         }
@@ -92,52 +92,52 @@ static int getPieceFromChar(char pieceChar) {
     return NO_PIECE;
 }
 
-static void castleFromFEN(char *castleFen, int *castleWhite, int *castleBlack) {
+static void castleFromFEN(char *castleFen, int *castle_white, int *castle_black) {
     if(strchr(castleFen, 'Q'))
-        *castleWhite |= CAN_CASTLE_OOO;
+        *castle_white |= CAN_CASTLE_OOO;
     if(strchr(castleFen, 'K'))
-        *castleWhite |= CAN_CASTLE_OO;
+        *castle_white |= CAN_CASTLE_OO;
     if(strchr(castleFen, 'q'))
-        *castleBlack |= CAN_CASTLE_OOO;
+        *castle_black |= CAN_CASTLE_OOO;
     if(strchr(castleFen, 'k'))
-        *castleBlack |= CAN_CASTLE_OO;
+        *castle_black |= CAN_CASTLE_OO;
 }
 
 static int getEnPassantSquare(char *epString) {
     if(strlen(epString) != 2) return INVALID_SQUARE;
-    return getSquare(epString);
+    return get_square(epString);
 }
 
-void loadFromFEN(Board *pBoard, FEN *record) {
+void load_from_FEN(Board *p_board, FEN *record) {
     // we first clean everything up, this makes the rest of the setup easier
-    resetBoard(pBoard);
+    reset_board(p_board);
 
     if(!record) return;
 
     int rank = 7;
     int idx = A8; // for some reason, FEN records start addressing with rank 8
-    for(char *iter = record->boardString; *iter != '\0'; iter++) {
+    for(char *iter = record->board_string; *iter != '\0'; iter++) {
         if(*iter == '/') {
             rank--;
             idx = rank * 8;
         }
         if(isdigit(*iter)) {
             for(int skip = *iter - '1' + 1; skip > 0; skip--) {
-                pBoard->position.square[idx] = EMPTY;
+                p_board->position.square[idx] = EMPTY;
                 idx++;
             }
         }
         else if(isalpha(*iter)) {
-            pBoard->position.square[idx] = getPieceFromChar(*iter);
+            p_board->position.square[idx] = getPieceFromChar(*iter);
             idx++;
         }
     }
 
-    int toPlay = (record->turnChar == 'w') ? WHITE : BLACK;
-    int castleWhite = 0, castleBlack = 0;
-    castleFromFEN(record->castleString, &castleWhite, &castleBlack);
-    int epSquare = getEnPassantSquare(record->enPassantString);
+    int to_play = (record->turn_char == 'w') ? WHITE : BLACK;
+    int castle_white = 0, castle_black = 0;
+    castleFromFEN(record->castle_string, &castle_white, &castle_black);
+    int ep_square = getEnPassantSquare(record->en_passant_string);
 
-    initBoardFromSquares(pBoard, toPlay, record->halfmoveClock, castleWhite, castleBlack, epSquare, record->fullmoveClock);
+    init_board_from_squares(p_board, to_play, record->halfmove_clock, castle_white, castle_black, ep_square, record->fullmove_clock);
 
 }

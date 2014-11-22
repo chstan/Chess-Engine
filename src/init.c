@@ -23,25 +23,25 @@ void pre_init() {
 }
 
 void init() {
-    dataInit();
-    moveTableInit();
+    data_init();
+    move_table_init();
 
     initEval();
 
-    initRandom();
+    init_random();
 
     initHashTable();
 
-    boardInit();
+    board_init();
 
     init_manage_time();
     return;
 }
 
-void moveTableInit() {
+void move_table_init() {
     int rank, file, index;
     int lRank, hRank, lFile, hFile;
-    BitMap bits;
+    U64 bits;
     // i will be rank and j will be file
     for(rank = 1; rank <= 8; rank++) {
         for(file = 1; file <= 8; file++) {
@@ -222,7 +222,7 @@ void moveTableInit() {
     return;
 }
 
-void dataInit() {
+void data_init() {
     int i, rank, file;
 
     for(int i = 0; i < 8; i++) {
@@ -255,8 +255,8 @@ void dataInit() {
     return;
 }
 
-void boardInit() {
-    pBoard = malloc(sizeof(Board));
-    resetBoard(pBoard);
+void board_init() {
+    p_board = malloc(sizeof(Board));
+    reset_board(p_board);
     return;
 }

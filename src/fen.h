@@ -11,30 +11,30 @@
  * more convenient.
 **/
 typedef struct {
-    char boardString[73];
-    char turnChar;
-    char castleString[5];
-    char enPassantString[3];
-    int halfmoveClock;
-    int fullmoveClock;
+    char board_string[73];
+    char turn_char;
+    char castle_string[5];
+    char en_passant_string[3];
+    int halfmove_clock;
+    int fullmove_clock;
 } FEN;
 
-/** Function: loadFromFEN
+/** Function: load_from_FEN
  *  ---------------------
- * loadFromFen allows restoration of the board state from a Forsyth-Edwards Notation record.
+ * load_from_FEN allows restoration of the board state from a Forsyth-Edwards Notation record.
 **/
-void loadFromFEN(Board *pBoard, FEN *record);
+void load_from_FEN(Board *p_board, FEN *record);
 
-/** Function: FENFromLine
+/** Function: FEN_from_line
  *  ---------------------
  * parses a string into FEN
 **/
-FEN *FENFromLine(const char *fen_string);
+FEN *FEN_from_line(const char *fen_string);
 
-/** Function: getFENFromFile
+/** Function: get_FEN_from_file
  *  ------------------------
- * getFENFromFile takes a string containing a filename and returns it as a char *.
+ * get_FEN_from_file takes a string containing a filename and returns it as a char *.
 **/
-FEN *getFENFromFile(char *fileName);
+FEN *get_FEN_from_file(char *fileName);
 
 #endif

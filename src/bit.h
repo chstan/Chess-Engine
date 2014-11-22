@@ -3,21 +3,21 @@
 
 #include "defines.h"
 
-/* Function: countBits
+/* Function: count_bits
  * -------------------
- * countBits uses the Kernighan's
+ * count_bits uses the Kernighan's
  * bit counting method to determine
- * the number of bits set in a long long (BitMap)
+ * the number of bits set in a long long (U64)
  */
-unsigned int countBits(BitMap bits);
+unsigned int count_bits(U64 bits);
 
 /* Function: LSB
  * -------------
  * Uses DeBruijin's multiplication to find the
  * least significant bit which is set to 1 in a
- * BitMap. This function looks like magic because it is.
+ * U64. This function looks like magic because it is.
  */
-unsigned int LSB(BitMap bits);
+unsigned int LSB(U64 bits);
 
 /* Function: GSB
  * -------------
@@ -27,9 +27,9 @@ unsigned int LSB(BitMap bits);
  * of research and find a magic number that would work for
  * DeBruijin multiplication here too.
  */
-unsigned int GSB(BitMap bits);
+unsigned int GSB(U64 bits);
 
-/* Function: printBitMap
+/* Function: print_U64
  * ---------------------
  * Pretty prints the bitmap in an
  * 8x8 square with the least significant bit
@@ -38,20 +38,20 @@ unsigned int GSB(BitMap bits);
  *              8 9 ...
  *              0 1 2 3 4 5 6 7
  */
-void printBitMap(BitMap bits);
+void print_U64(U64 bits);
 
-/** Function: sharedRank
+/** Function: shared_rank
  *  --------------------
  * Determines whether all the on bits in a bitboard fall
  * in the same rank.
 **/
-bool sharedRank(BitMap bits);
+bool shared_rank(U64 bits);
 
-/** Function: sharedFile
+/** Function: shared_file
  *  --------------------
  * Determines whether all the on bits in a bitboard fall
  * in the same file.
 **/
-bool sharedFile(BitMap bits);
+bool shared_file(U64 bits);
 
 #endif

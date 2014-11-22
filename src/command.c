@@ -7,7 +7,6 @@
 #include "commandlist.h"
 #include "defines.h"
 #include "extglobals.h"
-#include "alert.h"
 #include "move/movegen.h"
 #include "move/notation.h"
 #include "aux/random.h"
@@ -19,9 +18,9 @@ extern char *commandTriggers[];
 
 extern char *commandDescription[];
 
-void typePrompt() {
-    assert(pBoard->info.toPlay == W || pBoard->info.toPlay == B);
-    switch(pBoard->info.toPlay) {
+void type_prompt() {
+    assert(p_board->info.to_play == W || p_board->info.to_play == B);
+    switch(p_board->info.to_play) {
         case W:
             printf("WHITE> ");
         break;
@@ -31,7 +30,7 @@ void typePrompt() {
     }
 }
 
-bool tokenizeCommand() {
+bool tokenize_command() {
     TOKEN_COUNT = 0;
     char* currentToken;
     // Don't try to tokenize an empty buffer. Trying to call
@@ -45,26 +44,26 @@ bool tokenizeCommand() {
     return true;
 }
 
-bool processLine() {
+bool process_line() {
     // process all the commands currently sitting in CMD_BUFFER
     CMD_BUFFER[CMD_BUFFER_COUNT] = '\0';
-    if (!tokenizeCommand()) return true;
+    if (!tokenize_command()) return true;
     CMD_BUFFER_COUNT = 0;
-    // Send a message to exit if doCommand read a quit signal
-    if(!doCommand()) return false;
+    // Send a message to exit if do_command read a quit signal
+    if(!do_command()) return false;
     return true;
 }
 
-void readCommands() {
+void read_commands() {
     char c;
-    typePrompt();
+    type_prompt();
 
     // read until a newline or we have filled the buffer.
     while((c = getc(stdin)) != EOF) {
         if(c == '\n') {
             // handle the typed line and determine whether or not we need to exit
-            if(!processLine()) return;
-            typePrompt();
+            if(!process_line()) return;
+            type_prompt();
         } else {
             // refuse any characters that would overfill the buffer
             if(CMD_BUFFER_COUNT >= MAX_CMD_BUFFER-1) {
@@ -77,7 +76,7 @@ void readCommands() {
     return;
 }
 
-bool doCommand() {
+bool do_command() {
     // Blank token streams should be rejected
     if(!strcmp(TOKENS[0], "")) {
         return true;
@@ -89,6 +88,6 @@ bool doCommand() {
         }
     }
 
-    alert(UNKNOWN_COMMAND);
+    printf("The command you typed was not found.");
     return true;
 }

@@ -7,7 +7,7 @@
 #include "defines.h"
 #include "extglobals.h"
 
-unsigned int countBits(BitMap bits) {
+unsigned int count_bits(U64 bits) {
     unsigned int bitCount;
     // each loop reduces the number of set bits by one
     for(bitCount = 0; bits; bitCount++) {
@@ -16,7 +16,7 @@ unsigned int countBits(BitMap bits) {
     return bitCount;
 }
 
-unsigned int LSB(BitMap bits) {
+unsigned int LSB(U64 bits) {
     //if(!bits) return 0;
     unsigned long long lsb;
     #ifdef __clang__
@@ -42,7 +42,7 @@ unsigned int LSB(BitMap bits) {
     return lsb;
 }
 
-unsigned int GSB(BitMap bits) {
+unsigned int GSB(U64 bits) {
     //if(!bits) return 0;
     unsigned long long gsb;
     #ifdef __clang__
@@ -66,7 +66,7 @@ unsigned int GSB(BitMap bits) {
     return gsb;
 }
 
-void printBitMap(BitMap bits) {
+void print_U64(U64 bits) {
     int rank, file;
     for(rank = 8; rank >= 1; rank--) {
         for(file = 1; file <= 8; file++) {
@@ -78,7 +78,7 @@ void printBitMap(BitMap bits) {
     return;
 }
 
-bool sharedFile(BitMap bits) {
+bool shared_file(U64 bits) {
     bits >>= LSB(bits);
     while(bits && bits != 1) {
         if((LSB(bits) % 8) == 1)
@@ -89,7 +89,7 @@ bool sharedFile(BitMap bits) {
     return true;
 }
 
-bool sharedRank(BitMap bits) {
+bool shared_rank(U64 bits) {
     int shift = LSB(bits) - (LSB(bits) % 8);
     return (bits >> shift) < (1 << 8);
 }

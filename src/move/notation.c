@@ -18,23 +18,23 @@ extern MoveGenCB captureCB[];
 
 Move queenSide(unsigned char color) {
     if(color == W) {
-        return (moveF(0, 0, 0, 1, 0, 0, WHITE_KING, E1, C1));
+        return (move_full(0, 0, 0, 1, 0, 0, WHITE_KING, E1, C1));
     } else {
-        return (moveF(0, 0, 1, 0, 0, 0, BLACK_KING, E8, C8));
+        return (move_full(0, 0, 1, 0, 0, 0, BLACK_KING, E8, C8));
     }
     return 0;
 }
 
 Move kingSide(unsigned char color) {
     if(color == W) {
-        return moveF(0, 0, 0, 1, 0, 0, WHITE_KING, E1, G1);
+        return move_full(0, 0, 0, 1, 0, 0, WHITE_KING, E1, G1);
     } else {
-        return moveF(0, 0, 1, 0, 0, 0, BLACK_KING, E8, G8);
+        return move_full(0, 0, 1, 0, 0, 0, BLACK_KING, E8, G8);
     }
     return 0;
 }
 
-int getSquare(char *sq) {
+int get_square(char *sq) {
     //if(strlen(sq) != 2) return INVALID_SQUARE;
     assert(strlen(sq) == 2);
     char file = sq[0];
@@ -42,7 +42,7 @@ int getSquare(char *sq) {
     return SQ(rank - '1'+1, file - 'a'+1);
 }
 
-char *extractFile(BitBoard bits) {
+char *extractFile(U64 bits) {
     char *file = malloc(2);
     if(!file) return NULL;
     file[0] = 'a' + (LSB(bits) % 8);
@@ -50,7 +50,7 @@ char *extractFile(BitBoard bits) {
     return file;
 }
 
-char *extractRank(BitBoard bits) {
+char *extractRank(U64 bits) {
     char *rank = malloc(2);
     if(!rank) return NULL;
     rank[0] = '1' + (LSB(bits) - (LSB(bits) % 8))/8;
@@ -85,19 +85,19 @@ char getPieceName(UCHAR piece) {
     return '?';
 }
 
-char *pawnMoveToNotation(Board *pBoard, Move m) {
-    UCHAR piece = movedPiece(m);
+char *pawnMoveToNotation(Board *p_board, Move m) {
+    UCHAR piece = moved_piece(m);
     int color = color(piece);
-    BitBoard originCandidates;
+    U64 originCandidates;
 
     int length = 3;
 
     char *disambiguationString = NULL;
 
-    if(capturedPiece(m)) {
+    if(captured_piece(m)) {
         length++; // we will need another character in the string to denote the capture
-        originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, to(m), otherColor(color));
-        if(countBits(originCandidates) != 1) {
+        originCandidates = p_board->position.piece_BB[piece] & (*captureCB[piece])(p_board, to(m), other_color(color));
+        if(count_bits(originCandidates) != 1) {
             length++; // and another to disambiguate
             // we need only the file, as there are only ever two spots a pawn can capture from!
             disambiguationString = extractFile(originCandidates);
@@ -120,7 +120,7 @@ char *pawnMoveToNotation(Board *pBoard, Move m) {
         idx++;
         free(disambiguationString);
     }
-    if(capturedPiece(m)) {
+    if(captured_piece(m)) {
         notation[idx] = 'x';
         idx++;
         notation[idx] = '\0';
@@ -149,41 +149,41 @@ char *castleMoveToNotation(Move m) {
     return NULL;
 }
 
-char *disambiguateOriginFromMove(Board *pBoard, UCHAR piece, int destination, Move m) {
-    BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, (color(piece) == WHITE) ? BLACK : WHITE);
+char *disambiguateOriginFromMove(Board *p_board, UCHAR piece, int destination, Move m) {
+    U64 originCandidates = p_board->position.piece_BB[piece] & (*captureCB[piece])(p_board, destination, (color(piece) == WHITE) ? BLACK : WHITE);
 
     // algebraic chess notation requires we disambiguate by file, then rank, then both if needed
     // try disambiguate from file (a-h)
-    if(sharedFile(originCandidates))
+    if(shared_file(originCandidates))
         return extractRank(BITSET(from(m)));
 
     // try disambiguate from rank (1-8)
-    if(sharedRank(originCandidates))
+    if(shared_rank(originCandidates))
         return extractFile(BITSET(from(m)));
 
     // we have to return both the file and rank, which is simple enough
     return strdup(SQUARENAME[from(m)]);
 }
 
-char *moveToNotation(Board *pBoard, Move m) {
-    if(whiteCastle(m) || blackCastle(m))
+char *move_to_notation(Board *p_board, Move m) {
+    if(white_castle(m) || black_castle(m))
         return castleMoveToNotation(m);
 
-    UCHAR piece = movedPiece(m);
+    UCHAR piece = moved_piece(m);
     int color = color(piece);
     if(piece == WHITE_PAWN || piece == BLACK_PAWN)
-        return pawnMoveToNotation(pBoard, m);
+        return pawnMoveToNotation(p_board, m);
 
     char pieceChar = getPieceName(piece);
     int dest = to(m);
 
     char *disambiguationString = NULL;
-    BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, dest, otherColor(color));
-    if(countBits(originCandidates) != 1) {
-        disambiguationString = disambiguateOriginFromMove(pBoard, piece, dest, m);
+    U64 originCandidates = p_board->position.piece_BB[piece] & (*captureCB[piece])(p_board, dest, other_color(color));
+    if(count_bits(originCandidates) != 1) {
+        disambiguationString = disambiguateOriginFromMove(p_board, piece, dest, m);
     }
 
-    int len = (1 + ((disambiguationString) ? strlen(disambiguationString) : 0) + ((capturedPiece(m)) ? 1 : 0) + 2);
+    int len = (1 + ((disambiguationString) ? strlen(disambiguationString) : 0) + ((captured_piece(m)) ? 1 : 0) + 2);
     // one character for the moved piece, up to two to disambiguate the origin, potentially an 'x' for a capture, and a 2 character destination
     char *notation = malloc(len);
     notation[0] = pieceChar;
@@ -192,7 +192,7 @@ char *moveToNotation(Board *pBoard, Move m) {
         strcat(notation, disambiguationString);
         free(disambiguationString);
     }
-    if(capturedPiece(m))
+    if(captured_piece(m))
         strcat(notation, "x");
     strcat(notation, SQUARENAME[dest]);
 
@@ -211,39 +211,39 @@ unsigned int getDestination(char *notation) {
     char destinationSquare[3];
     strncpy(destinationSquare, end, 2);
     destinationSquare[2] = '\0';
-    return getSquare(destinationSquare);
+    return get_square(destinationSquare);
 }
 
-unsigned int getPawnOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
+unsigned int getPawnOrigin(Board *p_board, UCHAR piece, int destination, char *notation) {
     // This might not work in chess variants with fully randomized starting positions.
     if(isCapture(notation)) {
-        BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, otherColor(pBoard->info.toPlay));
-        if(countBits(originCandidates) == 1) return LSB(originCandidates);
+        U64 originCandidates = p_board->position.piece_BB[piece] & (*captureCB[piece])(p_board, destination, other_color(p_board->info.to_play));
+        if(count_bits(originCandidates) == 1) return LSB(originCandidates);
         originCandidates &= fileBB[notation[0] - 'a'];
         return LSB(originCandidates);
     } else {
-        BitBoard originHint = pawnTimidBB(pBoard, destination, otherColor(pBoard->info.toPlay));
+        U64 originHint = pawn_timid_BB(p_board, destination, other_color(p_board->info.to_play));
         if(originHint) {
             // the piece must be two back
-            return (pBoard->info.toPlay == WHITE) ? destination - 16 : destination + 16;
+            return (p_board->info.to_play == WHITE) ? destination - 16 : destination + 16;
         } else {
             // the piece must be one back
-            return (pBoard->info.toPlay == WHITE) ? destination - 8 : destination + 8;
+            return (p_board->info.to_play == WHITE) ? destination - 8 : destination + 8;
         }
     }
 }
 
-unsigned int getOrigin(Board *pBoard, UCHAR piece, int destination, char *notation) {
-    BitBoard originCandidates = pBoard->position.pieceBB[piece] & (*captureCB[piece])(pBoard, destination, otherColor(pBoard->info.toPlay));
+unsigned int getOrigin(Board *p_board, UCHAR piece, int destination, char *notation) {
+    U64 originCandidates = p_board->position.piece_BB[piece] & (*captureCB[piece])(p_board, destination, other_color(p_board->info.to_play));
     //if(!originCandidates) return INVALID_SQUARE;
     assert(originCandidates);
-    if(countBits(originCandidates) == 1) return LSB(originCandidates);
+    if(count_bits(originCandidates) == 1) return LSB(originCandidates);
     char disambiguateChar = *notation;
     if(isalpha(disambiguateChar)) {
         // we were given a file
         int index = disambiguateChar - 'a';
         originCandidates &= fileBB[index];
-        if(countBits(originCandidates) == 1) return LSB(originCandidates);
+        if(count_bits(originCandidates) == 1) return LSB(originCandidates);
         disambiguateChar = *(notation+1);
         assert(isdigit(disambiguateChar));
         originCandidates &= rankBB[disambiguateChar-'1'];
@@ -279,7 +279,7 @@ unsigned int getPromo(UCHAR piece, char *notation) {
     return NO_PIECE;
 }
 
-Move coord_notation_to_move(Board *pBoard, char *notation) {
+Move coord_notation_to_move(Board *p_board, char *notation) {
     assert(strlen(notation) >= 4);
     char from_str[3];
     char to_str[3];
@@ -290,13 +290,13 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
     to_str[1] = notation[3];
     to_str[2] = '\0';
 
-    int from_sq_idx = getSquare(from_str);
-    int to_sq_idx = getSquare(to_str);
-    UCHAR moved_piece = pBoard->position.square[from_sq_idx];
-    UCHAR capt_piece = pBoard->position.square[to_sq_idx];
+    int from_sq_idx = get_square(from_str);
+    int to_sq_idx = get_square(to_str);
+    UCHAR moved_piece = p_board->position.square[from_sq_idx];
+    UCHAR capt_piece = p_board->position.square[to_sq_idx];
 
     // could be an en passant
-    if (pBoard->info.state[pBoard->info.currentMove].enPassantSquare == to_sq_idx) {
+    if (p_board->info.state[p_board->info.current_move].en_passant_square == to_sq_idx) {
         // the piece captured 'like a pawn'
         if (FILE(to_sq_idx) != FILE(from_sq_idx)) {
             // the piece is a pawn
@@ -304,7 +304,7 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
                 // actually an en passant capture
                 capt_piece = moved_piece == WP ? BP : WP;
                 int color = color(moved_piece);
-                return moveF(color == WHITE, color == BLACK, 0, 0, 0,
+                return move_full(color == WHITE, color == BLACK, 0, 0, 0,
                              capt_piece, moved_piece, from_sq_idx, to_sq_idx);
             }
         }
@@ -349,7 +349,7 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
                 break;
             }
         }
-        return moveF(0, 0, 0, 0, promo_piece, capt_piece,
+        return move_full(0, 0, 0, 0, promo_piece, capt_piece,
                      moved_piece, from_sq_idx, to_sq_idx);
     }
     // castling
@@ -371,7 +371,7 @@ Move coord_notation_to_move(Board *pBoard, char *notation) {
     }
 
     // nothing special
-    return moveF(0, 0, 0, 0, 0, capt_piece, moved_piece, from_sq_idx, to_sq_idx);
+    return move_full(0, 0, 0, 0, 0, capt_piece, moved_piece, from_sq_idx, to_sq_idx);
 }
 
 char *move_to_coord_notation(Move m) {
@@ -406,8 +406,8 @@ char *move_to_coord_notation(Move m) {
     return notation;
 }
 
-Move notationToMove(Board *pBoard, char *notation) {
-    unsigned char color = pBoard->info.toPlay;
+Move notation_to_move(Board *p_board, char *notation) {
+    unsigned char color = p_board->info.to_play;
     if(!strcmp(notation, "O-O-O")) {
         return queenSide(color);
     } else if (!strcmp(notation, "O-O")) {
@@ -418,33 +418,33 @@ Move notationToMove(Board *pBoard, char *notation) {
     char controlChar = notation[0];
     if(controlChar == 'K') {
         piece = (color == WHITE) ? WHITE_KING : BLACK_KING;
-        orig = LSB(pBoard->position.pieceBB[piece]);
+        orig = LSB(p_board->position.piece_BB[piece]);
         dest = getDestination(notation+1);
-        return move(pBoard->position.square[dest], piece, orig, dest);
+        return move(p_board->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'Q') {
         piece = (color == WHITE) ? WHITE_QUEEN : BLACK_QUEEN;
         dest = getDestination(notation+1);
-        orig = getOrigin(pBoard, piece, dest, notation+1);
-        return move(pBoard->position.square[dest], piece, orig, dest);
+        orig = getOrigin(p_board, piece, dest, notation+1);
+        return move(p_board->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'B') {
         piece = (color == WHITE) ? WHITE_BISHOP : BLACK_BISHOP;
         dest = getDestination(notation+1);
-        orig = getOrigin(pBoard, piece, dest, notation+1);
-        return move(pBoard->position.square[dest], piece, orig, dest);
+        orig = getOrigin(p_board, piece, dest, notation+1);
+        return move(p_board->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'R') {
         piece = (color == WHITE) ? WHITE_ROOK : BLACK_ROOK;
         dest = getDestination(notation+1);
-        orig = getOrigin(pBoard, piece, dest, notation+1);
-        return move(pBoard->position.square[dest], piece, orig, dest);
+        orig = getOrigin(p_board, piece, dest, notation+1);
+        return move(p_board->position.square[dest], piece, orig, dest);
     } else if(controlChar == 'N') {
         piece = (color == WHITE) ? WHITE_KNIGHT : BLACK_KNIGHT;
         dest = getDestination(notation+1);
-        orig = getOrigin(pBoard, piece, dest, notation+1);
-        return move(pBoard->position.square[dest], piece, orig, dest);
+        orig = getOrigin(p_board, piece, dest, notation+1);
+        return move(p_board->position.square[dest], piece, orig, dest);
     } else {
         piece = (color == WHITE) ? WHITE_PAWN : BLACK_PAWN;
         dest = getDestination(notation);
-        orig = getPawnOrigin(pBoard, piece, dest, notation);
+        orig = getPawnOrigin(p_board, piece, dest, notation);
         unsigned int promo = 0;
         unsigned int capture = 0;
         unsigned int ep = 0;
@@ -453,13 +453,13 @@ Move notationToMove(Board *pBoard, char *notation) {
             promo = getPromo(piece, notation);
         }
         if(isCapture(notation)) {
-            capture = pBoard->position.square[dest];
+            capture = p_board->position.square[dest];
             if(!capture) {
                 // en passant, could do additional checks, but if the move is coeherent, this works
                 capture = (color == WHITE) ? BLACK_PAWN : WHITE_PAWN;
                 ep = 1;
             }
         }
-        return moveF((color == BLACK && ep) ? 1 : 0, (color == WHITE && ep) ? 1 : 0, 0, 0, promo, capture, piece, orig, dest);
+        return move_full((color == BLACK && ep) ? 1 : 0, (color == WHITE && ep) ? 1 : 0, 0, 0, promo, capture, piece, orig, dest);
     }
 }

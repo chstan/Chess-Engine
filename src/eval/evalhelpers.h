@@ -5,30 +5,30 @@
 
 void initEval();
 
-void build_pawn_ranges(Board *pBoard,
-                       BitBoard *wpfr, BitBoard *wpbr,BitBoard *bpfr, BitBoard *bpbr,
-                       BitBoard *wpwfr, BitBoard *bpwfr);
+void build_pawn_ranges(Board *p_board,
+                       U64 *wpfr, U64 *wpbr,U64 *bpfr, U64 *bpbr,
+                       U64 *wpwfr, U64 *bpwfr);
 
-int all_piece_square_scores (Board *pBoard);
+int all_piece_square_scores (Board *p_board);
 
-int doubledPawns(Board *pBoard);
+int doubled_pawns(Board *p_board);
 
-int tripledPawns(Board *pBoard);
+int tripled_pawns(Board *p_board);
 
-int passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
-                 BitBoard black_pawn_forward_range);
+int passed_pawns(Board *p_board, U64 white_pawn_forward_range,
+                 U64 black_pawn_forward_range);
 
-int outside_passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
-                         BitBoard black_pawn_forward_range);
+int outside_passed_pawns(Board *p_board, U64 white_pawn_forward_range,
+                         U64 black_pawn_forward_range);
 
-int bishopMobility(Board *pBoard);
+int bishop_mobility(Board *p_board);
 
-int rookMobility(Board *pBoard);
+int rook_mobility(Board *p_board);
 
-int kingSafety(Board *pBoard);
+int king_safety(Board *p_board);
 
-int control(Board *pBoard, int square);
+int control(Board *p_board, int square);
 
-int controlOfCenter(Board *pBoard);
+int control_of_center(Board *p_board);
 
 #endif

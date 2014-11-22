@@ -61,9 +61,9 @@ void apply_moves_from_str(char *moves_str) {
     const char *sep = " ";
     move_token = strtok(moves_str, sep);
     while (move_token) {
-        Move m = coord_notation_to_move(pBoard, move_token);
+        Move m = coord_notation_to_move(p_board, move_token);
         assert(m && "Invalid move parsed.");
-        makeMove(pBoard, m);
+        make_move(p_board, m);
         move_token = strtok(NULL, sep);
     }
 }
@@ -83,7 +83,7 @@ void uci_prep_newgame() {
         is_init = true;
         init();
     }
-    resetBoard(pBoard);
+    reset_board(p_board);
     reset_hash();
 }
 
@@ -103,7 +103,7 @@ void uci_quit() {
     while (is_thinking() && !sleep(1));
 
     if (is_init)
-        prepareForExit();
+        prepare_for_exit();
 }
 
 void uci_position(const char *position_str) {
@@ -120,7 +120,7 @@ void uci_position(const char *position_str) {
 
         assert(is_init);
 
-        resetBoard(pBoard);
+        reset_board(p_board);
         if (strpref(moves_str, rest)) {
             // there were additional moves
             const char *moves_start = rest + strlen(moves_str);
@@ -147,12 +147,12 @@ void uci_position(const char *position_str) {
             char *fen_str = malloc(size_of_fen + 1);
             strncpy(fen_str, fen_start, size_of_fen);
             fen_str[size_of_fen] = '\0';
-            FEN *parsed_fen = FENFromLine(fen_str);
+            FEN *parsed_fen = FEN_from_line(fen_str);
             if (!parsed_fen) {
                 free(fen_str);
                 return;
             }
-            loadFromFEN(pBoard, parsed_fen);
+            load_from_FEN(p_board, parsed_fen);
             free(fen_str);
             free(parsed_fen);
         } else {
@@ -164,12 +164,12 @@ void uci_position(const char *position_str) {
             strncpy(fen_str, fen_start, size_of_fen);
             // zero delimit the string since strncpy does not
             fen_str[size_of_fen] = '\0';
-            FEN *parsed_fen = FENFromLine(fen_str);
+            FEN *parsed_fen = FEN_from_line(fen_str);
             if (!parsed_fen) {
                 free(fen_str);
                 return;
             }
-            loadFromFEN(pBoard, parsed_fen);
+            load_from_FEN(p_board, parsed_fen);
             free(fen_str);
             free(parsed_fen);
 
@@ -199,7 +199,7 @@ void uci_go_test() {
     assert(is_init);
     set_to_stop(false);
     pthread_t search_thread;
-    pthread_create(&search_thread, NULL, &threadable_think, pBoard);
+    pthread_create(&search_thread, NULL, &threadable_think, p_board);
 }
 
 void uci_go(char *go_options) {
@@ -284,7 +284,7 @@ void uci_go(char *go_options) {
     // set thinking here, to prevent the ui from thinking the search
     // hasn't been started
     set_is_thinking(true);
-    pthread_create(&search_thread, NULL, &threadable_think, pBoard);
+    pthread_create(&search_thread, NULL, &threadable_think, p_board);
 }
 
 void uci_best_move(Move m) {

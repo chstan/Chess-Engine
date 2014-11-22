@@ -13,32 +13,32 @@ void pre_init();
 /* Function: init
  * --------------
  * init is called by main to fill
- * BitBoards used later by the move generators
+ * U64s used later by the move generators
  * and to allocate space for the board
  * and a few other data structures.
  */
 void init();
 
-/* Function: moveTableInit
+/* Function: move_table_init
  * -----------------------
- * Initializes the BitBoards used in the move tables.
+ * Initializes the U64s used in the move tables.
  */
-void moveTableInit();
+void move_table_init();
 
-/* Function: dataInit
+/* Function: data_init
  * ------------------
- * dataInit sets up some global data used
+ * data_init sets up some global data used
  * in bit functions and sporadically throughout the
  * rest of the code.
  */
-void dataInit();
+void data_init();
 
-/* Function: boardInit
+/* Function: board_init
  * -------------------
  * allocates memory for the board
  * and proceeds to call functions in board.c
  * to reset it to a coherent start state.
  */
-void boardInit();
+void board_init();
 
 #endif

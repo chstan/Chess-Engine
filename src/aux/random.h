@@ -1,13 +1,13 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
-/** Function: initRand
- *  ------------------
+/** Function: init_random
+ *  --------------------
  * initRand ensures that the random number generator
  * is seeded. It expects no arguments, and internally uses
  * the time to seed the c random functions.
 **/
-void initRandom();
+void init_random();
 
 /** Function: randomi
  *  ----------

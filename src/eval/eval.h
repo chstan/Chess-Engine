@@ -11,8 +11,8 @@
 extern const int EVAL_INFTY;
 extern const int EVAL_MATE;
 
-int evaluate(Board *pBoard);
+int evaluate(Board *p_board);
 
-int evaluateNaive(Board *pBoard);
+int evaluate_naive(Board *p_board);
 
 #endif

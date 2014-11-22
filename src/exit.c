@@ -6,8 +6,8 @@
 #include "extglobals.h"
 #include "zobrist.h"
 
-void prepareForExit() {
-    free(pBoard);
+void prepare_for_exit() {
+    free(p_board);
     free_hash();
     free_eval_hash();
 

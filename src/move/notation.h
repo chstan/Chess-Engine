@@ -3,40 +3,40 @@
 
 #include "move.h"
 
-/** Function: getSquare
+/** Function: get_square
  *  -------------------
- * getSquare converts a string designating a board position into the appropriate
+ * get_square converts a string designating a board position into the appropriate
  * numeric. Since this is used in a few other places, we'll keep the protoype here.
 **/
-int getSquare(char *sq);
+int get_square(char *sq);
 
-/** Function: notationToMove
+/** Function: notation_to_move
  *  ------------------------
  * Takes a string representing a move in algebraic chess notation and converts
  * it into the internal move format (see move.h) using the current board state
  * to resolve ambiguities where they are encountered.
 **/
-Move notationToMove(Board *pBoard, char *notation);
+Move notation_to_move(Board *p_board, char *notation);
 
-/** Function: moveToNotation
+/** Function: move_to_notation
  *  ------------------------
- * The reverse of notationToMove, takes a move in the internal format and converts
+ * The reverse of notation_to_move, takes a move in the internal format and converts
  * it into algebraic chess notation. It does not however add '+'/'#'/'++' at the end
  * of a move for checks or mates. The resulting string is malloced, and so must be freed
  * later by the client.
 **/
-char *moveToNotation(Board *pBoard, Move m);
+char *move_to_notation(Board *p_board, Move m);
 
 /** Function coord_notation_to_move
  *  -------------------------------
- * The same as notationToMove, but instead of using algebraic notation we use
+ * The same as notation_to_move, but instead of using algebraic notation we use
  * coordinate location, which is always specified as startsquare - endsquare
  **/
-Move coord_notation_to_move(Board *pBoard, char *notation);
+Move coord_notation_to_move(Board *p_board, char *notation);
 
 /** Function move_to_coord_notation
  *  -------------------------------
- * The same as moveToNotation, but instead of using algebraic notation we use
+ * The same as move_to_notation, but instead of using algebraic notation we use
  * coordinate location, which is always specified as startsquare - endsquare
  **/
 char *move_to_coord_notation(Move m);

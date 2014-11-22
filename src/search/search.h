@@ -9,12 +9,12 @@
 #define MAX_PLY 20
 
 void *threadable_think(void *arg);
-Move think(Board *pBoard);
+Move think(Board *p_board);
 
-int quiescentNegaMax(int ply, int alpha, int beta, int color, Move *pm,
+int quiescent_nega_max(int ply, int alpha, int beta, int color, Move *pm,
                      size_t *searched_nodes);
 
-int negaMax(int ply, int depth, int alpha, int beta, int color, Move *pm,
+int nega_max(int ply, int depth, int alpha, int beta, int color, Move *pm,
             size_t *searched_nodes, bool check_for_stop);
 
 #endif

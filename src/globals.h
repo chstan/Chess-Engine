@@ -11,7 +11,7 @@ int CMD_BUFFER_COUNT = 0;
 char *TOKENS[MAX_TOKENS];
 int TOKEN_COUNT;
 
-Board *pBoard;
+Board *p_board;
 
 const int INVALID_SQUARE = -1;
 const int A1 =  0; const int B1 =  1; const int C1 =  2; const int D1 =  3;
@@ -64,36 +64,36 @@ const int RANKS[64] = {
     8, 8, 8, 8, 8, 8, 8, 8
 };
 
-const BitBoard fullBoard = -1LL;
-const BitBoard emptyBoard = 0LL;
+const U64 fullBoard = -1LL;
+const U64 emptyBoard = 0LL;
 
-BitBoard rankBB[8];
-BitBoard fileBB[8];
+U64 rankBB[8];
+U64 fileBB[8];
 
-BitBoard rightMove[64];
-BitBoard upMove[64];
-BitBoard leftMove[64];
-BitBoard downMove[64];
+U64 rightMove[64];
+U64 upMove[64];
+U64 leftMove[64];
+U64 downMove[64];
 
-BitBoard rightUpMove[64];
-BitBoard leftUpMove[64];
-BitBoard leftDownMove[64];
-BitBoard rightDownMove[64];
+U64 rightUpMove[64];
+U64 leftUpMove[64];
+U64 leftDownMove[64];
+U64 rightDownMove[64];
 
-BitBoard knightMove[64];
-BitBoard pawnMoveWhite[64];
-BitBoard pawnDoubleWhite[64];
-BitBoard pawnCaptureWhite[64];
-BitBoard pawnAllCaptureWhite[64];
-BitBoard pawnPromotionWhite[64];
-BitBoard pawnPromotionCaptureWhite[64];
-BitBoard pawnMoveBlack[64];
-BitBoard pawnDoubleBlack[64];
-BitBoard pawnCaptureBlack[64];
-BitBoard pawnAllCaptureBlack[64];
-BitBoard pawnPromotionBlack[64];
-BitBoard pawnPromotionCaptureBlack[64];
-BitBoard kingMove[64];
+U64 knightMove[64];
+U64 pawnMoveWhite[64];
+U64 pawnDoubleWhite[64];
+U64 pawnCaptureWhite[64];
+U64 pawnAllCaptureWhite[64];
+U64 pawnPromotionWhite[64];
+U64 pawnPromotionCaptureWhite[64];
+U64 pawnMoveBlack[64];
+U64 pawnDoubleBlack[64];
+U64 pawnCaptureBlack[64];
+U64 pawnAllCaptureBlack[64];
+U64 pawnPromotionBlack[64];
+U64 pawnPromotionCaptureBlack[64];
+U64 kingMove[64];
 
 const unsigned char WHITE = 0;
 const unsigned char BLACK = 1;

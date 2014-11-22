@@ -97,7 +97,7 @@ TTElem *lookup_bucket_by_key(U64 key) {
 
 void write_hash(U64 key, int score, Move m, unsigned char depth,
                 unsigned char n_type) {
-    //setHashBit(m);
+    //set_hash_bit(m);
     TTElem *first_in_bucket = lookup_bucket_by_key(key);
     TTElem *b_iter = first_in_bucket;
     for (size_t elem_iter = 0; elem_iter < elems_per_bucket;
@@ -211,7 +211,7 @@ void write_eval_hash(U64 key, int score) {
     // not sure if gcc will optimize out the %, meh
     // we can also get maybe slightly better results by storing the hash_time?
     // also not really necessary to store full score as int, they will always
-    // be smallish because mate detection happens in negaMax, could use short?
+    // be smallish because mate detection happens in nega_max, could use short?
     EvalTElem *to_replace = first_in_bucket + (key % elems_per_eval_bucket);
     to_replace->_key = key;
     to_replace->_score = score;

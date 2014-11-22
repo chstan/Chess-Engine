@@ -1,7 +1,7 @@
 #ifndef EXIT_H
 #define EXIT_H
 
-/* Function: prepareForExit
+/* Function: prepare_for_exit
  * ------------------------
  * Frees all dynamically allocated memory.
  * At the moment, the only memory there is to free
@@ -9,6 +9,6 @@
  * breed of beast, any logic we might want to add at exit
  * can be put here as well.
  */
-void prepareForExit();
+void prepare_for_exit();
 
 #endif

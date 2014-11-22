@@ -5,7 +5,6 @@
 #include "manage_time.h"
 #include "defines.h"
 #include "extglobals.h"
-#include "alert.h"
 #include "move/move.h"
 #include "move/movegen.h"
 #include "move/notation.h"
@@ -16,23 +15,23 @@
 #include "search/search.h"
 
 CommandCB commandCallbacks[] = {
-    playCommand,
-    listMovesCommand,
-    randomMoveCommand,
-    performanceTestCommand,
-    divideCommand,
-    helpCommand,
-    moveCommand,
-    unmoveCommand,
-    aboutCommand,
-    displayCommand,
-    loadpgnCommand,
-    loadFENCommand,
-    debugCommand,
-    debugNotationCommand,
-    rotateCommand,
-    todoCommand,
-    quitCommand
+    play_command,
+    list_moves_command,
+    random_move_command,
+    performance_test_command,
+    divide_command,
+    help_command,
+    move_command,
+    unmove_command,
+    about_command,
+    display_command,
+    load_pgn_command,
+    load_FEN_command,
+    debug_command,
+    debug_notation_command,
+    rotate_command,
+    todo_command,
+    quit_command
 };
 
 char *commandTriggers[] = {
@@ -75,17 +74,17 @@ char *commandDescription[] = {
     "quit: quits from the chess engine back to your ::1ly terminal"
 };
 
-bool playCommand(int tokenCount, char **tokens) {
-    if(tokenCount == 0) {
+bool play_command(int token_count, char **tokens) {
+    if(token_count == 0) {
         printf("You have to specify a move as an additional parameter in algebraic chess notation.\n\n");
         return true;
     }
     Move m;
-    if((m = notationToMove(pBoard, tokens[0]))) {
+    if((m = notation_to_move(p_board, tokens[0]))) {
 #ifdef DEBUG
-        printMove(m);
+        print_move(m);
 #endif
-        makeMove(pBoard, m);
+        make_move(p_board, m);
         // have to set some time controls
         set_infinite_think(false);
         set_black_time_left(20000);
@@ -94,28 +93,28 @@ bool playCommand(int tokenCount, char **tokens) {
         set_white_time_inc(0);
         set_to_stop(false);
 
-        Move reply = think(pBoard);
-        printMove(reply);
-        char *replyString = moveToNotation(pBoard, reply);
+        Move reply = think(p_board);
+        print_move(reply);
+        char *replyString = move_to_notation(p_board, reply);
         if(replyString) {
             printf("%s\n", replyString);
             free(replyString);
         }
-        makeMove(pBoard, reply);
-        displayBoard(pBoard);
+        make_move(p_board, reply);
+        display_board(p_board);
     }
 
     return true;
 }
 
-bool listMovesCommand(__attribute__((unused)) int tokenCount,
+bool list_moves_command(__attribute__((unused)) int token_count,
                       __attribute__((unused)) char **tokens) {
     MoveSet moves;
-    resetMoveSet(&moves);
-    initializeMoveSetQuiet(pBoard, &moves);
-    for(int i = 0; i < moves.totalMoves; i++) {
-        Move currentMove = moves.moveList[i];
-        char *notation = moveToNotation(pBoard, currentMove);
+    reset_move_set(&moves);
+    initialize_move_set_quiet(p_board, &moves);
+    for(int i = 0; i < moves.total_moves; i++) {
+        Move current_move = moves.move_list[i];
+        char *notation = move_to_notation(p_board, current_move);
         printf("%s\n", notation);
         free(notation);
     }
@@ -123,31 +122,31 @@ bool listMovesCommand(__attribute__((unused)) int tokenCount,
     return true;
 }
 
-bool randomMoveCommand(__attribute__((unused)) int tokenCount,
+bool random_move_command(__attribute__((unused)) int token_count,
                        __attribute__((unused)) char **tokens) {
     MoveSet moves;
-    resetMoveSet(&moves);
-    initializeMoveSetQuiet(pBoard, &moves);
-    int moveIndex = randomi(0, moves.totalMoves);
-    Move randomMove = moves.moveList[moveIndex];
-    printMove(randomMove);
-    makeMove(pBoard, randomMove);
-    displayBoard(pBoard);
+    reset_move_set(&moves);
+    initialize_move_set_quiet(p_board, &moves);
+    int moveIndex = randomi(0, moves.total_moves);
+    Move randomMove = moves.move_list[moveIndex];
+    print_move(randomMove);
+    make_move(p_board, randomMove);
+    display_board(p_board);
     return true;
 }
 
-bool performanceTestCommand(int tokenCount, char **tokens) {
-    if(tokenCount != 1) {
+bool performance_test_command(int token_count, char **tokens) {
+    if(token_count != 1) {
         printf("Performance test usage: This command takes one parameter, the depth to be searched.\n");
         return true;
     }
     int depth = atoi(tokens[0]);
-    performanceTest(pBoard, depth, false);
+    performance_test(p_board, depth, false);
 
     return true;
 }
 
-bool helpCommand(__attribute__((unused)) int tokenCount,
+bool help_command(__attribute__((unused)) int token_count,
                  __attribute__((unused)) char **tokens) {
     printf("Command list:\n\n\n");
     for(int commandIndex = 0; commandIndex < COMMAND_COUNT; commandIndex++) {
@@ -156,113 +155,113 @@ bool helpCommand(__attribute__((unused)) int tokenCount,
     return true;
 }
 
-bool moveCommand(int tokenCount, char **tokens) {
-    if(tokenCount == 0) {
+bool move_command(int token_count, char **tokens) {
+    if(token_count == 0) {
         printf("You have to specify a move as an additional parameter in algebraic chess notation.\n\n");
         return true;
     }
     Move m;
-    if((m = notationToMove(pBoard, tokens[0]))) {
-        printMove(m);
-        makeMove(pBoard, m);
+    if((m = notation_to_move(p_board, tokens[0]))) {
+        print_move(m);
+        make_move(p_board, m);
     }
     return true;
 }
 
-bool unmoveCommand(__attribute__((unused)) int tokenCount,
+bool unmove_command(__attribute__((unused)) int token_count,
                    __attribute__((unused)) char **tokens) {
-    unmakeLastMove(pBoard);
+    unmake_last_move(p_board);
     return true;
 }
 
-bool aboutCommand(__attribute__((unused)) int tokenCount,
+bool about_command(__attribute__((unused)) int token_count,
                   __attribute__((unused)) char **tokens) {
     printf("\nThis is a computer chess engine being developed by Conrad and Tom (and Marc).\n%s\n\n", ENGINE_VERSION);
     return true;
 }
 
-bool displayCommand(__attribute__((unused)) int tokenCount,
+bool display_command(__attribute__((unused)) int token_count,
                     __attribute__((unused)) char **tokens) {
-    displayBoard(pBoard);
+    display_board(p_board);
     return true;
 }
 
-bool loadpgnCommand(int tokenCount, char **tokens) {
-    if (tokenCount >= 1) loadpgn(tokens[0], pBoard);
+bool load_pgn_command(int token_count, char **tokens) {
+    if (token_count >= 1) load_pgn(tokens[0], p_board);
     return true;
 }
 
-bool loadFENCommand(int tokenCount, char **tokens) {
-    if (tokenCount != 1) {
+bool load_FEN_command(int token_count, char **tokens) {
+    if (token_count != 1) {
         printf("load-fen usage: accepts one parameter specifying the filename.\n");
         return true;
     }
-    FEN *record = getFENFromFile(tokens[0]);
+    FEN *record = get_FEN_from_file(tokens[0]);
 
     if(!record) {
         printf("The file you specified did not contain a valid FEN record.\n");
         return true;
     }
 
-    loadFromFEN(pBoard, record);
+    load_from_FEN(p_board, record);
     free(record);
     return true;
 }
 
-bool debugCommand(__attribute__((unused)) int tokenCount,
+bool debug_command(__attribute__((unused)) int token_count,
                   __attribute__((unused)) char **tokens) {
-    debugBoard(pBoard);
+    debug_board(p_board);
     return true;
 }
 
-bool rotateCommand(__attribute__((unused)) int tokenCount,
+bool rotate_command(__attribute__((unused)) int token_count,
                    __attribute__((unused)) char **tokens) {
-    rotateBoard(pBoard);
+    rotate_board(p_board);
     return true;
 }
 
-bool todoCommand(__attribute__((unused)) int tokenCount,
+bool todo_command(__attribute__((unused)) int token_count,
                  __attribute__((unused)) char **tokens) {
     printf("This is for the developers so they can check what there is to implement.\n");
     return true;
 }
 
-bool quitCommand(__attribute__((unused)) int tokenCount,
+bool quit_command(__attribute__((unused)) int token_count,
                  __attribute__((unused)) char **tokens) {
     return false;
 }
 
-bool debugNotationCommand(__attribute__((unused)) int tokenCount,
+bool debug_notation_command(__attribute__((unused)) int token_count,
                           __attribute__((unused)) char **tokens) {
     MoveSet moves;
-    resetMoveSet(&moves);
-    initializeMoveSetQuiet(pBoard, &moves);
-    int passed = moves.totalMoves;
-    for(int i = 0; i < moves.totalMoves; i++) {
-        Move currentMove = moves.moveList[i];
-        char *notation = moveToNotation(pBoard, currentMove);
-        Move checkMove = notationToMove(pBoard, notation);
-        if(currentMove != checkMove) {
+    reset_move_set(&moves);
+    initialize_move_set_quiet(p_board, &moves);
+    int passed = moves.total_moves;
+    for(int i = 0; i < moves.total_moves; i++) {
+        Move current_move = moves.move_list[i];
+        char *notation = move_to_notation(p_board, current_move);
+        Move checkMove = notation_to_move(p_board, notation);
+        if(current_move != checkMove) {
             printf("Generated:\n");
-            printMove(currentMove);
+            print_move(current_move);
             printf("Converted to: %s\n", notation);
             printf("Reconverted to:\n");
-            printMove(checkMove);
+            print_move(checkMove);
             passed--;
         }
         free(notation);
     }
-    printf("%d/%d passed.\n", passed, moves.totalMoves);
+    printf("%d/%d passed.\n", passed, moves.total_moves);
     return true;
 }
 
-bool divideCommand(int tokenCount, char **tokens) {
-    if(tokenCount != 1) {
+bool divide_command(int token_count, char **tokens) {
+    if(token_count != 1) {
         printf("Divide usage: This command takes one parameter, the depth to be searched.\n");
         return true;
     }
     int depth = atoi(tokens[0]);
-    performanceTest(pBoard, depth, true);
+    performance_test(p_board, depth, true);
 
     return true;
 }

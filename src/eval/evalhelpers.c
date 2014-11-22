@@ -26,20 +26,20 @@
  */
 
 // we could generalize to x files, and should
-BitBoard forward_range[2][64];
-BitBoard backward_range[2][64];
+U64 forward_range[2][64];
+U64 backward_range[2][64];
 
-BitBoard outsidePassedPawn[2][64];
+U64 outsidePassedPawn[2][64];
 
-BitBoard kingSafetyZone[2][64];
-BitBoard pawnShield[2][64];
+U64 king_safetyZone[2][64];
+U64 pawnShield[2][64];
 
-void build_pawn_ranges(Board *pBoard,
-                       BitBoard *wpfr, BitBoard *wpbr,BitBoard *bpfr, BitBoard *bpbr,
-                       BitBoard *wpwfr, BitBoard *bpwfr) {
+void build_pawn_ranges(Board *p_board,
+                       U64 *wpfr, U64 *wpbr,U64 *bpfr, U64 *bpbr,
+                       U64 *wpwfr, U64 *bpwfr) {
     // white pawn forward range
-    *wpfr = pBoard->position.pieceBB[WHITE_PAWN];
-    BitBoard pawns = *wpfr;
+    *wpfr = p_board->position.piece_BB[WHITE_PAWN];
+    U64 pawns = *wpfr;
     int origin = -1, shift = 0;
     while (pawns) {
         shift = LSB(pawns) + 1;
@@ -48,7 +48,7 @@ void build_pawn_ranges(Board *pBoard,
         *wpfr |= forward_range[WHITE][origin];
     }
     // ...
-    *wpbr = pBoard->position.pieceBB[WHITE_PAWN];
+    *wpbr = p_board->position.piece_BB[WHITE_PAWN];
     pawns = *wpbr;
     origin = -1;
     shift = 0;
@@ -59,7 +59,7 @@ void build_pawn_ranges(Board *pBoard,
         *wpbr |= forward_range[BLACK][origin];
     }
 
-    *bpfr = pBoard->position.pieceBB[BLACK_PAWN];
+    *bpfr = p_board->position.piece_BB[BLACK_PAWN];
     pawns = *bpfr;
     origin = -1;
     shift = 0;
@@ -70,7 +70,7 @@ void build_pawn_ranges(Board *pBoard,
         *bpfr |= forward_range[BLACK][origin];
     }
 
-    *bpbr = pBoard->position.pieceBB[BLACK_PAWN];
+    *bpbr = p_board->position.piece_BB[BLACK_PAWN];
     pawns = *bpbr;
     origin = -1;
     shift = 0;
@@ -187,31 +187,31 @@ int piece_square_difference(U64 white_pieces, U64 black_pieces,
     return score;
 }
 
-int all_piece_square_scores (Board *pBoard) {
+int all_piece_square_scores (Board *p_board) {
     int score;
-    score = piece_square_difference(pBoard->position.pieceBB[WHITE_PAWN],
-                                     pBoard->position.pieceBB[BLACK_PAWN],
+    score = piece_square_difference(p_board->position.piece_BB[WHITE_PAWN],
+                                     p_board->position.piece_BB[BLACK_PAWN],
                                      pawn_squares);
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_KNIGHT],
-                                     pBoard->position.pieceBB[BLACK_KNIGHT],
+    score += piece_square_difference(p_board->position.piece_BB[WHITE_KNIGHT],
+                                     p_board->position.piece_BB[BLACK_KNIGHT],
                                      knight_squares);
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_BISHOP],
-                                     pBoard->position.pieceBB[BLACK_BISHOP],
+    score += piece_square_difference(p_board->position.piece_BB[WHITE_BISHOP],
+                                     p_board->position.piece_BB[BLACK_BISHOP],
                                      bishop_squares);
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_ROOK],
-                                     pBoard->position.pieceBB[BLACK_ROOK],
+    score += piece_square_difference(p_board->position.piece_BB[WHITE_ROOK],
+                                     p_board->position.piece_BB[BLACK_ROOK],
                                      rook_squares);
-    score += piece_square_difference(pBoard->position.pieceBB[WHITE_QUEEN],
-                                     pBoard->position.pieceBB[BLACK_QUEEN],
+    score += piece_square_difference(p_board->position.piece_BB[WHITE_QUEEN],
+                                     p_board->position.piece_BB[BLACK_QUEEN],
                                      queen_squares);
-    if (pBoard->info.currentMove > 50 || pBoard->info.material < 2000) {
+    if (p_board->info.current_move > 50 || p_board->info.material < 2000) {
         // better would be to do checks on remaining minor pieces, I think
-        score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
-                                         pBoard->position.pieceBB[BLACK_KING],
+        score += piece_square_difference(p_board->position.piece_BB[WHITE_KING],
+                                         p_board->position.piece_BB[BLACK_KING],
                                          king_squares_early);
     } else {
-        score += piece_square_difference(pBoard->position.pieceBB[WHITE_KING],
-                                         pBoard->position.pieceBB[BLACK_KING],
+        score += piece_square_difference(p_board->position.piece_BB[WHITE_KING],
+                                         p_board->position.piece_BB[BLACK_KING],
                                          king_squares_late);
     }
 
@@ -223,9 +223,9 @@ void initEval() {
         for(int file = 0; file < 8; file++) {
             int square = SQ(rank+1, file+1);
 
-            BitBoard forward_mask = 0;
+            U64 forward_mask = 0;
 
-            BitBoard outsideMask = 0;
+            U64 outsideMask = 0;
             for(int fileIndex = 0; fileIndex < 8; fileIndex++) {
                 if(abs(fileIndex - file) < 2) {
                     forward_mask |= fileBB[fileIndex];
@@ -259,60 +259,60 @@ void initEval() {
 
 
 
-int doubledPawns(Board *pBoard) {
-    int doubledPawns = 0;
+int doubled_pawns(Board *p_board) {
+    int doubled_pawns = 0;
     for(int currentFile = 0; currentFile < 8; currentFile++) {
-        if(countBits(pBoard->position.pieceBB[WHITE_PAWN] & fileBB[currentFile]) == 2) doubledPawns++;
-        if(countBits(pBoard->position.pieceBB[BLACK_PAWN] & fileBB[currentFile]) == 2) doubledPawns--;
+        if(count_bits(p_board->position.piece_BB[WHITE_PAWN] & fileBB[currentFile]) == 2) doubled_pawns++;
+        if(count_bits(p_board->position.piece_BB[BLACK_PAWN] & fileBB[currentFile]) == 2) doubled_pawns--;
     }
-    return doubledPawns;
+    return doubled_pawns;
 }
 
-int tripledPawns(Board *pBoard) {
-    int tripledPawns = 0;
+int tripled_pawns(Board *p_board) {
+    int tripled_pawns = 0;
     for(int currentFile = 0; currentFile < 8; currentFile++) {
-        if(countBits(pBoard->position.pieceBB[WHITE_PAWN] & fileBB[currentFile]) == 3) tripledPawns++;
-        if(countBits(pBoard->position.pieceBB[BLACK_PAWN] & fileBB[currentFile]) == 3) tripledPawns--;
+        if(count_bits(p_board->position.piece_BB[WHITE_PAWN] & fileBB[currentFile]) == 3) tripled_pawns++;
+        if(count_bits(p_board->position.piece_BB[BLACK_PAWN] & fileBB[currentFile]) == 3) tripled_pawns--;
     }
-    return tripledPawns;
+    return tripled_pawns;
 }
 
-int passed_pawns(Board *pBoard, BitBoard white_pawn_forward_range,
-                 BitBoard black_pawn_forward_range) {
+int passed_pawns(Board *p_board, U64 white_pawn_forward_range,
+                 U64 black_pawn_forward_range) {
     // returns the passed pawn delta (+ for white)
     int passed_pawn_count =
-        ((int) countBits(pBoard->position.pieceBB[WHITE_PAWN] & ~black_pawn_forward_range))-
-        ((int) countBits(pBoard->position.pieceBB[BLACK_PAWN] & ~white_pawn_forward_range));
+        ((int) count_bits(p_board->position.piece_BB[WHITE_PAWN] & ~black_pawn_forward_range))-
+        ((int) count_bits(p_board->position.piece_BB[BLACK_PAWN] & ~white_pawn_forward_range));
     return passed_pawn_count;
 }
 
-int outside_passed_pawns(Board *pBoard,
-                         __attribute__((unused)) BitBoard white_pawn_wide_forward_range,
-                         __attribute__((unused)) BitBoard black_pawn_wide_forward_range) {
+int outside_passed_pawns(Board *p_board,
+                         __attribute__((unused)) U64 white_pawn_wide_forward_range,
+                         __attribute__((unused)) U64 black_pawn_wide_forward_range) {
     int outsidePawnCount = 0;
     // not as fast as an optimized bitboard method, but this is all still proof of concept
     for(int square = A1; square <= H8; square++) {
-        int piece = pBoard->position.square[square];
+        int piece = p_board->position.square[square];
         if(piece == WHITE_PAWN) {
-            if(!(outsidePassedPawn[WHITE][square] & pBoard->position.pieceBB[BLACK_PAWN]))
+            if(!(outsidePassedPawn[WHITE][square] & p_board->position.piece_BB[BLACK_PAWN]))
                 outsidePawnCount++;
         } else if(piece == BLACK_PAWN) {
-            if(!(outsidePassedPawn[BLACK][square] & pBoard->position.pieceBB[WHITE_PAWN]))
+            if(!(outsidePassedPawn[BLACK][square] & p_board->position.piece_BB[WHITE_PAWN]))
                 outsidePawnCount--;
         }
     }
     return outsidePawnCount;
 }
 
-int bishopMobility(Board *pBoard);
+int bishop_mobility(Board *p_board);
 
-int rookMobility(Board *pBoard);
+int rook_mobility(Board *p_board);
 
-int kingSafety(Board *pBoard);
+int king_safety(Board *p_board);
 
-int controlOfCenter(Board *pBoard);
+int control_of_center(Board *p_board);
 
-int control(__attribute__((unused)) Board *pBoard,
+int control(__attribute__((unused)) Board *p_board,
             __attribute__((unused)) int square) {
     // we count the number of white pieces attacking the square, and subtract the number of black pieces.
     assert(false);

@@ -19,7 +19,7 @@ void usage_message() {
 /* Function: main
  * --------------
  * entry point for the entire application
- * drops into a loop at readCommands()
+ * drops into a loop at read_commands()
  * which exits as soon as the user decides to quit
  * or some error is encountered.
  *
@@ -34,8 +34,8 @@ int main (int argc, char const *argv[]) {
 
         printf("%s\n",ENGINE_VERSION);
 
-        readCommands();
-        prepareForExit();
+        read_commands();
+        prepare_for_exit();
     } else {
         if (argc == 3 && !strcmp(argv[1], "--uci")) {
             // need a logging location as the second argument

@@ -10,29 +10,29 @@
 
 
 typedef struct {
-    BitBoard pieceBB[16];
+    U64 piece_BB[16];
 
-    BitBoard whiteOccupied;
-    BitBoard blackOccupied;
-    BitBoard occupied;
+    U64 white_occupied;
+    U64 black_occupied;
+    U64 occupied;
 
     int square[64];
 
     signed char pieces[16];
-    signed char totalWhite;
-    signed char totalBlack;
-    signed char totalPieces;
+    signed char total_white;
+    signed char total_black;
+    signed char total_pieces;
 } Position;
 
 typedef struct {
-    unsigned char castleWhite;
-    unsigned char castleBlack;
+    unsigned char castle_white;
+    unsigned char castle_black;
 
     // the en passant index
     // represents where a pawn can capture to, rather than
     // where the pawn actually is
-    int enPassantSquare;
-    int staleMoves;
+    int en_passant_square;
+    int stale_moves;
 
     U64 _zobrist_key;
 
@@ -43,17 +43,17 @@ typedef struct {
 
 typedef struct {
     int material;
-    int whiteMaterial;
-    int blackMaterial;
+    int white_material;
+    int black_material;
 
-    unsigned char toPlay;
+    unsigned char to_play;
     MoveInfo state[MAX_MOVES_PER_GAME];
 
     // indexs into the array, gives us the number
     // of moves that have elapsed so far
-    unsigned int currentMove;
+    unsigned int current_move;
 
-    bool displayRotated;
+    bool display_rotated;
 } BoardInfo;
 
 typedef struct {
@@ -63,52 +63,52 @@ typedef struct {
 
 //--------------------RESET AND DISPLAY----------------------
 
-void resetBoard(Board *pBoard);
+void reset_board(Board *p_board);
 
-void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW,
-    int castleB, int enPassantSquare, int turnCount);
+void init_board_from_squares(Board* p_board, unsigned char to_play, int stale_moves, int castle_W,
+    int castle_B, int en_passant_square, int turn_count);
 
-void displayBoard(Board *pBoard);
+void display_board(Board *p_board);
 
-void rotateBoard(Board *pBoard);
+void rotate_board(Board *p_board);
 
 //------------------------DEBUG------------------------------
-bool debugBoard(Board *pBoard);
+bool debug_board(Board *p_board);
 
 //---------------------MAKE FUNCTIONS------------------------
-void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant);
+void set_empty_at(Board *p_board, UCHAR index, UCHAR last_occupant);
 
-void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece);
+void set_piece_at(Board *p_board, UCHAR index, UCHAR moved_piece, UCHAR captured_piece);
 
-void updateEnPassantSquare(Board *pBoard, int index);
+void update_en_passant_square(Board *p_board, int index);
 
-void enPassant(Board *pBoard, int color);
+void en_passant(Board *p_board, int color);
 
-void unPassant(Board *pBoard, int index, int color);
+void un_passant(Board *p_board, int index, int color);
 
-void castle(Board *pBoard, UCHAR index, UCHAR whichKing);
+void castle(Board *p_board, UCHAR index, UCHAR which_king);
 
-void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing);
+void un_castle(Board *p_board, UCHAR index, UCHAR which_king);
 
-void doPromote(Board *pBoard, UCHAR index, UCHAR whichPromote);
+void do_promote(Board *p_board, UCHAR index, UCHAR which_promote);
 
-void unPromote(Board *pBoard, UCHAR index);
+void un_promote(Board *p_board, UCHAR index);
 
-void addMaterial(Board *pBoard, UCHAR piece);
+void add_material(Board *p_board, UCHAR piece);
 
-void removeMaterial(Board *pBoard, UCHAR piece);
+void remove_material(Board *p_board, UCHAR piece);
 
 //---------------------AUX FUNCTIONS-------------------------
-void updatePieceCountsFromBB(Board *pBoard);
+void update_piece_counts_from_BB(Board *p_board);
 
-void resetBB(Board *pBoard);
+void reset_BB(Board *p_board);
 
-void updateAggregateBB(Board *pBoard);
+void update_aggregate_BB(Board *p_board);
 
-void updateBBFromSquares(Board *pBoard);
+void update_BB_from_squares(Board *p_board);
 
-void updateMaterialFromBB(Board *pBoard);
+void update_material_from_BB(Board *p_board);
 
-U64 fullZobristKey(Board *pBoard);
+U64 full_zobrist_key(Board *p_board);
 
 #endif

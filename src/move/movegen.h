@@ -7,58 +7,58 @@
 #include "../board/board.h"
 
 typedef struct {
-    Move moveList[MAX_MOVES_PER_PLY];
-    Move killerList[MAX_KILLERS_PER_PLY];
-    int timidIndex;
-    int totalMoves;
-    int moveIter;
-    int currentMoveIndex;
+    Move move_list[MAX_MOVES_PER_PLY];
+    Move killer_list[MAX_KILLERS_PER_PLY];
+    int timid_index;
+    int total_moves;
+    int move_iter;
+    int current_move_index;
 
-    int totalKillers;
-    int currentKillerIndex;
-    int killerIter;
+    int total_killers;
+    int current_killer_index;
+    int killer_iter;
 } MoveSet;
 
 bool moveset_contains(MoveSet *moves, Move m);
 
 
-// void generateCheck(Board *pBoard);
+// void generate_check(Board *p_board);
 
-// BitBoard attacks(Board *pBoard, int attackeeIndex);
-// BitBoard checks(Board *pBoard, int kingIndex);
+// U64 attacks(Board *p_board, int attackee_index);
+// U64 checks(Board *p_board, int king_index);
 
-// void extractMoves(Board *pBoard);
+// void extractMoves(Board *p_board);
 
 
-void generateAgnostic(Board *pBoard, int color, BitBoard currentPieces,
-    int piece, MoveSet *pMoves, BitBoard (*moveGen)(Board *pBoard, UCHAR origin, int color));
+void generate_agnostic(Board *p_board, int color, U64 current_pieces,
+    int piece, MoveSet *p_moves, U64 (*move_gen)(Board *p_board, UCHAR origin, int color));
 
-void generateTimid(Board *pBoard, MoveSet *pMoves);
+void generate_timid(Board *p_board, MoveSet *p_moves);
 
-void generateCapture(Board *pBoard, MoveSet *pMoves);
+void generate_capture(Board *p_board, MoveSet *p_moves);
 
-void generateMove(Board *pBoard, MoveSet *pMoves);
+void generate_move(Board *p_board, MoveSet *p_moves);
 
-void initializeMoveSet(Board *pBoard, MoveSet *pMoves);
+void initialize_move_set(Board *p_board, MoveSet *p_moves);
 
-void initializeMoveSetQuiet(Board *pBoard, MoveSet *pMoves);
+void initialize_move_set_quiet(Board *p_board, MoveSet *p_moves);
 
 /**
- *\brief resetMoveSet
+ *\brief reset_move_set
  *
- *  resetMoveSet is an auxilliary function
+ *  reset_move_set is an auxilliary function
  *  which effectively clears the state of the
  *  moveSet passed in as the parameter.
  *
  *\param  Pointer to the moveset
  *\return (void)
 **/
-void resetMoveSet(MoveSet *pMoves);
+void reset_move_set(MoveSet *p_moves);
 
 /**
- *\brief nextMove
+ *\brief next_move
  *
- *  nextMove returns the next unread move from the
+ *  next_move returns the next unread move from the
  *  moveSet and updates the iterator to point to the
  *  next spot in the array. It also asserts that you are not
  *  trying to read an unwritten move from the moveSet.
@@ -66,12 +66,12 @@ void resetMoveSet(MoveSet *pMoves);
  *\param  Pointer to the moveSet
  *\return Move that was read from the moveSet
 **/
-Move nextMove(MoveSet *pMoves);
+Move next_move(MoveSet *p_moves);
 
 /**
- *\brief writeMove
+ *\brief write_move
  *
- *  writeMove adds a non-killer move to a moveSet
+ *  write_move adds a non-killer move to a moveSet
  *  and leaves the moveSet in a consistent state, updating
  *  iterators as necessary.
  *
@@ -79,12 +79,12 @@ Move nextMove(MoveSet *pMoves);
  *\param  Move to be written
  *\return (void)
 **/
-void writeMove(MoveSet *pMoves, Move m);
+void write_move(MoveSet *p_moves, Move m);
 
 /**
- *\brief writeKiller
+ *\brief write_killer
  *
- *  writeKiller adds a killer move to a moveSet
+ *  write_killer adds a killer move to a moveSet
  *  and leaves the moveSet in a consistent state, updating
  *  iterators as necessary.
  *
@@ -92,17 +92,17 @@ void writeMove(MoveSet *pMoves, Move m);
  *\param  Killer move to be written
  *\return (void)
 **/
-void writeKiller(MoveSet *pMoves, Move killer);
+void write_killer(MoveSet *p_moves, Move killer);
 
-BitBoard generateAllAttacks(Board *pBoard, int color);
+U64 generate_all_attacks(Board *p_board, int color);
 
 //===============UNFINISHED===================
 
-void generateCheck(Board *pBoard, MoveSet *pMoves);
+void generate_check(Board *p_board, MoveSet *p_moves);
 
-BitBoard attacks(Board *pBoard, int attackeeIndex, int side);
+U64 attacks(Board *p_board, int attackee_index, int side);
 
-bool checks(Board *pBoard, int side);
+bool checks(Board *p_board, int side);
 
 
 #endif

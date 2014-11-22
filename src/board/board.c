@@ -8,258 +8,258 @@
 #include "../move/move.h"
 #include "../move/movegen.h"
 
-void resetBoard(Board *pBoard) {
-    for(int i = 0; i < 64; i++) pBoard->position.square[i] = EMPTY;
+void reset_board(Board *p_board) {
+    for(int i = 0; i < 64; i++) p_board->position.square[i] = EMPTY;
     for(int i = 0; i < MAX_MOVES_PER_GAME; i++) {
-        pBoard->info.state[i].enPassantSquare = INVALID_SQUARE;
+        p_board->info.state[i].en_passant_square = INVALID_SQUARE;
     }
 
-    pBoard->position.square[A1] = WHITE_ROOK;
-    pBoard->position.square[B1] = WHITE_KNIGHT;
-    pBoard->position.square[C1] = WHITE_BISHOP;
-    pBoard->position.square[D1] = WHITE_QUEEN;
-    pBoard->position.square[E1] = WHITE_KING;
-    pBoard->position.square[F1] = WHITE_BISHOP;
-    pBoard->position.square[G1] = WHITE_KNIGHT;
-    pBoard->position.square[H1] = WHITE_ROOK;
-    pBoard->position.square[A2] = WHITE_PAWN;
-    pBoard->position.square[B2] = WHITE_PAWN;
-    pBoard->position.square[C2] = WHITE_PAWN;
-    pBoard->position.square[D2] = WHITE_PAWN;
-    pBoard->position.square[E2] = WHITE_PAWN;
-    pBoard->position.square[F2] = WHITE_PAWN;
-    pBoard->position.square[G2] = WHITE_PAWN;
-    pBoard->position.square[H2] = WHITE_PAWN;
+    p_board->position.square[A1] = WHITE_ROOK;
+    p_board->position.square[B1] = WHITE_KNIGHT;
+    p_board->position.square[C1] = WHITE_BISHOP;
+    p_board->position.square[D1] = WHITE_QUEEN;
+    p_board->position.square[E1] = WHITE_KING;
+    p_board->position.square[F1] = WHITE_BISHOP;
+    p_board->position.square[G1] = WHITE_KNIGHT;
+    p_board->position.square[H1] = WHITE_ROOK;
+    p_board->position.square[A2] = WHITE_PAWN;
+    p_board->position.square[B2] = WHITE_PAWN;
+    p_board->position.square[C2] = WHITE_PAWN;
+    p_board->position.square[D2] = WHITE_PAWN;
+    p_board->position.square[E2] = WHITE_PAWN;
+    p_board->position.square[F2] = WHITE_PAWN;
+    p_board->position.square[G2] = WHITE_PAWN;
+    p_board->position.square[H2] = WHITE_PAWN;
 
-    pBoard->position.square[A8] = BLACK_ROOK;
-    pBoard->position.square[B8] = BLACK_KNIGHT;
-    pBoard->position.square[C8] = BLACK_BISHOP;
-    pBoard->position.square[D8] = BLACK_QUEEN;
-    pBoard->position.square[E8] = BLACK_KING;
-    pBoard->position.square[F8] = BLACK_BISHOP;
-    pBoard->position.square[G8] = BLACK_KNIGHT;
-    pBoard->position.square[H8] = BLACK_ROOK;
-    pBoard->position.square[A7] = BLACK_PAWN;
-    pBoard->position.square[B7] = BLACK_PAWN;
-    pBoard->position.square[C7] = BLACK_PAWN;
-    pBoard->position.square[D7] = BLACK_PAWN;
-    pBoard->position.square[E7] = BLACK_PAWN;
-    pBoard->position.square[F7] = BLACK_PAWN;
-    pBoard->position.square[G7] = BLACK_PAWN;
-    pBoard->position.square[H7] = BLACK_PAWN;
+    p_board->position.square[A8] = BLACK_ROOK;
+    p_board->position.square[B8] = BLACK_KNIGHT;
+    p_board->position.square[C8] = BLACK_BISHOP;
+    p_board->position.square[D8] = BLACK_QUEEN;
+    p_board->position.square[E8] = BLACK_KING;
+    p_board->position.square[F8] = BLACK_BISHOP;
+    p_board->position.square[G8] = BLACK_KNIGHT;
+    p_board->position.square[H8] = BLACK_ROOK;
+    p_board->position.square[A7] = BLACK_PAWN;
+    p_board->position.square[B7] = BLACK_PAWN;
+    p_board->position.square[C7] = BLACK_PAWN;
+    p_board->position.square[D7] = BLACK_PAWN;
+    p_board->position.square[E7] = BLACK_PAWN;
+    p_board->position.square[F7] = BLACK_PAWN;
+    p_board->position.square[G7] = BLACK_PAWN;
+    p_board->position.square[H7] = BLACK_PAWN;
 
-    pBoard->info.displayRotated = false;
-    pBoard->info.currentMove = 0;
+    p_board->info.display_rotated = false;
+    p_board->info.current_move = 0;
 
-    initBoardFromSquares(pBoard, WHITE, 0, CAN_CASTLE, CAN_CASTLE, INVALID_SQUARE, 0);
+    init_board_from_squares(p_board, WHITE, 0, CAN_CASTLE, CAN_CASTLE, INVALID_SQUARE, 0);
     return;
 }
 
-U64 fullZobristKey(Board *pBoard) {
+U64 full_zobrist_key(Board *p_board) {
     U64 key = 0;
     for (int sq_idx = 0; sq_idx < 64; sq_idx++) {
-        UCHAR at_sq = pBoard->position.square[sq_idx];
-        if(isPiece(at_sq)) {
+        UCHAR at_sq = p_board->position.square[sq_idx];
+        if(is_piece(at_sq)) {
             key ^= piece_keys[at_sq][sq_idx];
         }
     }
-    MoveInfo m_info = pBoard->info.state[pBoard->info.currentMove];
-    key ^= castling_rights_keys[(m_info.castleWhite + 4*m_info.castleBlack)];
+    MoveInfo m_info = p_board->info.state[p_board->info.current_move];
+    key ^= castling_rights_keys[(m_info.castle_white + 4*m_info.castle_black)];
 
-    if (pBoard->info.toPlay == W) key ^= white_to_move_key;
+    if (p_board->info.to_play == W) key ^= white_to_move_key;
 
-    int ep_square = m_info.enPassantSquare;
+    int ep_square = m_info.en_passant_square;
     if (ep_square != INVALID_SQUARE) key ^= ep_file_keys[FILE(ep_square)];
 
     return key;
 }
 
-void initBoardFromSquares(Board* pBoard, unsigned char toPlay, int staleMoves, int castleW,
-int castleB, int enPassantSquare, int turnCount) {
+void init_board_from_squares(Board* p_board, unsigned char to_play, int stale_moves, int castle_W,
+int castle_B, int en_passant_square, int turn_count) {
 
-    resetBB(pBoard);
-    updateBBFromSquares(pBoard);
-    updateAggregateBB(pBoard);
-    updateMaterialFromBB(pBoard);
-    updatePieceCountsFromBB(pBoard);
+    reset_BB(p_board);
+    update_BB_from_squares(p_board);
+    update_aggregate_BB(p_board);
+    update_material_from_BB(p_board);
+    update_piece_counts_from_BB(p_board);
 
-    pBoard->info.currentMove = turnCount;
-    pBoard->info.toPlay = toPlay;
-    pBoard->info.state[pBoard->info.currentMove].castleWhite = castleW;
-    pBoard->info.state[pBoard->info.currentMove].castleBlack = castleB;
-    pBoard->info.state[pBoard->info.currentMove].enPassantSquare = enPassantSquare;
-    pBoard->info.state[pBoard->info.currentMove].staleMoves = staleMoves;
+    p_board->info.current_move = turn_count;
+    p_board->info.to_play = to_play;
+    p_board->info.state[p_board->info.current_move].castle_white = castle_W;
+    p_board->info.state[p_board->info.current_move].castle_black = castle_B;
+    p_board->info.state[p_board->info.current_move].en_passant_square = en_passant_square;
+    p_board->info.state[p_board->info.current_move].stale_moves = stale_moves;
 
     // rebuild Zobrist key
-    pBoard->info.state[pBoard->info.currentMove]._zobrist_key = fullZobristKey(pBoard);
+    p_board->info.state[p_board->info.current_move]._zobrist_key = full_zobrist_key(p_board);
 
     return;
 }
 
-void displayBoard(Board *pBoard) {
+void display_board(Board *p_board) {
     const char *header  = "   A     B     C     D     E     F     G     H   ";
     const char *reverse = "   H     G     F     E     D     C     B     A   ";
     const char *divider = "+-----+-----+-----+-----+-----+-----+-----+-----+";
 
-    printf("\n\t%s\n", pBoard->info.toPlay ? reverse : header);
+    printf("\n\t%s\n", p_board->info.to_play ? reverse : header);
 
     int i, j;
     for(i = 0; i < 8; i++) {
         printf("\t%s\n\t", divider);
         for(j = 0; j < 8; j++) {
-            switch(pBoard->info.toPlay) {
+            switch(p_board->info.to_play) {
                 case W:
-                    printf("| %s ", PIECE_NAMES[pBoard->position.square[SQ(8-i, j+1)]]);
+                    printf("| %s ", PIECE_NAMES[p_board->position.square[SQ(8-i, j+1)]]);
                 break;
                 case B:
-                    printf("| %s ", PIECE_NAMES[pBoard->position.square[SQ(i+1, 8-j)]]);
+                    printf("| %s ", PIECE_NAMES[p_board->position.square[SQ(i+1, 8-j)]]);
                 break;
             }
         }
-        printf("|  %d\n", pBoard->info.toPlay ? i+1 : 8-i);
+        printf("|  %d\n", p_board->info.to_play ? i+1 : 8-i);
     }
     printf("\t%s\n\n", divider);
 
-    if(pBoard->info.toPlay == W) {
+    if(p_board->info.to_play == W) {
         printf("White to play.\n");
     } else {
         printf("Black to play.\n");
     }
-    printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", pBoard->info.whiteMaterial, pBoard->info.blackMaterial);
-    if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CANNOT_CASTLE) printf("White cannot castle.\n");
+    printf("Material counts:\n\tWhite: %d\n\tBlack: %d\n", p_board->info.white_material, p_board->info.black_material);
+    if(p_board->info.state[p_board->info.current_move].castle_white == CANNOT_CASTLE) printf("White cannot castle.\n");
     else {
         printf("White can castle");
-        if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CAN_CASTLE_OOO)
+        if(p_board->info.state[p_board->info.current_move].castle_white == CAN_CASTLE_OOO)
             printf(" queenside");
-        if(pBoard->info.state[pBoard->info.currentMove].castleWhite == CAN_CASTLE_OO)
+        if(p_board->info.state[p_board->info.current_move].castle_white == CAN_CASTLE_OO)
             printf(" kingside");
         printf(".\n");
     }
-    if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CANNOT_CASTLE) printf("Black cannot castle.\n");
+    if(p_board->info.state[p_board->info.current_move].castle_black == CANNOT_CASTLE) printf("Black cannot castle.\n");
     else {
         printf("Black can castle");
-        if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CAN_CASTLE_OOO)
+        if(p_board->info.state[p_board->info.current_move].castle_black == CAN_CASTLE_OOO)
             printf(" queenside");
-        if(pBoard->info.state[pBoard->info.currentMove].castleBlack == CAN_CASTLE_OO)
+        if(p_board->info.state[p_board->info.current_move].castle_black == CAN_CASTLE_OO)
             printf(" kingside");
         printf(".\n\n");
     }
-    if(checks(pBoard, WHITE)) {
+    if(checks(p_board, WHITE)) {
         printf("White is in check.\n");
-    } else if(checks(pBoard, BLACK)) {
+    } else if(checks(p_board, BLACK)) {
         printf("Black is in check.\n\n");
     }
-    int epSquare = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
-    if(epSquare == INVALID_SQUARE)
+    int ep_square = p_board->info.state[p_board->info.current_move].en_passant_square;
+    if(ep_square == INVALID_SQUARE)
         printf("EP Square : --\n");
     else
-        printf("EP Square : %s\n", SQUARENAME[epSquare]);
+        printf("EP Square : %s\n", SQUARENAME[ep_square]);
 }
 
-void rotateBoard(Board *pBoard) {
-    pBoard->info.displayRotated = !pBoard->info.displayRotated;
+void rotate_board(Board *p_board) {
+    p_board->info.display_rotated = !p_board->info.display_rotated;
 }
 
-bool debugBoard(Board *pBoard) {
+bool debug_board(Board *p_board) {
     // we first check if the board is in a consistent state, and report to the user
     // certain problems cannot be found at runtime however, and require prior knowledge of the
     // state of the board, for instance in the case of castling.
-    bool boardConsistent = true;
+    bool board_consistent = true;
     for(int i = 0; i < 64; i++) {
-        UCHAR currentPiece = pBoard->position.square[i];
-        if(currentPiece != EMPTY) {
-            if(!(BITSET(i) & pBoard->position.pieceBB[currentPiece])) {
-                boardConsistent = false;
+        UCHAR current_piece = p_board->position.square[i];
+        if(current_piece != EMPTY) {
+            if(!(BITSET(i) & p_board->position.piece_BB[current_piece])) {
+                board_consistent = false;
                 printf("The array of squares reports a %s at %s,"
                        " but the bitboard is empty.\n",
-                       PIECE_NAMES_FULL[currentPiece], SQUARENAME[i]);
+                       PIECE_NAMES_FULL[current_piece], SQUARENAME[i]);
             }
         }
     }
 
     // material checks
-    int materialB = pBoard->info.blackMaterial;
-    int materialW = pBoard->info.whiteMaterial;
+    int materialB = p_board->info.black_material;
+    int materialW = p_board->info.white_material;
 
-    updateMaterialFromBB(pBoard);
+    update_material_from_BB(p_board);
 
-    if (materialB != pBoard->info.blackMaterial ||
-        materialW != pBoard->info.whiteMaterial) {
+    if (materialB != p_board->info.black_material ||
+        materialW != p_board->info.white_material) {
         printf("Material values are not consistent. WP%d WA%d BP%d BA%d",
-               materialW, pBoard->info.whiteMaterial,
-               materialB, pBoard->info.blackMaterial);
+               materialW, p_board->info.white_material,
+               materialB, p_board->info.black_material);
     }
-    //assert(materialB == pBoard->info.blackMaterial);
-    //assert(materialW == pBoard->info.whiteMaterial);
+    //assert(materialB == p_board->info.black_material);
+    //assert(materialW == p_board->info.white_material);
 
     // array of pieces
     // no real check needed here at the moment, though one could be added for material consistency
 
     // bitboards
-    for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
-        if(isPiece(currentPieceType)) {
-            BitBoard currentBitBoard = pBoard->position.pieceBB[currentPieceType];
+    for(int current_pieceType = 0; current_pieceType < TOTAL_PIECE_TYPES; current_pieceType++) {
+        if(is_piece(current_pieceType)) {
+            U64 currentU64 = p_board->position.piece_BB[current_pieceType];
             int index = -1, shift = 0;
-            while(currentBitBoard) {
-                shift = LSB(currentBitBoard)+1;
-                if (shift < 64) currentBitBoard >>= shift;
-                else currentBitBoard = 0;
+            while(currentU64) {
+                shift = LSB(currentU64)+1;
+                if (shift < 64) currentU64 >>= shift;
+                else currentU64 = 0;
                 index += shift;
-                if(pBoard->position.square[index] != currentPieceType) {
-                    boardConsistent = false;
-                    printf("The bitboards report a %s at %s, but the array of pieces does not.\n", PIECE_NAMES_FULL[currentPieceType], SQUARENAME[index]);
+                if(p_board->position.square[index] != current_pieceType) {
+                    board_consistent = false;
+                    printf("The bitboards report a %s at %s, but the array of pieces does not.\n", PIECE_NAMES_FULL[current_pieceType], SQUARENAME[index]);
                 }
             }
         }
     }
 
     // rudimentary castling checks
-    switch(pBoard->info.state[pBoard->info.currentMove].castleWhite) {
+    switch(p_board->info.state[p_board->info.current_move].castle_white) {
         break;
         case CAN_CASTLE_OO:
-            if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[H1] != WHITE_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E1] != WHITE_KING || p_board->position.square[H1] != WHITE_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that white can castle kingside.");
             }
         break;
         case CAN_CASTLE_OOO:
-            if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A1] != WHITE_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E1] != WHITE_KING || p_board->position.square[A1] != WHITE_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that white can castle queenside.");
             }
         break;
         case CAN_CASTLE_OO | CAN_CASTLE_OOO:
-            if(pBoard->position.square[E1] != WHITE_KING || pBoard->position.square[A1] != WHITE_ROOK || pBoard->position.square[H1] != WHITE_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E1] != WHITE_KING || p_board->position.square[A1] != WHITE_ROOK || p_board->position.square[H1] != WHITE_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that white can castle kingside or queenside.");
             }
         break;
     }
 
-    switch(pBoard->info.state[pBoard->info.currentMove].castleBlack) {
+    switch(p_board->info.state[p_board->info.current_move].castle_black) {
         case CAN_CASTLE_OO:
-            if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[H8] != BLACK_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E8] != BLACK_KING || p_board->position.square[H8] != BLACK_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that black can castle kingside.");
             }
         break;
         case CAN_CASTLE_OOO:
-            if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E8] != BLACK_KING || p_board->position.square[A8] != BLACK_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that black can castle queenside.");
             }
         break;
         case CAN_CASTLE_OO | CAN_CASTLE_OOO:
-            if(pBoard->position.square[E8] != BLACK_KING || pBoard->position.square[A8] != BLACK_ROOK || pBoard->position.square[H8] != BLACK_ROOK) {
-                boardConsistent = false;
+            if(p_board->position.square[E8] != BLACK_KING || p_board->position.square[A8] != BLACK_ROOK || p_board->position.square[H8] != BLACK_ROOK) {
+                board_consistent = false;
                 printf("The board info incorrectly reports that black can castle kingside or queenside.");
             }
         break;
     }
 
     // if it is not, we will print out a diagnostic
-    if(!boardConsistent) {
-        displayBoard(pBoard);
+    if(!board_consistent) {
+        display_board(p_board);
         // other info would be nice too, but this is fine for the moment
         // leave a breakpoint for debugging, not that much can be found here...
         #ifdef __clang__
@@ -268,286 +268,286 @@ bool debugBoard(Board *pBoard) {
         __asm__("int3");
         #endif
     }
-    return boardConsistent;
+    return board_consistent;
 }
 
 //---------------------MAKE FUNCTIONS------------------------
-void setEmptyAt(Board *pBoard, UCHAR index, UCHAR lastOccupant) {
+void set_empty_at(Board *p_board, UCHAR index, UCHAR last_occupant) {
     //DOES NOT UPDATE ANY MATERIAL COUNTS!!!
-    pBoard->position.pieceBB[lastOccupant] &= ~BITSET(index);
-    pBoard->position.occupied &= ~BITSET(index);
-    pBoard->position.square[index] = EMPTY;
-    if(color(lastOccupant) == B) {
-        pBoard->position.blackOccupied &= ~BITSET(index);
+    p_board->position.piece_BB[last_occupant] &= ~BITSET(index);
+    p_board->position.occupied &= ~BITSET(index);
+    p_board->position.square[index] = EMPTY;
+    if(color(last_occupant) == B) {
+        p_board->position.black_occupied &= ~BITSET(index);
     } else {
-        pBoard->position.whiteOccupied &= ~BITSET(index);
+        p_board->position.white_occupied &= ~BITSET(index);
     }
 }
 
-void setPieceAt(Board *pBoard, UCHAR index, UCHAR movedPiece, UCHAR capturedPiece) {
-    if(capturedPiece) {
-        setEmptyAt(pBoard, index, capturedPiece);
+void set_piece_at(Board *p_board, UCHAR index, UCHAR moved_piece, UCHAR captured_piece) {
+    if(captured_piece) {
+        set_empty_at(p_board, index, captured_piece);
     }
-    pBoard->position.pieceBB[movedPiece] |= BITSET(index);
-    pBoard->position.occupied |= BITSET(index);
-    pBoard->position.square[index] = movedPiece;
-    if(color(movedPiece) == B) {
-        pBoard->position.blackOccupied |= BITSET(index);
+    p_board->position.piece_BB[moved_piece] |= BITSET(index);
+    p_board->position.occupied |= BITSET(index);
+    p_board->position.square[index] = moved_piece;
+    if(color(moved_piece) == B) {
+        p_board->position.black_occupied |= BITSET(index);
     } else {
-        pBoard->position.whiteOccupied |= BITSET(index);
+        p_board->position.white_occupied |= BITSET(index);
     }
 }
 
-void updateEnPassantSquare(Board *pBoard, int index) {
-    pBoard->info.state[pBoard->info.currentMove].enPassantSquare = index;
+void update_en_passant_square(Board *p_board, int index) {
+    p_board->info.state[p_board->info.current_move].en_passant_square = index;
 }
 
-void enPassant(Board *pBoard, int color) {
+void en_passant(Board *p_board, int color) {
     // the color should be the color of the *capturing* pawn
     // find where the en passant will take place and
     // make sure the board is updated so that no further enpassant is possible
-    int index = pBoard->info.state[pBoard->info.currentMove].enPassantSquare;
+    int index = p_board->info.state[p_board->info.current_move].en_passant_square;
 
     // the piece will either be a white pawn or a black pawn, but
     // we can get it either way here
     if(color == WHITE) {
-        setEmptyAt(pBoard, index - 8, BLACK_PAWN);
+        set_empty_at(p_board, index - 8, BLACK_PAWN);
     } else {
-        setEmptyAt(pBoard, index + 8, WHITE_PAWN);
+        set_empty_at(p_board, index + 8, WHITE_PAWN);
     }
     return;
 }
 
-void unPassant(Board *pBoard, int index, int color) {
+void un_passant(Board *p_board, int index, int color) {
     // a horrible corruption of the French language... mon Dieu!
     if(color == BLACK) {
-        setPieceAt(pBoard, index + 8, WHITE_PAWN, NO_PIECE);
+        set_piece_at(p_board, index + 8, WHITE_PAWN, NO_PIECE);
     } else {
-        setPieceAt(pBoard, index - 8, BLACK_PAWN, NO_PIECE);
+        set_piece_at(p_board, index - 8, BLACK_PAWN, NO_PIECE);
     }
 }
 
-void castle(Board *pBoard, UCHAR index, UCHAR whichKing) {
-    switch(whichKing) {
+void castle(Board *p_board, UCHAR index, UCHAR which_king) {
+    switch(which_king) {
         case W:
             assert(index == C1 || index == G1);
             if(index == C1) {
-                setEmptyAt(pBoard, E1, WHITE_KING);
-                setPieceAt(pBoard, C1, WHITE_KING, 0);
-                setEmptyAt(pBoard, A1, WHITE_ROOK);
-                setPieceAt(pBoard, D1, WHITE_ROOK, 0);
+                set_empty_at(p_board, E1, WHITE_KING);
+                set_piece_at(p_board, C1, WHITE_KING, 0);
+                set_empty_at(p_board, A1, WHITE_ROOK);
+                set_piece_at(p_board, D1, WHITE_ROOK, 0);
             } else {
-                setEmptyAt(pBoard, E1, WHITE_KING);
-                setPieceAt(pBoard, G1, WHITE_KING, 0);
-                setEmptyAt(pBoard, H1, WHITE_ROOK);
-                setPieceAt(pBoard, F1, WHITE_ROOK, 0);
+                set_empty_at(p_board, E1, WHITE_KING);
+                set_piece_at(p_board, G1, WHITE_KING, 0);
+                set_empty_at(p_board, H1, WHITE_ROOK);
+                set_piece_at(p_board, F1, WHITE_ROOK, 0);
             }
         break;
         case B:
             assert(index == C8 || index == G8);
             if(index == C8) {
-                setEmptyAt(pBoard, E8, BLACK_KING);
-                setPieceAt(pBoard, C8, BLACK_KING, 0);
-                setEmptyAt(pBoard, A8, BLACK_ROOK);
-                setPieceAt(pBoard, D8, BLACK_ROOK, 0);
+                set_empty_at(p_board, E8, BLACK_KING);
+                set_piece_at(p_board, C8, BLACK_KING, 0);
+                set_empty_at(p_board, A8, BLACK_ROOK);
+                set_piece_at(p_board, D8, BLACK_ROOK, 0);
             } else {
-                setEmptyAt(pBoard, E8, BLACK_KING);
-                setPieceAt(pBoard, G8, BLACK_KING, 0);
-                setEmptyAt(pBoard, H8, BLACK_ROOK);
-                setPieceAt(pBoard, F8, BLACK_ROOK, 0);
+                set_empty_at(p_board, E8, BLACK_KING);
+                set_piece_at(p_board, G8, BLACK_KING, 0);
+                set_empty_at(p_board, H8, BLACK_ROOK);
+                set_piece_at(p_board, F8, BLACK_ROOK, 0);
             }
         break;
     }
     return;
 }
 
-void unCastle(Board *pBoard, UCHAR index, UCHAR whichKing) {
-    switch(whichKing) {
+void un_castle(Board *p_board, UCHAR index, UCHAR which_king) {
+    switch(which_king) {
         case W:
             assert(index == C1 || index == G1);
             if(index == C1) {
-                setEmptyAt(pBoard, C1, WHITE_KING);
-                setPieceAt(pBoard, E1, WHITE_KING, 0);
-                setEmptyAt(pBoard, D1, WHITE_ROOK);
-                setPieceAt(pBoard, A1, WHITE_ROOK, 0);
+                set_empty_at(p_board, C1, WHITE_KING);
+                set_piece_at(p_board, E1, WHITE_KING, 0);
+                set_empty_at(p_board, D1, WHITE_ROOK);
+                set_piece_at(p_board, A1, WHITE_ROOK, 0);
             } else {
-                setEmptyAt(pBoard, G1, WHITE_KING);
-                setPieceAt(pBoard, E1, WHITE_KING, 0);
-                setEmptyAt(pBoard, F1, WHITE_ROOK);
-                setPieceAt(pBoard, H1, WHITE_ROOK, 0);
+                set_empty_at(p_board, G1, WHITE_KING);
+                set_piece_at(p_board, E1, WHITE_KING, 0);
+                set_empty_at(p_board, F1, WHITE_ROOK);
+                set_piece_at(p_board, H1, WHITE_ROOK, 0);
             }
         break;
         case B:
             assert(index == C8 || index == G8);
             if(index == C8) {
-                setEmptyAt(pBoard, C8, BLACK_KING);
-                setPieceAt(pBoard, E8, BLACK_KING, 0);
-                setEmptyAt(pBoard, D8, BLACK_ROOK);
-                setPieceAt(pBoard, A8, BLACK_ROOK, 0);
+                set_empty_at(p_board, C8, BLACK_KING);
+                set_piece_at(p_board, E8, BLACK_KING, 0);
+                set_empty_at(p_board, D8, BLACK_ROOK);
+                set_piece_at(p_board, A8, BLACK_ROOK, 0);
             } else {
-                setEmptyAt(pBoard, G8, BLACK_KING);
-                setPieceAt(pBoard, E8, BLACK_KING, 0);
-                setEmptyAt(pBoard, F8, BLACK_ROOK);
-                setPieceAt(pBoard, H8, BLACK_ROOK, 0);
+                set_empty_at(p_board, G8, BLACK_KING);
+                set_piece_at(p_board, E8, BLACK_KING, 0);
+                set_empty_at(p_board, F8, BLACK_ROOK);
+                set_piece_at(p_board, H8, BLACK_ROOK, 0);
             }
         break;
     }
     return;
 }
 
-void doPromote(Board *pBoard, UCHAR index, UCHAR whichPromote) {
-    switch(color(whichPromote)) {
+void do_promote(Board *p_board, UCHAR index, UCHAR which_promote) {
+    switch(color(which_promote)) {
         case W:
-            setEmptyAt(pBoard, index, WHITE_PAWN);
-            setPieceAt(pBoard, index, whichPromote, 0);
+            set_empty_at(p_board, index, WHITE_PAWN);
+            set_piece_at(p_board, index, which_promote, 0);
         break;
         case B:
-            setEmptyAt(pBoard, index, BLACK_PAWN);
-            setPieceAt(pBoard, index, whichPromote, 0);
+            set_empty_at(p_board, index, BLACK_PAWN);
+            set_piece_at(p_board, index, which_promote, 0);
         break;
     }
     return;
 }
 
-void unPromote(Board *pBoard, UCHAR index) {
-    switch(color(pBoard->position.square[index])) {
+void un_promote(Board *p_board, UCHAR index) {
+    switch(color(p_board->position.square[index])) {
         case W:
-            setEmptyAt(pBoard, index, pBoard->position.square[index]);
-            setPieceAt(pBoard, index, WHITE_PAWN, 0);
+            set_empty_at(p_board, index, p_board->position.square[index]);
+            set_piece_at(p_board, index, WHITE_PAWN, 0);
         break;
         case B:
-            setEmptyAt(pBoard, index, pBoard->position.square[index]);
-            setPieceAt(pBoard, index, BLACK_PAWN, 0);
+            set_empty_at(p_board, index, p_board->position.square[index]);
+            set_piece_at(p_board, index, BLACK_PAWN, 0);
         break;
     }
     return;
 }
 
-void addMaterial(Board *pBoard, UCHAR piece) {
-    pBoard->position.pieces[piece]++;
+void add_material(Board *p_board, UCHAR piece) {
+    p_board->position.pieces[piece]++;
     if(color(piece) == WHITE) {
-        pBoard->position.totalWhite++;
+        p_board->position.total_white++;
     } else {
-        pBoard->position.totalBlack++;
+        p_board->position.total_black++;
     }
-    pBoard->position.totalPieces++;
+    p_board->position.total_pieces++;
     if(color(piece) == BLACK) {
-        pBoard->info.blackMaterial += PIECEVALUES[piece];
+        p_board->info.black_material += PIECEVALUES[piece];
     } else {
-        pBoard->info.whiteMaterial += PIECEVALUES[piece];
+        p_board->info.white_material += PIECEVALUES[piece];
     }
-    pBoard->info.material = pBoard->info.whiteMaterial - pBoard->info.blackMaterial;
+    p_board->info.material = p_board->info.white_material - p_board->info.black_material;
     return;
 }
 
-void removeMaterial(Board *pBoard, UCHAR piece) {
-    pBoard->position.pieces[piece]--;
+void remove_material(Board *p_board, UCHAR piece) {
+    p_board->position.pieces[piece]--;
     if(color(piece) == WHITE) {
-        pBoard->position.totalWhite--;
+        p_board->position.total_white--;
     } else {
-        pBoard->position.totalBlack--;
+        p_board->position.total_black--;
     }
-    pBoard->position.totalPieces--;
+    p_board->position.total_pieces--;
     if(color(piece) == BLACK) {
-        pBoard->info.blackMaterial -= PIECEVALUES[piece];
+        p_board->info.black_material -= PIECEVALUES[piece];
     } else {
-        pBoard->info.whiteMaterial -= PIECEVALUES[piece];
+        p_board->info.white_material -= PIECEVALUES[piece];
     }
-    pBoard->info.material = pBoard->info.whiteMaterial - pBoard->info.blackMaterial;
+    p_board->info.material = p_board->info.white_material - p_board->info.black_material;
     return;
 }
 
 //---------------------AUX FUNCTIONS-------------------------
-void updatePieceCountsFromBB(Board *pBoard) {
+void update_piece_counts_from_BB(Board *p_board) {
     // Reset everything
-    for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
-        pBoard->position.pieces[currentPieceType] = 0;
+    for(int current_pieceType = 0; current_pieceType < TOTAL_PIECE_TYPES; current_pieceType++) {
+        p_board->position.pieces[current_pieceType] = 0;
     }
 
-    pBoard->position.totalWhite = 0;
-    pBoard->position.totalBlack = 0;
+    p_board->position.total_white = 0;
+    p_board->position.total_black = 0;
 
     // now iterate across the squares in order to update piece counts
     for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
-        UCHAR currentPiece = pBoard->position.square[currentSquare];
-        if(isPiece(currentPiece)) {
-            int color = color(currentPiece);
-            pBoard->position.pieces[currentPiece]++;
+        UCHAR current_piece = p_board->position.square[currentSquare];
+        if(is_piece(current_piece)) {
+            int color = color(current_piece);
+            p_board->position.pieces[current_piece]++;
             if(color == WHITE) {
-                pBoard->position.totalWhite++;
+                p_board->position.total_white++;
             } else {
-                pBoard->position.totalBlack++;
+                p_board->position.total_black++;
             }
         }
     }
 
-    pBoard->position.totalPieces = pBoard->position.totalWhite + pBoard->position.totalBlack;
+    p_board->position.total_pieces = p_board->position.total_white + p_board->position.total_black;
     return;
 }
 
-void resetBB(Board *pBoard) {
-    for(int currentPieceType = 0; currentPieceType < TOTAL_PIECE_TYPES; currentPieceType++) {
-        pBoard->position.pieceBB[currentPieceType] = 0;
+void reset_BB(Board *p_board) {
+    for(int current_pieceType = 0; current_pieceType < TOTAL_PIECE_TYPES; current_pieceType++) {
+        p_board->position.piece_BB[current_pieceType] = 0;
     }
 
-    pBoard->position.whiteOccupied = 0;
-    pBoard->position.blackOccupied = 0;
-    pBoard->position.occupied = 0;
+    p_board->position.white_occupied = 0;
+    p_board->position.black_occupied = 0;
+    p_board->position.occupied = 0;
     return;
 }
 
-void updateAggregateBB(Board *pBoard) {
-    pBoard->position.whiteOccupied = pBoard->position.pieceBB[WHITE_PAWN] |
-                                                                    pBoard->position.pieceBB[WHITE_KING] |
-                                                                    pBoard->position.pieceBB[WHITE_QUEEN] |
-                                                                    pBoard->position.pieceBB[WHITE_BISHOP] |
-                                                                    pBoard->position.pieceBB[WHITE_KNIGHT] |
-                                                                    pBoard->position.pieceBB[WHITE_ROOK];
+void update_aggregate_BB(Board *p_board) {
+    p_board->position.white_occupied = p_board->position.piece_BB[WHITE_PAWN] |
+                                                                    p_board->position.piece_BB[WHITE_KING] |
+                                                                    p_board->position.piece_BB[WHITE_QUEEN] |
+                                                                    p_board->position.piece_BB[WHITE_BISHOP] |
+                                                                    p_board->position.piece_BB[WHITE_KNIGHT] |
+                                                                    p_board->position.piece_BB[WHITE_ROOK];
 
-    pBoard->position.blackOccupied = pBoard->position.pieceBB[BLACK_PAWN] |
-                                                                    pBoard->position.pieceBB[BLACK_KING] |
-                                                                    pBoard->position.pieceBB[BLACK_QUEEN] |
-                                                                    pBoard->position.pieceBB[BLACK_BISHOP] |
-                                                                    pBoard->position.pieceBB[BLACK_KNIGHT] |
-                                                                    pBoard->position.pieceBB[BLACK_ROOK];
+    p_board->position.black_occupied = p_board->position.piece_BB[BLACK_PAWN] |
+                                                                    p_board->position.piece_BB[BLACK_KING] |
+                                                                    p_board->position.piece_BB[BLACK_QUEEN] |
+                                                                    p_board->position.piece_BB[BLACK_BISHOP] |
+                                                                    p_board->position.piece_BB[BLACK_KNIGHT] |
+                                                                    p_board->position.piece_BB[BLACK_ROOK];
 
-    pBoard->position.occupied = pBoard->position.whiteOccupied |
-                                                            pBoard->position.blackOccupied;
+    p_board->position.occupied = p_board->position.white_occupied |
+                                                            p_board->position.black_occupied;
     return;
 }
 
-void updateBBFromSquares(Board *pBoard) {
-    resetBB(pBoard);
+void update_BB_from_squares(Board *p_board) {
+    reset_BB(p_board);
 
     for(int currentSquare = 0; currentSquare < 64; currentSquare++) {
-        UCHAR currentPiece = pBoard->position.square[currentSquare];
-        if(isPiece(currentPiece)) {
-            pBoard->position.pieceBB[currentPiece] |= BITSET(currentSquare);
+        UCHAR current_piece = p_board->position.square[currentSquare];
+        if(is_piece(current_piece)) {
+            p_board->position.piece_BB[current_piece] |= BITSET(currentSquare);
         }
     }
 
-    updateAggregateBB(pBoard);
+    update_aggregate_BB(p_board);
     return;
 }
 
-void updateMaterialFromBB(Board *pBoard) {
-    pBoard->info.whiteMaterial =
-        countBits(pBoard->position.pieceBB[WHITE_PAWN]) * PAWN_VALUE
-      + countBits(pBoard->position.pieceBB[WHITE_BISHOP]) * BISHOP_VALUE
-      + countBits(pBoard->position.pieceBB[WHITE_KNIGHT]) * KNIGHT_VALUE
-      + countBits(pBoard->position.pieceBB[WHITE_ROOK]) * ROOK_VALUE
-      + countBits(pBoard->position.pieceBB[WHITE_QUEEN]) * QUEEN_VALUE;
+void update_material_from_BB(Board *p_board) {
+    p_board->info.white_material =
+        count_bits(p_board->position.piece_BB[WHITE_PAWN]) * PAWN_VALUE
+      + count_bits(p_board->position.piece_BB[WHITE_BISHOP]) * BISHOP_VALUE
+      + count_bits(p_board->position.piece_BB[WHITE_KNIGHT]) * KNIGHT_VALUE
+      + count_bits(p_board->position.piece_BB[WHITE_ROOK]) * ROOK_VALUE
+      + count_bits(p_board->position.piece_BB[WHITE_QUEEN]) * QUEEN_VALUE;
 
-    pBoard->info.blackMaterial =
-        countBits(pBoard->position.pieceBB[BLACK_PAWN]) * PAWN_VALUE
-      + countBits(pBoard->position.pieceBB[BLACK_BISHOP]) * BISHOP_VALUE
-      + countBits(pBoard->position.pieceBB[BLACK_KNIGHT]) * KNIGHT_VALUE
-      + countBits(pBoard->position.pieceBB[BLACK_ROOK]) * ROOK_VALUE
-      + countBits(pBoard->position.pieceBB[BLACK_QUEEN]) * QUEEN_VALUE;
+    p_board->info.black_material =
+        count_bits(p_board->position.piece_BB[BLACK_PAWN]) * PAWN_VALUE
+      + count_bits(p_board->position.piece_BB[BLACK_BISHOP]) * BISHOP_VALUE
+      + count_bits(p_board->position.piece_BB[BLACK_KNIGHT]) * KNIGHT_VALUE
+      + count_bits(p_board->position.piece_BB[BLACK_ROOK]) * ROOK_VALUE
+      + count_bits(p_board->position.piece_BB[BLACK_QUEEN]) * QUEEN_VALUE;
 
-    pBoard->info.material =
-        pBoard->info.whiteMaterial
-      - pBoard->info.blackMaterial;
+    p_board->info.material =
+        p_board->info.white_material
+      - p_board->info.black_material;
 
     return;
 }

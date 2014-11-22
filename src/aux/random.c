@@ -7,7 +7,7 @@
 
 #define ACTUALLY_RANDOM
 
-void initRandom() {
+void init_random() {
     #ifdef ACTUALLY_RANDOM
     srand(time(NULL));
     #else

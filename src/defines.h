@@ -38,10 +38,10 @@
 #define BR 14
 #define WQ 7
 #define BQ 15
-#define isPiece(p) ((0 < (p)) && ((p) < 16) && ((p) != 4) && ((p) != 8) && ((p) != 12))
+#define is_piece(p) ((0 < (p)) && ((p) < 16) && ((p) != 4) && ((p) != 8) && ((p) != 12))
 #define TOTAL_PIECE_TYPES 16
 
-#define otherColor(c) ((c) ^ 1)
+#define other_color(c) ((c) ^ 1)
 
 #define CANNOT_CASTLE 0
 #define CAN_CASTLE_OO 1
@@ -51,13 +51,6 @@
 #define BITSET(i) (1ULL << (i))
 
 typedef unsigned long long U64;
-typedef unsigned long long BitMap;
-
-typedef unsigned long long BitBoard;
 typedef unsigned char UCHAR;
-
-enum ALERTS {
-    UNKNOWN_COMMAND
-};
 
 #endif

@@ -26,7 +26,7 @@ static int checkComment(FILE* file) {
     return result == EOF;
 }
 
-int loadpgn(const char* filename, Board *pBoard) {
+int load_pgn(const char* filename, Board *p_board) {
     int turn, newturn, color = NONE;
     int result = 0, ret = 0;
     Move m;
@@ -36,7 +36,7 @@ int loadpgn(const char* filename, Board *pBoard) {
 
     FILE* file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "loadpgn: unable to open %s\n", filename);
+        fprintf(stderr, "load_pgn: unable to open %s\n", filename);
         return 1;
     }
 
@@ -56,7 +56,7 @@ int loadpgn(const char* filename, Board *pBoard) {
         if (result == EOF) break;
         else if (result == 0) {
             if (color == NONE) {
-                fprintf(stderr, "loadpgn: expected turn number\n");
+                fprintf(stderr, "load_pgn: expected turn number\n");
                 ret = 1;
                 break;
             }
@@ -68,7 +68,7 @@ int loadpgn(const char* filename, Board *pBoard) {
             else if (periodstr[0] == '/' || periodstr[0] == '-')
                 break;
             else {
-                fprintf(stderr, "loadpgn: expected 1 or 3 periods following turn number\n");
+                fprintf(stderr, "load_pgn: expected 1 or 3 periods following turn number\n");
                 ret = 1;
                 break;
             }
@@ -80,24 +80,24 @@ int loadpgn(const char* filename, Board *pBoard) {
         result = fscanf(file, "%15s ", movestr);
         if (result == EOF) {
             if (turn != newturn) {
-                fprintf(stderr, "loadpgn: unexpected EOF after turn number\n");
+                fprintf(stderr, "load_pgn: unexpected EOF after turn number\n");
                 ret = 1;
             }
             break;
         }
         if (!isalpha(movestr[0])) {
-            fprintf(stderr, "loadpgn: unexpected character in move string\n");
+            fprintf(stderr, "load_pgn: unexpected character in move string\n");
             ret = 1;
             break;
         }
 
-        // TODO get m and makeMove(pBoard, m);
+        // TODO get m and make_move(p_board, m);
         printf("Turn %d color %s string %s\n", turn, (color == W)? "white" :
             (color == B)? "black" : "none", movestr);
-        m = notationToMove(pBoard, movestr);
-        printMove(m);
-        makeMove(pBoard, m);
-        displayBoard(pBoard);
+        m = notation_to_move(p_board, movestr);
+        print_move(m);
+        make_move(p_board, m);
+        display_board(p_board);
         if (color == W) color = B;
         else color = NONE;
 

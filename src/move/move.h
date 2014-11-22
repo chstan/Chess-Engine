@@ -37,57 +37,61 @@ typedef unsigned int Move;
 #define hB      B32(10000000,00000000,00000000,00000000)
 
 //------------INITIALIZER-------------
-#define moveF(bP, wP, bC, wC, promo, capt, mov, fr, to) (((((((((((((((((bP) << 1) | (wP)) << 1) | (bC)) << 1) | (wC)) << 4) | (promo)) << 4) | (capt)) << 4) | (mov)) << 6) | (fr)) << 6) | (to))
+#define move_full(bP, wP, bC, wC, promo, capt, mov, fr, to) (((((((((((((((((bP) << 1) | (wP)) << 1) | (bC)) << 1) | (wC)) << 4) | (promo)) << 4) | (capt)) << 4) | (mov)) << 6) | (fr)) << 6) | (to))
 #define move(capt, mov, fr, to) (((((((capt) << 4) | (mov)) << 6) | (fr)) << 6) | (to))
 
 //--------------GETTERS---------------
 #define to(move)                                            ((move) & 63)
 #define from(move)                                      (((move) >> 6) & 63)
-#define movedPiece(move)                            (((move) >> 12) & 15)
-#define capturedPiece(move)                     (((move) >> 16) & 15)
+#define moved_piece(move)                            (((move) >> 12) & 15)
+#define captured_piece(move)                     (((move) >> 16) & 15)
 #define promote(move)                               (((move) >> 20) & 15)
-#define whiteCastle(move)                       (((move) >> 24) & 1)
-#define blackCastle(move)                       (((move) >> 25) & 1)
-#define whiteEnPassant(move)                    (((move) >> 26) & 1)
-#define blackEnPassant(move)                    (((move) >> 27) & 1)
-#define hashMove(move)                          ((move) & (hB))
-#define zeroHash(move)                          ((move) & (~hB))
+#define white_castle(move)                       (((move) >> 24) & 1)
+#define black_castle(move)                       (((move) >> 25) & 1)
+#define white_en_passant(move)                    (((move) >> 26) & 1)
+#define black_en_passant(move)                    (((move) >> 27) & 1)
+#define hash_move(move)                          ((move) & (hB))
+#define zero_hash(move)                          ((move) & (~hB))
 
 //--------------SETTERS---------------
-#define setTo(move, to)                             ((move) &= (((tM) | (to)))
-#define setFrom(move, from)                     ((move) &= (((fM) | ((to) << 6)))
-#define setMovedPiece(move, piece)      ((move) &= (((mM) | ((piece) << 12)))
-#define setCapturedPiece(move, piece) ((move) &= (((cM) | ((piece) << 16)))
-#define setPromote(move, promo)             ((move) &= (((pM) | ((promo) << 20)))
-#define setWhiteCastle(move)                    ((move) |= (wC))
-#define unsetWhiteCastle(move)              ((move) &= ~(wC))
-#define setBlackCastle(move)                    ((move) |= (bC))
-#define unsetBlackCastle(move)              ((move) &= ~(bC))
-#define setWhiteEnPassant(move)             ((move) |= (wP))
-#define unsetWhiteEnPassant(move)       ((move) &= ~(wP))
-#define setBlackEnPassant(move)             ((move) |= (bP))
-#define unsetBlackEnPassant(move)       ((move) &= ~(bP))
-#define setHashBit(move)                ((move) |= hB)
-#define unsetHashBit(move)              ((move) &= ~(hB))
+#define set_to(move, to)                             ((move) &= (((tM) | (to)))
+#define set_from(move, from)                     ((move) &= (((fM) | ((to) << 6)))
+#define set_moved_piece(move, piece)      ((move) &= (((mM) | ((piece) << 12)))
+#define set_captured_piece(move, piece) ((move) &= (((cM) | ((piece) << 16)))
+#define set_promote(move, promo)             ((move) &= (((pM) | ((promo) << 20)))
+#define set_white_castle(move)                    ((move) |= (wC))
+#define unset_white_castle(move)              ((move) &= ~(wC))
+#define set_black_castle(move)                    ((move) |= (bC))
+#define unset_black_castle(move)              ((move) &= ~(bC))
+#define set_white_en_passant(move)             ((move) |= (wP))
+#define unset_white_en_passant(move)       ((move) &= ~(wP))
+#define set_black_en_passant(move)             ((move) |= (bP))
+#define unset_black_en_passant(move)       ((move) &= ~(bP))
+#define set_hash_bit(move)                ((move) |= hB)
+#define unset_hash_bit(move)              ((move) &= ~(hB))
 
-void makeMove(Board *pBoard, Move m);
+void make_null_move(Board *p_board);
 
-void unmakeMove(Board *pBoard, Move m);
+void unmake_null_move(Board *p_board);
 
-void unmakeLastMove(Board *pBoard);
+void make_move(Board *p_board, Move m);
 
-void printMove(Move m);
+void unmake_move(Board *p_board, Move m);
 
-void advanceState(Board *pBoard, Move m);
+void unmake_last_move(Board *p_board);
 
-void rewindState(Board *pBoard);
+void print_move(Move m);
 
-/** Function: compMove
+void advance_state(Board *p_board, Move m);
+
+void rewind_state(Board *p_board);
+
+/** Function: comp_move
  *  ------------------
- * compMove is a comparison operator for moves, useful for when moves have to be
+ * comp_move is a comparison operator for moves, useful for when moves have to be
  * sorted according to *approximately* how good they might be at first glance.
  * Subject to MUCH change.
  **/
-int compMove (const void* p_move_a, const void* p_move_b);
+int comp_move (const void* p_move_a, const void* p_move_b);
 
 #endif

@@ -3,6 +3,6 @@
 
 #include "board/board.h"
 
-int loadpgn(const char* filename, Board *pBoard);
+int load_pgn(const char* filename, Board *p_board);
 
 #endif

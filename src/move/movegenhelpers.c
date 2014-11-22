@@ -16,66 +16,66 @@
 
 //----------------ROOK-----------------
 
-BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex,
+U64 rook_timid_BB(Board *p_board, UCHAR rook_index,
                      __attribute__((unused)) int side) {
-    BitBoard validMoves = 0;
+    U64 validMoves = 0;
     // UP
-    BitBoard currentIndex = UP(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    U64 currentIndex = UP(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = UP(currentIndex);
     }
     // DOWN
-    currentIndex = DOWN(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = DOWN(currentIndex);
     }
     // RIGHT
-    currentIndex = RIGHT(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = RIGHT(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = RIGHT(currentIndex);
     }
     // LEFT
-    currentIndex = LEFT(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = LEFT(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = LEFT(currentIndex);
     }
     return validMoves;
 }
 
-BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
-    BitBoard validMoves = 0;
-    BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
+U64 rook_capture_BB(Board *p_board, UCHAR rook_index, int side) {
+    U64 validMoves = 0;
+    U64 takable = (side == BLACK)? p_board->position.white_occupied : p_board->position.black_occupied;
     // UP
-    BitBoard currentIndex = UP(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    U64 currentIndex = UP(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = UP(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // DOWN
-    currentIndex = DOWN(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = DOWN(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // RIGHT
-    currentIndex = RIGHT(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = RIGHT(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = RIGHT(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // LEFT
-    currentIndex = LEFT(BITSET(rookIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = LEFT(BITSET(rook_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = LEFT(currentIndex);
     }
     if(currentIndex & takable) {
@@ -84,73 +84,73 @@ BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side) {
     return validMoves;
 }
 
-BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side) {
-    return rookTimidBB(pBoard, rookIndex, side)
-             | rookCaptureBB(pBoard, rookIndex, side);
+U64 rook_move_BB(Board *p_board, UCHAR rook_index, int side) {
+    return rook_timid_BB(p_board, rook_index, side)
+             | rook_capture_BB(p_board, rook_index, side);
 }
 
 //---------------BISHOP----------------
 
-BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex,
+U64 bishop_timid_BB(Board *p_board, UCHAR bishop_index,
                        __attribute__((unused)) int side) {
-    BitBoard validMoves = 0;
+    U64 validMoves = 0;
     // UL
-    BitBoard currentIndex = UP_LEFT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    U64 currentIndex = UP_LEFT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = UP_LEFT(currentIndex);
     }
     // UR
-    currentIndex = UP_RIGHT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = UP_RIGHT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = UP_RIGHT(currentIndex);
     }
     // DL
-    currentIndex = DOWN_LEFT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN_LEFT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = DOWN_LEFT(currentIndex);
     }
     // DR
-    currentIndex = DOWN_RIGHT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN_RIGHT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         validMoves |= currentIndex;
         currentIndex = DOWN_RIGHT(currentIndex);
     }
     return validMoves;
 }
 
-BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
-    BitBoard validMoves = 0;
-    BitBoard takable = (side == BLACK)? pBoard->position.whiteOccupied : pBoard->position.blackOccupied;
+U64 bishop_capture_BB(Board *p_board, UCHAR bishop_index, int side) {
+    U64 validMoves = 0;
+    U64 takable = (side == BLACK)? p_board->position.white_occupied : p_board->position.black_occupied;
     // UL
-    BitBoard currentIndex = UP_LEFT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    U64 currentIndex = UP_LEFT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = UP_LEFT(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // UR
-    currentIndex = UP_RIGHT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = UP_RIGHT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = UP_RIGHT(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // DL
-    currentIndex = DOWN_LEFT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN_LEFT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = DOWN_LEFT(currentIndex);
     }
     if(currentIndex & takable) {
         validMoves |= currentIndex;
     }
     // DR
-    currentIndex = DOWN_RIGHT(BITSET(bishopIndex));
-    while(currentIndex & ~(pBoard->position.occupied)) {
+    currentIndex = DOWN_RIGHT(BITSET(bishop_index));
+    while(currentIndex & ~(p_board->position.occupied)) {
         currentIndex = DOWN_RIGHT(currentIndex);
     }
     if(currentIndex & takable) {
@@ -159,116 +159,116 @@ BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side) {
     return validMoves;
 }
 
-BitBoard bishopMoveBB(Board *pBoard, UCHAR bishopIndex, int side) {
-    return bishopTimidBB(pBoard, bishopIndex, side)
-             | bishopCaptureBB(pBoard, bishopIndex, side);
+U64 bishop_move_BB(Board *p_board, UCHAR bishop_index, int side) {
+    return bishop_timid_BB(p_board, bishop_index, side)
+             | bishop_capture_BB(p_board, bishop_index, side);
 }
 
 //----------------QUEEN----------------
-BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side) {
-    return bishopTimidBB(pBoard, queenIndex, side)
-             | rookTimidBB(pBoard, queenIndex, side);
+U64 queen_timid_BB(Board *p_board, UCHAR queen_index, int side) {
+    return bishop_timid_BB(p_board, queen_index, side)
+             | rook_timid_BB(p_board, queen_index, side);
 }
 
-BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side) {
-    return bishopCaptureBB(pBoard, queenIndex, side)
-             | rookCaptureBB(pBoard, queenIndex, side);
+U64 queen_capture_BB(Board *p_board, UCHAR queen_index, int side) {
+    return bishop_capture_BB(p_board, queen_index, side)
+             | rook_capture_BB(p_board, queen_index, side);
 }
 
-BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side) {
-    return bishopMoveBB(pBoard, queenIndex, side)
-             | rookMoveBB(pBoard, queenIndex, side);
+U64 queen_move_BB(Board *p_board, UCHAR queen_index, int side) {
+    return bishop_move_BB(p_board, queen_index, side)
+             | rook_move_BB(p_board, queen_index, side);
 }
 
 //---------------KNIGHT----------------
-BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex,
+U64 knight_timid_BB(Board *p_board, UCHAR knight_index,
                        __attribute__((unused)) int side) {
-    return knightMove[knightIndex] & ~pBoard->position.occupied;
+    return knightMove[knight_index] & ~p_board->position.occupied;
 }
 
-BitBoard knightCaptureBB(Board *pBoard, UCHAR knightIndex, int side) {
+U64 knight_capture_BB(Board *p_board, UCHAR knight_index, int side) {
     switch(side) {
         case W:
-            return knightMove[knightIndex] & pBoard->position.blackOccupied;
+            return knightMove[knight_index] & p_board->position.black_occupied;
         break;
         case B:
-            return knightMove[knightIndex] & pBoard->position.whiteOccupied;
+            return knightMove[knight_index] & p_board->position.white_occupied;
         break;
     }
     return 0;
 }
 
-BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side) {
+U64 knight_move_BB(Board *p_board, UCHAR knight_index, int side) {
     switch(side) {
         case W:
-            return knightMove[knightIndex] & ~pBoard->position.whiteOccupied;
+            return knightMove[knight_index] & ~p_board->position.white_occupied;
         break;
         case B:
-            return knightMove[knightIndex] & ~pBoard->position.blackOccupied;
+            return knightMove[knight_index] & ~p_board->position.black_occupied;
         break;
     }
     return 0;
 }
 
 //----------------KING-----------------
-BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex,
+U64 king_timid_BB(Board *p_board, UCHAR king_index,
                      __attribute__((unused)) int side) {
-    return kingMove[kingIndex] & ~pBoard->position.occupied;
+    return kingMove[king_index] & ~p_board->position.occupied;
 }
 
-BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side) {
+U64 king_capture_BB(Board *p_board, UCHAR king_index, int side) {
     switch(side) {
         case W:
-            return kingMove[kingIndex] & pBoard->position.blackOccupied;
+            return kingMove[king_index] & p_board->position.black_occupied;
         break;
         case B:
-            return kingMove[kingIndex] & pBoard->position.whiteOccupied;
+            return kingMove[king_index] & p_board->position.white_occupied;
         break;
     }
     return 0;
 }
 
-BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side) {
+U64 king_move_BB(Board *p_board, UCHAR king_index, int side) {
     switch(side) {
         case W:
-            return kingMove[kingIndex] & ~pBoard->position.whiteOccupied;
+            return kingMove[king_index] & ~p_board->position.white_occupied;
         break;
         case B:
-            return kingMove[kingIndex] & ~pBoard->position.blackOccupied;
+            return kingMove[king_index] & ~p_board->position.black_occupied;
         break;
     }
     return 0;
 }
 
 //----------------PAWN-----------------
-BitBoard enPassantBB(Board *pBoard, int side) {
-    if(pBoard->info.state[pBoard->info.currentMove].enPassantSquare == INVALID_SQUARE) return 0;
+U64 en_passant_BB(Board *p_board, int side) {
+    if(p_board->info.state[p_board->info.current_move].en_passant_square == INVALID_SQUARE) return 0;
 
     switch(side) {
         case W:
-            return pawnCaptureBlack[pBoard->info.state[pBoard->info.currentMove].enPassantSquare] & pBoard->position.pieceBB[WHITE_PAWN];
+            return pawnCaptureBlack[p_board->info.state[p_board->info.current_move].en_passant_square] & p_board->position.piece_BB[WHITE_PAWN];
         break;
         case B:
-            return pawnCaptureWhite[pBoard->info.state[pBoard->info.currentMove].enPassantSquare] & pBoard->position.pieceBB[BLACK_PAWN];
+            return pawnCaptureWhite[p_board->info.state[p_board->info.current_move].en_passant_square] & p_board->position.piece_BB[BLACK_PAWN];
         break;
     }
     return 0;
 }
 
-BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
-    BitBoard oneStep;
+U64 pawn_timid_BB(Board *p_board, UCHAR pawn_index, int side) {
+    U64 oneStep;
     switch(side) {
         case W:
-            oneStep = pawnMoveWhite[pawnIndex] & ~pBoard->position.occupied;
+            oneStep = pawnMoveWhite[pawn_index] & ~p_board->position.occupied;
             if(oneStep) {
-                return oneStep | (pawnDoubleWhite[pawnIndex] & ~pBoard->position.occupied);
+                return oneStep | (pawnDoubleWhite[pawn_index] & ~p_board->position.occupied);
             }
             return 0;
         break;
         case B:
-            oneStep = pawnMoveBlack[pawnIndex] & ~pBoard->position.occupied;
+            oneStep = pawnMoveBlack[pawn_index] & ~p_board->position.occupied;
             if(oneStep) {
-                return oneStep | (pawnDoubleBlack[pawnIndex] & ~pBoard->position.occupied);
+                return oneStep | (pawnDoubleBlack[pawn_index] & ~p_board->position.occupied);
             }
             return 0;
         break;
@@ -276,42 +276,42 @@ BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side) {
     return 0;
 }
 
-BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side) {
+U64 pawn_promotion_BB(Board *p_board, UCHAR pawn_index, int side) {
     switch(side) {
         case W:
-            return pawnPromotionWhite[pawnIndex] & ~pBoard->position.occupied;
+            return pawnPromotionWhite[pawn_index] & ~p_board->position.occupied;
         break;
         case B:
-            return pawnPromotionBlack[pawnIndex] & ~pBoard->position.occupied;
+            return pawnPromotionBlack[pawn_index] & ~p_board->position.occupied;
         break;
     }
     return 0;
 }
 
-BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
+U64 pawn_capture_BB(Board *p_board, UCHAR pawn_index, int side) {
     switch(side) {
         case W:
-            return pawnCaptureWhite[pawnIndex] & pBoard->position.blackOccupied;
+            return pawnCaptureWhite[pawn_index] & p_board->position.black_occupied;
         break;
         case B:
-            return pawnCaptureBlack[pawnIndex] & pBoard->position.whiteOccupied;
+            return pawnCaptureBlack[pawn_index] & p_board->position.white_occupied;
         break;
     }
     return 0;
 }
 
-BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side) {
+U64 pawn_promotion_capture_BB(Board *p_board, UCHAR pawn_index, int side) {
     switch(side) {
         case W:
-            return pawnPromotionCaptureWhite[pawnIndex] & pBoard->position.blackOccupied;
+            return pawnPromotionCaptureWhite[pawn_index] & p_board->position.black_occupied;
         break;
         case B:
-            return pawnPromotionCaptureBlack[pawnIndex] & pBoard->position.whiteOccupied;
+            return pawnPromotionCaptureBlack[pawn_index] & p_board->position.white_occupied;
         break;
     }
     return 0;
 }
 
-BitBoard pawnMoveBB(Board *pBoard, UCHAR pawnIndex, int side) {
-    return pawnCaptureBB(pBoard, pawnIndex, side) | pawnTimidBB(pBoard, pawnIndex, side);
+U64 pawn_move_BB(Board *p_board, UCHAR pawn_index, int side) {
+    return pawn_capture_BB(p_board, pawn_index, side) | pawn_timid_BB(p_board, pawn_index, side);
 }

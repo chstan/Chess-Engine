@@ -6,90 +6,90 @@
 
 //----------------ROOK-----------------
 
-/* Function: rookTimidBB
- * Finds the valid moves for a rook at rookIndex which
+/* Function: rook_timid_BB
+ * Finds the valid moves for a rook at rook_index which
  * does not capture any piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard rookTimidBB(Board *pBoard, UCHAR rookIndex, int side);
+U64 rook_timid_BB(Board *p_board, UCHAR rook_index, int side);
 
-/* Function: rookCaptureBB
- * Finds the valid moves for a rook at rookIndex which
+/* Function: rook_capture_BB
+ * Finds the valid moves for a rook at rook_index which
  * do capture an enemy piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard rookCaptureBB(Board *pBoard, UCHAR rookIndex, int side);
+U64 rook_capture_BB(Board *p_board, UCHAR rook_index, int side);
 
-/* Function: rookMoveBB
- * Finds the valid moves for a rook at rookIndex which can
+/* Function: rook_move_BB
+ * Finds the valid moves for a rook at rook_index which can
  * but does not have to capture a piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard rookMoveBB(Board *pBoard, UCHAR rookIndex, int side);
+U64 rook_move_BB(Board *p_board, UCHAR rook_index, int side);
 
 //---------------BISHOP----------------
 
-/* Function: bishopTimidBB
- * Finds the valid moves for a bishop at bishopIndex which
+/* Function: bishop_timid_BB
+ * Finds the valid moves for a bishop at bishop_index which
  * does not capture any piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard bishopTimidBB(Board *pBoard, UCHAR bishopIndex, int side);
+U64 bishop_timid_BB(Board *p_board, UCHAR bishop_index, int side);
 
-/* Function: bishopCaptureBB
- * Finds the valid moves for a bishop at bishopIndex which
+/* Function: bishop_capture_BB
+ * Finds the valid moves for a bishop at bishop_index which
  * do capture an enemy piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard bishopCaptureBB(Board *pBoard, UCHAR bishopIndex, int side);
+U64 bishop_capture_BB(Board *p_board, UCHAR bishop_index, int side);
 
-/* Function: bishopMoveBB
- * Finds the valid moves for a bishop at bishopIndex which can
+/* Function: bishop_move_BB
+ * Finds the valid moves for a bishop at bishop_index which can
  * but does not have to capture a piece. AS A NOTE, this current
  * incarnation uses loops to achieve the rook move generation
  * it can probably be done in O(1) with clever bit ops.
  */
-BitBoard bishopMoveBB(Board *pBoard, UCHAR bishopIndex, int side);
+U64 bishop_move_BB(Board *p_board, UCHAR bishop_index, int side);
 
 //----------------QUEEN----------------
-BitBoard queenTimidBB(Board *pBoard, UCHAR queenIndex, int side);
+U64 queen_timid_BB(Board *p_board, UCHAR queen_index, int side);
 
-BitBoard queenCaptureBB(Board *pBoard, UCHAR queenIndex, int side);
+U64 queen_capture_BB(Board *p_board, UCHAR queen_index, int side);
 
-BitBoard queenMoveBB(Board *pBoard, UCHAR queenIndex, int side);
+U64 queen_move_BB(Board *p_board, UCHAR queen_index, int side);
 
 //---------------KNIGHT----------------
-BitBoard knightTimidBB(Board *pBoard, UCHAR knightIndex, int side);
+U64 knight_timid_BB(Board *p_board, UCHAR knight_index, int side);
 
-BitBoard knightCaptureBB(Board *pBoard, UCHAR knightIndex, int side);
+U64 knight_capture_BB(Board *p_board, UCHAR knight_index, int side);
 
-BitBoard knightMoveBB(Board *pBoard, UCHAR knightIndex, int side);
+U64 knight_move_BB(Board *p_board, UCHAR knight_index, int side);
 
 //----------------KING-----------------
-BitBoard kingTimidBB(Board *pBoard, UCHAR kingIndex, int side);
+U64 king_timid_BB(Board *p_board, UCHAR king_index, int side);
 
-BitBoard kingCaptureBB(Board *pBoard, UCHAR kingIndex, int side);
+U64 king_capture_BB(Board *p_board, UCHAR king_index, int side);
 
-BitBoard kingMoveBB(Board *pBoard, UCHAR kingIndex, int side);
+U64 king_move_BB(Board *p_board, UCHAR king_index, int side);
 
 //----------------PAWN-----------------
-BitBoard enPassantBB(Board *pBoard, int side);
+U64 en_passant_BB(Board *p_board, int side);
 
-BitBoard pawnTimidBB(Board *pBoard, UCHAR pawnIndex, int side);
+U64 pawn_timid_BB(Board *p_board, UCHAR pawn_index, int side);
 
-BitBoard pawnPromotionBB(Board *pBoard, UCHAR pawnIndex, int side);
+U64 pawn_promotion_BB(Board *p_board, UCHAR pawn_index, int side);
 
-BitBoard pawnCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
+U64 pawn_capture_BB(Board *p_board, UCHAR pawn_index, int side);
 
-BitBoard pawnPromotionCaptureBB(Board *pBoard, UCHAR pawnIndex, int side);
+U64 pawn_promotion_capture_BB(Board *p_board, UCHAR pawn_index, int side);
 
-BitBoard pawnMoveBB(Board *pBoard, UCHAR pawnIndex, int side);
+U64 pawn_move_BB(Board *p_board, UCHAR pawn_index, int side);
 
-typedef BitBoard (*MoveGenCB)(Board *pBoard, UCHAR index, int side);
+typedef U64 (*MoveGenCB)(Board *p_board, UCHAR index, int side);
 
 #endif
