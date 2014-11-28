@@ -8,6 +8,11 @@
 
 #define MAX_MOVES_PER_GAME 512
 
+// TODO: use lookup tables to determine when discovered checks occur
+//       then monitoring for check is as easy as seeing whether the
+//       moved/promoted piece attacks the king, or a slider has discovered
+//       check, by using a fast MSB/LSB to check only one slider at most,
+//       this process can be made very quick
 
 typedef struct {
     U64 piece_BB[16];

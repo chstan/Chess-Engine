@@ -4,6 +4,7 @@
 #include <time.h>
 
 #include "search.h"
+#include "search_helpers.h"
 #include "../log.h"
 #include "../manage_time.h"
 #include "../zobrist.h"
@@ -236,10 +237,6 @@ int nega_max(int ply, int depth, int alpha, int beta, int color, Move *pm,
         }
     }
 
-    int write_depth = table_entry
-        ? (table_entry->_depth > depth ? table_entry->_depth : depth)
-        : depth;
-
     Move best_found_move = table_entry ? table_entry->_m : 0;
     (*pm) = best_found_move;
 
@@ -309,16 +306,10 @@ int nega_max(int ply, int depth, int alpha, int beta, int color, Move *pm,
             bestValue = 0;
         }
     }
-    // synchronize to TT
-    if (check_for_stop && should_stop()) {
-        return bestValue; // BAD DON'T WRITE
-    }
-    if (bestValue <= alpha_original) {
-        write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_LOW_NODE);
-    } else if (bestValue >= beta) {
-        write_hash(zob_key, bestValue, best_found_move, write_depth, FAIL_HIGH_NODE);
-    } else {
-        write_hash(zob_key, bestValue, best_found_move, write_depth, PV_NODE);
-    }
+
+    // synchronize to TT, handles issue of when its safe to sync
+    sync_to_TT(zob_key, table_entry, best_found_move, bestValue, alpha_original, beta,
+               depth, check_for_stop);
+
     return bestValue;
 }
