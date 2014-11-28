@@ -26,13 +26,13 @@ unsigned int LSB(U64 bits) {
     #else
     // we have to be careful and use the 32 bit version.
     unsigned int bits32, lsb32;
-    if(!(bits >> 32)) {
+    if((bits >> 32)) {
         bits32 = (unsigned int) (bits >> 32);
-        asm("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
+        __asm__("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
         return lsb32 + 32;
     } else {
         bits32 = (unsigned int) bits;
-        asm("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
+        __asm__("bsfl %1, %0" : "=r" (lsb32) : "r" (bits32));
         return lsb32;
     }
     #endif
@@ -52,11 +52,11 @@ unsigned int GSB(U64 bits) {
     unsigned int bits32, gsb32;
     if(bits >= BITSET(32)) {
         bits32 = (unsigned int) (bits >> 32);
-        asm("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
+        __asm__("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
         return gsb32 + 32;
     } else {
         bits32 = (unsigned int) bits;
-        asm("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
+        __asm__("bsrl %1, %0" : "=r" (gsb32) : "r" (bits32));
         return gsb32;
     }
     #endif
